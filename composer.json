@@ -1,0 +1,9 @@
+{
+    "require": {
+        "wdalmut/simple-mvc": "^0.1.6",
+        "propel/propel": "~2.0@dev"
+    },
+    "autoload": {
+        "classmap": ["app/models", "app/controllers"]
+    }
+}
