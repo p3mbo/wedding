@@ -1,0 +1,11 @@
+<?php
+$collection = $this->collection;
+echo 'moo';
+/** @var \Wedding\Enquiry $lead */
+foreach($collection as $lead) :
+    echo 'maa';
+    echo $lead->getName();
+endforeach;
+
+
+
