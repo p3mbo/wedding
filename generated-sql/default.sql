@@ -41,6 +41,7 @@ CREATE TABLE `enquiry_comment`
     `entity_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `enquiry_id` int(11) unsigned,
     `staff_id` int(11) unsigned,
+    `comment` TEXT,
     `created_at` DATETIME,
     PRIMARY KEY (`entity_id`),
     INDEX `enquiry_id` (`enquiry_id`),

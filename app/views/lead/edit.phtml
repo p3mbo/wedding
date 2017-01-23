@@ -1,0 +1,10 @@
+<?php
+/** @var \Wedding\Enquiry $enq */
+$enq = $this->enq;
+
+?>
+<div class="col-sm-5 col-sm-offset-3 col-md-7 col-md-offset-2 main">
+    <h1 class="page-header">Edit Lead</h1>
+
+    <?php echo $this->partial('lead/partial/form.phtml', ['enq' => $this->enq]); ?>
+</div>

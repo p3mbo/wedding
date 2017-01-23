@@ -16,5 +16,9 @@ use Wedding\Base\Enquiry as BaseEnquiry;
  */
 class Enquiry extends BaseEnquiry
 {
+    public function getFormattedId()
+    {
+        return $this->getEntityId();
+    }
 
 }

@@ -23,11 +23,13 @@ use Wedding\Map\EnquiryCommentTableMap;
  * @method     ChildEnquiryCommentQuery orderByEntityId($order = Criteria::ASC) Order by the entity_id column
  * @method     ChildEnquiryCommentQuery orderByEnquiryId($order = Criteria::ASC) Order by the enquiry_id column
  * @method     ChildEnquiryCommentQuery orderByStaffId($order = Criteria::ASC) Order by the staff_id column
+ * @method     ChildEnquiryCommentQuery orderByComment($order = Criteria::ASC) Order by the comment column
  * @method     ChildEnquiryCommentQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  *
  * @method     ChildEnquiryCommentQuery groupByEntityId() Group by the entity_id column
  * @method     ChildEnquiryCommentQuery groupByEnquiryId() Group by the enquiry_id column
  * @method     ChildEnquiryCommentQuery groupByStaffId() Group by the staff_id column
+ * @method     ChildEnquiryCommentQuery groupByComment() Group by the comment column
  * @method     ChildEnquiryCommentQuery groupByCreatedAt() Group by the created_at column
  *
  * @method     ChildEnquiryCommentQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -56,6 +58,7 @@ use Wedding\Map\EnquiryCommentTableMap;
  * @method     ChildEnquiryComment findOneByEntityId(int $entity_id) Return the first ChildEnquiryComment filtered by the entity_id column
  * @method     ChildEnquiryComment findOneByEnquiryId(int $enquiry_id) Return the first ChildEnquiryComment filtered by the enquiry_id column
  * @method     ChildEnquiryComment findOneByStaffId(int $staff_id) Return the first ChildEnquiryComment filtered by the staff_id column
+ * @method     ChildEnquiryComment findOneByComment(string $comment) Return the first ChildEnquiryComment filtered by the comment column
  * @method     ChildEnquiryComment findOneByCreatedAt(string $created_at) Return the first ChildEnquiryComment filtered by the created_at column *
 
  * @method     ChildEnquiryComment requirePk($key, ConnectionInterface $con = null) Return the ChildEnquiryComment by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -64,12 +67,14 @@ use Wedding\Map\EnquiryCommentTableMap;
  * @method     ChildEnquiryComment requireOneByEntityId(int $entity_id) Return the first ChildEnquiryComment filtered by the entity_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEnquiryComment requireOneByEnquiryId(int $enquiry_id) Return the first ChildEnquiryComment filtered by the enquiry_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEnquiryComment requireOneByStaffId(int $staff_id) Return the first ChildEnquiryComment filtered by the staff_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildEnquiryComment requireOneByComment(string $comment) Return the first ChildEnquiryComment filtered by the comment column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEnquiryComment requireOneByCreatedAt(string $created_at) Return the first ChildEnquiryComment filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildEnquiryComment[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEnquiryComment objects based on current ModelCriteria
  * @method     ChildEnquiryComment[]|ObjectCollection findByEntityId(int $entity_id) Return ChildEnquiryComment objects filtered by the entity_id column
  * @method     ChildEnquiryComment[]|ObjectCollection findByEnquiryId(int $enquiry_id) Return ChildEnquiryComment objects filtered by the enquiry_id column
  * @method     ChildEnquiryComment[]|ObjectCollection findByStaffId(int $staff_id) Return ChildEnquiryComment objects filtered by the staff_id column
+ * @method     ChildEnquiryComment[]|ObjectCollection findByComment(string $comment) Return ChildEnquiryComment objects filtered by the comment column
  * @method     ChildEnquiryComment[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildEnquiryComment objects filtered by the created_at column
  * @method     ChildEnquiryComment[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -169,7 +174,7 @@ abstract class EnquiryCommentQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT entity_id, enquiry_id, staff_id, created_at FROM enquiry_comment WHERE entity_id = :p0';
+        $sql = 'SELECT entity_id, enquiry_id, staff_id, comment, created_at FROM enquiry_comment WHERE entity_id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -382,6 +387,31 @@ abstract class EnquiryCommentQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(EnquiryCommentTableMap::COL_STAFF_ID, $staffId, $comparison);
+    }
+
+    /**
+     * Filter the query on the comment column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByComment('fooValue');   // WHERE comment = 'fooValue'
+     * $query->filterByComment('%fooValue%', Criteria::LIKE); // WHERE comment LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $comment The value to use as filter.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildEnquiryCommentQuery The current query, for fluid interface
+     */
+    public function filterByComment($comment = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($comment)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(EnquiryCommentTableMap::COL_COMMENT, $comment, $comparison);
     }
 
     /**

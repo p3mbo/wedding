@@ -1,0 +1,22 @@
+<?php
+/** @var \Wedding\Enquiry $enq */
+$enq = $this->enquiry;
+?>
+
+<?php $commentHistory = \Wedding\EnquiryComment::getHistory($enq->getEntityId());?>
+<div class="comment">
+    <?php echo $this->partial('partial/comment/history.phtml', ['enquiry' => $enq]); ?>
+
+    <form method="post" action="<?php echo \Wedding::getUrl('comment/add');?>">
+        <div class="no-display">
+            <input type="hidden" name="comment[enq_id]" value="<?php echo $enq->getEntityId();?>" />
+        </div>
+
+        <div class="form-group">
+            <label for="comment[comment]">Comments</label>
+            <textarea name="comment[comment]" class="form-control" rows="3" style="font-size: 0.9em"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Comment</button>
+    </form>
+</div>

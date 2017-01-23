@@ -1,0 +1,118 @@
+<?php
+$enqData = [];
+if($this->new !== true) {
+    /** @var \Wedding\Enquiry $enq */
+    $enq = $this->enq;
+    $enqData = $enq->toArray();
+}
+
+?>
+<form method="post" action="<?php echo \Wedding::getUrl('enq/editPost');?>">
+    <div class="no-display">
+        <input type="hidden" name="enq[enq_id]" value="<?php echo isset($enqData['EntityId']) ? $enqData['EntityId'] : ''; ?>" />
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="form-group">
+                <label for="title">Title</label>
+                <select id="title" type="text" name="enq[title]" class="form-control" required="required">
+                    <?php foreach(\Wedding\Source\Title::getOptions() as $option) : ?>
+                        <option <?php if(isset($enqData['Title']) && $option == $enqData['Title']) : echo 'selected="selected"'; endif; ?> value="<?php echo $option;?>"><?php echo $option;?></option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input id="name" type="text" name="enq[name]" class="form-control" required="required" value="<?php echo isset($enqData['Name']) ? \Wedding::__($enqData['Name']) : '';?>"/>
+            </div>
+
+            <div class="form-group">
+                <label for="partner_name">Partner</label>
+                <input id="partner_name" type="text" name="enq[partner_name]" class="form-control" required="required" value="<?php echo isset($enqData['PartnerName']) ? \Wedding::__($enqData['PartnerName']) : '';?>"/>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" type="text" name="enq[email]" class="form-control" required="required" value="<?php echo isset($enqData['Email']) ? \Wedding::__($enqData['Email']) : '';?>"/>
+            </div>
+
+            <div class="form-group">
+                <label for="telephone">Telephone</label>
+                <input id="telephone" type="text" name="enq[telephone]" class="form-control" required="required" value="<?php echo isset($enqData['Telephone']) ? \Wedding::__($enqData['Telephone']) : '';?>"/>
+            </div>
+
+            <div class="form-group">
+                <label for="mobile">Mobile</label>
+                <input id="mobile" type="text" name="enq[mobile]" class="form-control" required="required" value="<?php echo isset($enqData['Mobile']) ? \Wedding::__($enqData['Mobile']) : '';?>"/>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address</label>
+                <textarea id="address" name="enq[address]" class="form-control" required="required"><?php
+                    echo isset($enqData['Address']) ? \Wedding::__($enqData['Address']) : '';?>
+                </textarea>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="day_guests">Day Guests</label>
+                <input id="day_guests" type="text" name="enq[day_guests]" class="form-control" value="<?php echo isset($enqData['DayGuests']) ? \Wedding::__($enqData['DayGuests']) : '';?>"/>
+            </div>
+
+            <div class="form-group">
+                <label for="day_guests">Evening Guests</label>
+                <input id="day_guests" type="text" name="enq[day_guests]" class="form-control" value="<?php echo isset($enqData['EveningGuests']) ? \Wedding::__($enqData['EveningGuests']) : '';?>"/>
+            </div>
+
+
+            <div class="form-group">
+                <label for="year">Year</label>
+                <select id="year" type="text" name="enq[year]" class="form-control" required="required">
+                    <?php foreach(\Wedding\Source\Year::getOptions() as $option) : ?>
+                        <option <?php if(isset($enqData['Year']) && $option == $enqData['Year']) : echo 'selected="selected"'; endif; ?> value="<?php echo $option;?>"><?php echo $option;?></option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="budget">Budget</label>
+                <div class="input-group">
+                    <span class="input-group-addon">£</span>
+                    <input id="budget" type="text" name="enq[budget]" class="form-control" value="<?php echo isset($enqData['Budget']) ? \Wedding::__($enqData['Budget']) : '';?>"/>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="heard">Heard</label>
+                <select id="heard" type="text" name="enq[heard]" class="form-control">
+                    <?php foreach(\Wedding\Source\Heard::getOptions() as $option) : ?>
+                        <option <?php if(isset($enqData['Heard']) && $option == $enqData['Heard']) : echo 'selected="selected"'; endif; ?> value="<?php echo $option;?>"><?php echo $option;?></option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="comment">Comment</label>
+                <textarea id="comment" name="enq[comment]" class="form-control" required="required"><?php
+                    echo isset($enqData['Comment']) ? \Wedding::__($enqData['Comment']) : '';?>
+                </textarea>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+<?php echo $this->partial('partial/comment/form.phtml', ['enquiry' => $enq]); ?>

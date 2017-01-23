@@ -25,6 +25,7 @@
     <column name="entity_id" phpName="EntityId" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="enquiry_id" phpName="EnquiryId" type="INTEGER" sqlType="int(11) unsigned"/>
     <column name="staff_id" phpName="StaffId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="comment" phpName="Comment" type="LONGVARCHAR"/>
     <column name="created_at" phpName="CreatedAt" type="TIMESTAMP"/>
     <foreign-key foreignTable="enquiry" name="enquiry_comment_ibfk_1" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="enquiry_id" foreign="entity_id"/>

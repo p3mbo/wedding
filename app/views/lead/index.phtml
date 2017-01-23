@@ -1,11 +1,65 @@
-<?php
-$collection = $this->collection;
-echo 'moo';
-/** @var \Wedding\Enquiry $lead */
-foreach($collection as $lead) :
-    echo 'maa';
-    echo $lead->getName();
-endforeach;
+<?php $collection = $this->collection; ?>
+<div class="col-md-12 main">
+
+    <div class="row">
+        <h1 class="page-header">Leads</h1>
 
 
+        <div id="lead-srt">
 
+            <div class="row">
+                <div class="col-md-11">
+                    <div class="form-group">
+                        <label for="name" class="hidden">Name</label>
+                        <input class="search form-control" placeholder="Search Leads..." />
+                    </div>
+
+                </div>
+                <div class="col-md-1">
+                    <a href="<?php echo \Wedding::getUrl('lead/add');?>" class="btn btn-primary pull-right">Add New</a>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <colgroup>
+                        <col width="200">
+                        <col />
+                        <col width="100">
+                        <col width="100">
+                        <col width="100">
+                        <col width="250">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>Names</th>
+                        <th>Address</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Mobile</th>
+                        <th class="text-right">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody class="list">
+                    <?php
+                    /** @var \Wedding\Enquiry $enq */
+                    foreach($collection as $enq) : ?>
+                        <tr>
+                            <td class="srt-name name"><?php echo \Wedding::__($enq->getName());?><br /><?php echo  \Wedding::__($enq->getPartnerName());?></td>
+                            <td class="srt-addr addr"><?php echo \Wedding::__($enq->getAddress());?></td>
+                            <td class="srt-email email"><?php echo \Wedding::__($enq->getEmail());?></td>
+                            <td class="srt-name phone"><?php echo \Wedding::__($enq->getTelephone());?></td>
+                            <td class="srt-name mobile"><?php echo \Wedding::__($enq->getMobile());?></td>
+                            <td class="text-right">
+                                <a title="Edit Item" class="btn-sm btn-default js-entry-edit" href="<?php echo \Wedding::getUrl('lead/edit', ['id' => $enq->getEntityId()]);?>"><span class="glyphicon glyphicon-pencil"></span><span class="hidden">Edit</span></a>
+                                <a title="Mark as Contacted" class="btn-sm btn-danger js-entry-edit" href="<?php echo \Wedding::getUrl('lead/edit', ['id' => $enq->getEntityId()]);?>"><span class="glyphicon glyphicon-envelope"></span><span class="hidden">Mark as Contacted</span></a>
+                                <a title="Mark as Lost" class="btn-sm btn-danger js-entry-edit" href="<?php echo \Wedding::getUrl('lead/edit', ['id' => $enq->getEntityId()]);?>"><span class="hidden">Mark as </span>LOST</a>
+                                <a title="Promote to Viewing" class="btn-sm btn-danger js-entry-edit" href="<?php echo \Wedding::getUrl('lead/edit', ['id' => $enq->getEntityId()]);?>">PROMOTE <span class="hidden">to viewing</span></a>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>

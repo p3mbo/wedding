@@ -85,6 +85,13 @@ abstract class EnquiryComment implements ActiveRecordInterface
     protected $staff_id;
 
     /**
+     * The value for the comment field.
+     * 
+     * @var        string
+     */
+    protected $comment;
+
+    /**
      * The value for the created_at field.
      * 
      * @var        DateTime
@@ -360,6 +367,16 @@ abstract class EnquiryComment implements ActiveRecordInterface
     }
 
     /**
+     * Get the [comment] column value.
+     * 
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
      * Get the [optionally formatted] temporal [created_at] column value.
      * 
      *
@@ -444,6 +461,26 @@ abstract class EnquiryComment implements ActiveRecordInterface
     } // setStaffId()
 
     /**
+     * Set the value of [comment] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Wedding\EnquiryComment The current object (for fluent API support)
+     */
+    public function setComment($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->comment !== $v) {
+            $this->comment = $v;
+            $this->modifiedColumns[EnquiryCommentTableMap::COL_COMMENT] = true;
+        }
+
+        return $this;
+    } // setComment()
+
+    /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
@@ -508,7 +545,10 @@ abstract class EnquiryComment implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : EnquiryCommentTableMap::translateFieldName('StaffId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->staff_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : EnquiryCommentTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : EnquiryCommentTableMap::translateFieldName('Comment', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->comment = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : EnquiryCommentTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -521,7 +561,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 4; // 4 = EnquiryCommentTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = EnquiryCommentTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Wedding\\EnquiryComment'), 0, $e);
@@ -747,6 +787,9 @@ abstract class EnquiryComment implements ActiveRecordInterface
         if ($this->isColumnModified(EnquiryCommentTableMap::COL_STAFF_ID)) {
             $modifiedColumns[':p' . $index++]  = 'staff_id';
         }
+        if ($this->isColumnModified(EnquiryCommentTableMap::COL_COMMENT)) {
+            $modifiedColumns[':p' . $index++]  = 'comment';
+        }
         if ($this->isColumnModified(EnquiryCommentTableMap::COL_CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'created_at';
         }
@@ -769,6 +812,9 @@ abstract class EnquiryComment implements ActiveRecordInterface
                         break;
                     case 'staff_id':                        
                         $stmt->bindValue($identifier, $this->staff_id, PDO::PARAM_INT);
+                        break;
+                    case 'comment':                        
+                        $stmt->bindValue($identifier, $this->comment, PDO::PARAM_STR);
                         break;
                     case 'created_at':                        
                         $stmt->bindValue($identifier, $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
@@ -845,6 +891,9 @@ abstract class EnquiryComment implements ActiveRecordInterface
                 return $this->getStaffId();
                 break;
             case 3:
+                return $this->getComment();
+                break;
+            case 4:
                 return $this->getCreatedAt();
                 break;
             default:
@@ -880,10 +929,11 @@ abstract class EnquiryComment implements ActiveRecordInterface
             $keys[0] => $this->getEntityId(),
             $keys[1] => $this->getEnquiryId(),
             $keys[2] => $this->getStaffId(),
-            $keys[3] => $this->getCreatedAt(),
+            $keys[3] => $this->getComment(),
+            $keys[4] => $this->getCreatedAt(),
         );
-        if ($result[$keys[3]] instanceof \DateTime) {
-            $result[$keys[3]] = $result[$keys[3]]->format('c');
+        if ($result[$keys[4]] instanceof \DateTime) {
+            $result[$keys[4]] = $result[$keys[4]]->format('c');
         }
         
         $virtualColumns = $this->virtualColumns;
@@ -951,6 +1001,9 @@ abstract class EnquiryComment implements ActiveRecordInterface
                 $this->setStaffId($value);
                 break;
             case 3:
+                $this->setComment($value);
+                break;
+            case 4:
                 $this->setCreatedAt($value);
                 break;
         } // switch()
@@ -989,7 +1042,10 @@ abstract class EnquiryComment implements ActiveRecordInterface
             $this->setStaffId($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setCreatedAt($arr[$keys[3]]);
+            $this->setComment($arr[$keys[3]]);
+        }
+        if (array_key_exists($keys[4], $arr)) {
+            $this->setCreatedAt($arr[$keys[4]]);
         }
     }
 
@@ -1040,6 +1096,9 @@ abstract class EnquiryComment implements ActiveRecordInterface
         }
         if ($this->isColumnModified(EnquiryCommentTableMap::COL_STAFF_ID)) {
             $criteria->add(EnquiryCommentTableMap::COL_STAFF_ID, $this->staff_id);
+        }
+        if ($this->isColumnModified(EnquiryCommentTableMap::COL_COMMENT)) {
+            $criteria->add(EnquiryCommentTableMap::COL_COMMENT, $this->comment);
         }
         if ($this->isColumnModified(EnquiryCommentTableMap::COL_CREATED_AT)) {
             $criteria->add(EnquiryCommentTableMap::COL_CREATED_AT, $this->created_at);
@@ -1132,6 +1191,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
     {
         $copyObj->setEnquiryId($this->getEnquiryId());
         $copyObj->setStaffId($this->getStaffId());
+        $copyObj->setComment($this->getComment());
         $copyObj->setCreatedAt($this->getCreatedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
@@ -1225,6 +1285,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
         $this->entity_id = null;
         $this->enquiry_id = null;
         $this->staff_id = null;
+        $this->comment = null;
         $this->created_at = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();

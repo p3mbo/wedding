@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once('vendor/autoload.php');
+require_once('app/wedding.php');
 require_once('generated-conf/config.php');
 
 
@@ -51,4 +52,4 @@ $app->bootstrap('layout', function(){
 
 $app->run();
 
-//\Timesheets\Registry::clear();
+\Wedding\Registry::clear();

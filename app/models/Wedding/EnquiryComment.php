@@ -16,5 +16,27 @@ use Wedding\Base\EnquiryComment as BaseEnquiryComment;
  */
 class EnquiryComment extends BaseEnquiryComment
 {
+    public static function getHistory($enqId)
+    {
+        $collection = \Wedding\EnquiryCommentQuery::create()->orderByCreatedAt('DESC')->findByEnquiryId($enqId);
+        return $collection;
+    }
 
+    public static function add($enquiry, $str, $staffId = '')
+    {
+        if(!empty($staffId)) {
+            // Check if we have a staff id and if so; set it
+        }
+
+        $comment = new \Wedding\EnquiryComment();
+        $comment->setStaffId($staffId);
+        $comment->setComment($str);
+        $comment->setCreatedAt(time());
+        $comment->setEnquiry($enquiry);
+        if($comment->save()) {
+            return true;
+        }
+
+        return false;
+    }
 }

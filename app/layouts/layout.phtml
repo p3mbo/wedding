@@ -59,6 +59,7 @@ $this->title('The Sheene Mill Weddings');
 </nav>
 
 <div class="container-fluid">
+    <?php echo \Wedding\Messages::outputMessages(); ?>
     <?php echo $this->content; ?>
 </div>
 
