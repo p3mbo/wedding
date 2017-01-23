@@ -8,7 +8,7 @@ class Food
     {
         return [
             'Nibbles',
-            'Canapes',
+            'Canapés',
             'Starter',
             'Kids Starter',
             'Amuse',
@@ -21,7 +21,7 @@ class Food
             'Evening Buffet',
             'Hog Roast',
             'BBQ',
-            'Evening Canapes',
+            'Evening Canapés',
             'Snacks',
             'Supplier Food',
             'Getting Ready Food',
