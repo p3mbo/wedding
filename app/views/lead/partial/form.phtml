@@ -1,5 +1,6 @@
 <?php
 $enqData = [];
+
 if($this->new !== true) {
     /** @var \Wedding\Enquiry $enq */
     $enq = $this->enq;
@@ -7,7 +8,7 @@ if($this->new !== true) {
 }
 
 ?>
-<form method="post" action="<?php echo \Wedding::getUrl('enq/editPost');?>">
+<form method="post" action="<?php echo \Wedding::getUrl('lead/editPost');?>">
     <div class="no-display">
         <input type="hidden" name="enq[enq_id]" value="<?php echo isset($enqData['EntityId']) ? $enqData['EntityId'] : ''; ?>" />
     </div>
@@ -46,14 +47,14 @@ if($this->new !== true) {
 
             <div class="form-group">
                 <label for="mobile">Mobile</label>
-                <input id="mobile" type="text" name="enq[mobile]" class="form-control" required="required" value="<?php echo isset($enqData['Mobile']) ? \Wedding::__($enqData['Mobile']) : '';?>"/>
+                <input id="mobile" type="text" name="enq[mobile]" class="form-control" value="<?php echo isset($enqData['Mobile']) ? \Wedding::__($enqData['Mobile']) : '';?>"/>
             </div>
 
             <div class="form-group">
                 <label for="address">Address</label>
                 <textarea id="address" name="enq[address]" class="form-control" required="required"><?php
-                    echo isset($enqData['Address']) ? \Wedding::__($enqData['Address']) : '';?>
-                </textarea>
+                    echo isset($enqData['Address']) ? \Wedding::__($enqData['Address']) : '';
+                ?></textarea>
             </div>
         </div>
 
@@ -64,8 +65,8 @@ if($this->new !== true) {
             </div>
 
             <div class="form-group">
-                <label for="day_guests">Evening Guests</label>
-                <input id="day_guests" type="text" name="enq[day_guests]" class="form-control" value="<?php echo isset($enqData['EveningGuests']) ? \Wedding::__($enqData['EveningGuests']) : '';?>"/>
+                <label for="evening_guests">Evening Guests</label>
+                <input id="evening_guests" type="text" name="enq[evening_guests]" class="form-control" value="<?php echo isset($enqData['EveningGuests']) ? \Wedding::__($enqData['EveningGuests']) : '';?>"/>
             </div>
 
 
@@ -73,7 +74,8 @@ if($this->new !== true) {
                 <label for="year">Year</label>
                 <select id="year" type="text" name="enq[year]" class="form-control" required="required">
                     <?php foreach(\Wedding\Source\Year::getOptions() as $option) : ?>
-                        <option <?php if(isset($enqData['Year']) && $option == $enqData['Year']) : echo 'selected="selected"'; endif; ?> value="<?php echo $option;?>"><?php echo $option;?></option>
+                        <option <?php if((isset($enqData['Year']) && $option == $enqData['Year']) || !isset($enqData['Year']) && $option == date('Y')) : echo 'selected="selected"'; endif; ?>
+                                value="<?php echo $option;?>"><?php echo $option;?></option>
                     <?php endforeach;?>
                 </select>
             </div>
@@ -101,8 +103,8 @@ if($this->new !== true) {
             <div class="form-group">
                 <label for="comment">Comment</label>
                 <textarea id="comment" name="enq[comment]" class="form-control" required="required"><?php
-                    echo isset($enqData['Comment']) ? \Wedding::__($enqData['Comment']) : '';?>
-                </textarea>
+                    echo isset($enqData['Comment']) ? \Wedding::__($enqData['Comment']) : '';
+                ?></textarea>
             </div>
 
         </div>
@@ -115,4 +117,6 @@ if($this->new !== true) {
 </form>
 
 
-<?php echo $this->partial('partial/comment/form.phtml', ['enquiry' => $enq]); ?>
+<?php if($this->new !== true) : ?>
+    <?php echo $this->partial('partial/comment/form.phtml', ['enquiry' => $enq]); ?>
+<?php endif; ?>

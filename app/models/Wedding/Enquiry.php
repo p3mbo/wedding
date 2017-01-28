@@ -18,7 +18,7 @@ class Enquiry extends BaseEnquiry
 {
     public function getFormattedId()
     {
-        return $this->getEntityId();
+        return implode('', ['#', $this->getEntityId()]);
     }
 
 }
