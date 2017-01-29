@@ -36,6 +36,9 @@ use Wedding\Map\EnquiryTableMap;
  * @method     ChildEnquiryQuery orderByComment($order = Criteria::ASC) Order by the comment column
  * @method     ChildEnquiryQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildEnquiryQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
+ * @method     ChildEnquiryQuery orderByLostAt($order = Criteria::ASC) Order by the lost_at column
+ * @method     ChildEnquiryQuery orderByPromtedAt($order = Criteria::ASC) Order by the promted_at column
+ * @method     ChildEnquiryQuery orderByContactedAt($order = Criteria::ASC) Order by the contacted_at column
  *
  * @method     ChildEnquiryQuery groupByEntityId() Group by the entity_id column
  * @method     ChildEnquiryQuery groupByTitle() Group by the title column
@@ -53,6 +56,9 @@ use Wedding\Map\EnquiryTableMap;
  * @method     ChildEnquiryQuery groupByComment() Group by the comment column
  * @method     ChildEnquiryQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildEnquiryQuery groupByUpdatedAt() Group by the updated_at column
+ * @method     ChildEnquiryQuery groupByLostAt() Group by the lost_at column
+ * @method     ChildEnquiryQuery groupByPromtedAt() Group by the promted_at column
+ * @method     ChildEnquiryQuery groupByContactedAt() Group by the contacted_at column
  *
  * @method     ChildEnquiryQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildEnquiryQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -72,7 +78,17 @@ use Wedding\Map\EnquiryTableMap;
  * @method     ChildEnquiryQuery rightJoinWithEnquiryComment() Adds a RIGHT JOIN clause and with to the query using the EnquiryComment relation
  * @method     ChildEnquiryQuery innerJoinWithEnquiryComment() Adds a INNER JOIN clause and with to the query using the EnquiryComment relation
  *
- * @method     \Wedding\EnquiryCommentQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildEnquiryQuery leftJoinViewing($relationAlias = null) Adds a LEFT JOIN clause to the query using the Viewing relation
+ * @method     ChildEnquiryQuery rightJoinViewing($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Viewing relation
+ * @method     ChildEnquiryQuery innerJoinViewing($relationAlias = null) Adds a INNER JOIN clause to the query using the Viewing relation
+ *
+ * @method     ChildEnquiryQuery joinWithViewing($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Viewing relation
+ *
+ * @method     ChildEnquiryQuery leftJoinWithViewing() Adds a LEFT JOIN clause and with to the query using the Viewing relation
+ * @method     ChildEnquiryQuery rightJoinWithViewing() Adds a RIGHT JOIN clause and with to the query using the Viewing relation
+ * @method     ChildEnquiryQuery innerJoinWithViewing() Adds a INNER JOIN clause and with to the query using the Viewing relation
+ *
+ * @method     \Wedding\EnquiryCommentQuery|\Wedding\ViewingQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildEnquiry findOne(ConnectionInterface $con = null) Return the first ChildEnquiry matching the query
  * @method     ChildEnquiry findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEnquiry matching the query, or a new ChildEnquiry object populated from the query conditions when no match is found
@@ -92,7 +108,10 @@ use Wedding\Map\EnquiryTableMap;
  * @method     ChildEnquiry findOneByHeard(string $heard) Return the first ChildEnquiry filtered by the heard column
  * @method     ChildEnquiry findOneByComment(string $comment) Return the first ChildEnquiry filtered by the comment column
  * @method     ChildEnquiry findOneByCreatedAt(string $created_at) Return the first ChildEnquiry filtered by the created_at column
- * @method     ChildEnquiry findOneByUpdatedAt(string $updated_at) Return the first ChildEnquiry filtered by the updated_at column *
+ * @method     ChildEnquiry findOneByUpdatedAt(string $updated_at) Return the first ChildEnquiry filtered by the updated_at column
+ * @method     ChildEnquiry findOneByLostAt(string $lost_at) Return the first ChildEnquiry filtered by the lost_at column
+ * @method     ChildEnquiry findOneByPromtedAt(string $promted_at) Return the first ChildEnquiry filtered by the promted_at column
+ * @method     ChildEnquiry findOneByContactedAt(string $contacted_at) Return the first ChildEnquiry filtered by the contacted_at column *
 
  * @method     ChildEnquiry requirePk($key, ConnectionInterface $con = null) Return the ChildEnquiry by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEnquiry requireOne(ConnectionInterface $con = null) Return the first ChildEnquiry matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -113,6 +132,9 @@ use Wedding\Map\EnquiryTableMap;
  * @method     ChildEnquiry requireOneByComment(string $comment) Return the first ChildEnquiry filtered by the comment column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEnquiry requireOneByCreatedAt(string $created_at) Return the first ChildEnquiry filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEnquiry requireOneByUpdatedAt(string $updated_at) Return the first ChildEnquiry filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildEnquiry requireOneByLostAt(string $lost_at) Return the first ChildEnquiry filtered by the lost_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildEnquiry requireOneByPromtedAt(string $promted_at) Return the first ChildEnquiry filtered by the promted_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildEnquiry requireOneByContactedAt(string $contacted_at) Return the first ChildEnquiry filtered by the contacted_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildEnquiry[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEnquiry objects based on current ModelCriteria
  * @method     ChildEnquiry[]|ObjectCollection findByEntityId(int $entity_id) Return ChildEnquiry objects filtered by the entity_id column
@@ -131,6 +153,9 @@ use Wedding\Map\EnquiryTableMap;
  * @method     ChildEnquiry[]|ObjectCollection findByComment(string $comment) Return ChildEnquiry objects filtered by the comment column
  * @method     ChildEnquiry[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildEnquiry objects filtered by the created_at column
  * @method     ChildEnquiry[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildEnquiry objects filtered by the updated_at column
+ * @method     ChildEnquiry[]|ObjectCollection findByLostAt(string $lost_at) Return ChildEnquiry objects filtered by the lost_at column
+ * @method     ChildEnquiry[]|ObjectCollection findByPromtedAt(string $promted_at) Return ChildEnquiry objects filtered by the promted_at column
+ * @method     ChildEnquiry[]|ObjectCollection findByContactedAt(string $contacted_at) Return ChildEnquiry objects filtered by the contacted_at column
  * @method     ChildEnquiry[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -229,7 +254,7 @@ abstract class EnquiryQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT entity_id, title, name, partner_name, email, telephone, mobile, address, day_guests, evening_guests, year, budget, heard, comment, created_at, updated_at FROM enquiry WHERE entity_id = :p0';
+        $sql = 'SELECT entity_id, title, name, partner_name, email, telephone, mobile, address, day_guests, evening_guests, year, budget, heard, comment, created_at, updated_at, lost_at, promted_at, contacted_at FROM enquiry WHERE entity_id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -820,6 +845,135 @@ abstract class EnquiryQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the lost_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByLostAt('2011-03-14'); // WHERE lost_at = '2011-03-14'
+     * $query->filterByLostAt('now'); // WHERE lost_at = '2011-03-14'
+     * $query->filterByLostAt(array('max' => 'yesterday')); // WHERE lost_at > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $lostAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildEnquiryQuery The current query, for fluid interface
+     */
+    public function filterByLostAt($lostAt = null, $comparison = null)
+    {
+        if (is_array($lostAt)) {
+            $useMinMax = false;
+            if (isset($lostAt['min'])) {
+                $this->addUsingAlias(EnquiryTableMap::COL_LOST_AT, $lostAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($lostAt['max'])) {
+                $this->addUsingAlias(EnquiryTableMap::COL_LOST_AT, $lostAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(EnquiryTableMap::COL_LOST_AT, $lostAt, $comparison);
+    }
+
+    /**
+     * Filter the query on the promted_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByPromtedAt('2011-03-14'); // WHERE promted_at = '2011-03-14'
+     * $query->filterByPromtedAt('now'); // WHERE promted_at = '2011-03-14'
+     * $query->filterByPromtedAt(array('max' => 'yesterday')); // WHERE promted_at > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $promtedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildEnquiryQuery The current query, for fluid interface
+     */
+    public function filterByPromtedAt($promtedAt = null, $comparison = null)
+    {
+        if (is_array($promtedAt)) {
+            $useMinMax = false;
+            if (isset($promtedAt['min'])) {
+                $this->addUsingAlias(EnquiryTableMap::COL_PROMTED_AT, $promtedAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($promtedAt['max'])) {
+                $this->addUsingAlias(EnquiryTableMap::COL_PROMTED_AT, $promtedAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(EnquiryTableMap::COL_PROMTED_AT, $promtedAt, $comparison);
+    }
+
+    /**
+     * Filter the query on the contacted_at column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByContactedAt('2011-03-14'); // WHERE contacted_at = '2011-03-14'
+     * $query->filterByContactedAt('now'); // WHERE contacted_at = '2011-03-14'
+     * $query->filterByContactedAt(array('max' => 'yesterday')); // WHERE contacted_at > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $contactedAt The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildEnquiryQuery The current query, for fluid interface
+     */
+    public function filterByContactedAt($contactedAt = null, $comparison = null)
+    {
+        if (is_array($contactedAt)) {
+            $useMinMax = false;
+            if (isset($contactedAt['min'])) {
+                $this->addUsingAlias(EnquiryTableMap::COL_CONTACTED_AT, $contactedAt['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($contactedAt['max'])) {
+                $this->addUsingAlias(EnquiryTableMap::COL_CONTACTED_AT, $contactedAt['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(EnquiryTableMap::COL_CONTACTED_AT, $contactedAt, $comparison);
+    }
+
+    /**
      * Filter the query by a related \Wedding\EnquiryComment object
      *
      * @param \Wedding\EnquiryComment|ObjectCollection $enquiryComment the related object to use as filter
@@ -890,6 +1044,79 @@ abstract class EnquiryQuery extends ModelCriteria
         return $this
             ->joinEnquiryComment($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'EnquiryComment', '\Wedding\EnquiryCommentQuery');
+    }
+
+    /**
+     * Filter the query by a related \Wedding\Viewing object
+     *
+     * @param \Wedding\Viewing|ObjectCollection $viewing the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildEnquiryQuery The current query, for fluid interface
+     */
+    public function filterByViewing($viewing, $comparison = null)
+    {
+        if ($viewing instanceof \Wedding\Viewing) {
+            return $this
+                ->addUsingAlias(EnquiryTableMap::COL_ENTITY_ID, $viewing->getEnquiryId(), $comparison);
+        } elseif ($viewing instanceof ObjectCollection) {
+            return $this
+                ->useViewingQuery()
+                ->filterByPrimaryKeys($viewing->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByViewing() only accepts arguments of type \Wedding\Viewing or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Viewing relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildEnquiryQuery The current query, for fluid interface
+     */
+    public function joinViewing($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Viewing');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Viewing');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Viewing relation Viewing object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Wedding\ViewingQuery A secondary query class using the current class as primary query
+     */
+    public function useViewingQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinViewing($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Viewing', '\Wedding\ViewingQuery');
     }
 
     /**

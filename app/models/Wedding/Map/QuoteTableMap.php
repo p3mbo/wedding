@@ -11,12 +11,12 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
-use Wedding\EnquiryComment;
-use Wedding\EnquiryCommentQuery;
+use Wedding\Quote;
+use Wedding\QuoteQuery;
 
 
 /**
- * This class defines the structure of the 'enquiry_comment' table.
+ * This class defines the structure of the 'quote' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Wedding\EnquiryCommentQuery;
  * (i.e. if it's a text column type).
  *
  */
-class EnquiryCommentTableMap extends TableMap
+class QuoteTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class EnquiryCommentTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Wedding.Map.EnquiryCommentTableMap';
+    const CLASS_NAME = 'Wedding.Map.QuoteTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class EnquiryCommentTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'enquiry_comment';
+    const TABLE_NAME = 'quote';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Wedding\\EnquiryComment';
+    const OM_CLASS = '\\Wedding\\Quote';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Wedding.EnquiryComment';
+    const CLASS_DEFAULT = 'Wedding.Quote';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 4;
 
     /**
      * The number of lazy-loaded columns
@@ -69,32 +69,27 @@ class EnquiryCommentTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /**
      * the column name for the entity_id field
      */
-    const COL_ENTITY_ID = 'enquiry_comment.entity_id';
+    const COL_ENTITY_ID = 'quote.entity_id';
 
     /**
      * the column name for the enquiry_id field
      */
-    const COL_ENQUIRY_ID = 'enquiry_comment.enquiry_id';
-
-    /**
-     * the column name for the staff_id field
-     */
-    const COL_STAFF_ID = 'enquiry_comment.staff_id';
-
-    /**
-     * the column name for the comment field
-     */
-    const COL_COMMENT = 'enquiry_comment.comment';
+    const COL_ENQUIRY_ID = 'quote.enquiry_id';
 
     /**
      * the column name for the created_at field
      */
-    const COL_CREATED_AT = 'enquiry_comment.created_at';
+    const COL_CREATED_AT = 'quote.created_at';
+
+    /**
+     * the column name for the updated_at field
+     */
+    const COL_UPDATED_AT = 'quote.updated_at';
 
     /**
      * The default string format for model objects of the related table
@@ -108,11 +103,11 @@ class EnquiryCommentTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('EntityId', 'EnquiryId', 'StaffId', 'Comment', 'CreatedAt', ),
-        self::TYPE_CAMELNAME     => array('entityId', 'enquiryId', 'staffId', 'comment', 'createdAt', ),
-        self::TYPE_COLNAME       => array(EnquiryCommentTableMap::COL_ENTITY_ID, EnquiryCommentTableMap::COL_ENQUIRY_ID, EnquiryCommentTableMap::COL_STAFF_ID, EnquiryCommentTableMap::COL_COMMENT, EnquiryCommentTableMap::COL_CREATED_AT, ),
-        self::TYPE_FIELDNAME     => array('entity_id', 'enquiry_id', 'staff_id', 'comment', 'created_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('EntityId', 'EnquiryId', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_CAMELNAME     => array('entityId', 'enquiryId', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(QuoteTableMap::COL_ENTITY_ID, QuoteTableMap::COL_ENQUIRY_ID, QuoteTableMap::COL_CREATED_AT, QuoteTableMap::COL_UPDATED_AT, ),
+        self::TYPE_FIELDNAME     => array('entity_id', 'enquiry_id', 'created_at', 'updated_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -122,11 +117,11 @@ class EnquiryCommentTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('EntityId' => 0, 'EnquiryId' => 1, 'StaffId' => 2, 'Comment' => 3, 'CreatedAt' => 4, ),
-        self::TYPE_CAMELNAME     => array('entityId' => 0, 'enquiryId' => 1, 'staffId' => 2, 'comment' => 3, 'createdAt' => 4, ),
-        self::TYPE_COLNAME       => array(EnquiryCommentTableMap::COL_ENTITY_ID => 0, EnquiryCommentTableMap::COL_ENQUIRY_ID => 1, EnquiryCommentTableMap::COL_STAFF_ID => 2, EnquiryCommentTableMap::COL_COMMENT => 3, EnquiryCommentTableMap::COL_CREATED_AT => 4, ),
-        self::TYPE_FIELDNAME     => array('entity_id' => 0, 'enquiry_id' => 1, 'staff_id' => 2, 'comment' => 3, 'created_at' => 4, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('EntityId' => 0, 'EnquiryId' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, ),
+        self::TYPE_CAMELNAME     => array('entityId' => 0, 'enquiryId' => 1, 'createdAt' => 2, 'updatedAt' => 3, ),
+        self::TYPE_COLNAME       => array(QuoteTableMap::COL_ENTITY_ID => 0, QuoteTableMap::COL_ENQUIRY_ID => 1, QuoteTableMap::COL_CREATED_AT => 2, QuoteTableMap::COL_UPDATED_AT => 3, ),
+        self::TYPE_FIELDNAME     => array('entity_id' => 0, 'enquiry_id' => 1, 'created_at' => 2, 'updated_at' => 3, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -139,18 +134,17 @@ class EnquiryCommentTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('enquiry_comment');
-        $this->setPhpName('EnquiryComment');
+        $this->setName('quote');
+        $this->setPhpName('Quote');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\Wedding\\EnquiryComment');
+        $this->setClassName('\\Wedding\\Quote');
         $this->setPackage('Wedding');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('entity_id', 'EntityId', 'INTEGER', true, null, null);
-        $this->addForeignKey('enquiry_id', 'EnquiryId', 'INTEGER', 'enquiry', 'entity_id', false, null, null);
-        $this->addForeignKey('staff_id', 'StaffId', 'INTEGER', 'staff', 'entity_id', false, null, null);
-        $this->addColumn('comment', 'Comment', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('enquiry_id', 'EnquiryId', 'INTEGER', false, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -158,20 +152,6 @@ class EnquiryCommentTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Staff', '\\Wedding\\Staff', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':staff_id',
-    1 => ':entity_id',
-  ),
-), 'CASCADE', 'CASCADE', null, false);
-        $this->addRelation('Enquiry', '\\Wedding\\Enquiry', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':enquiry_id',
-    1 => ':entity_id',
-  ),
-), 'CASCADE', 'CASCADE', null, false);
     } // buildRelations()
 
     /**
@@ -231,7 +211,7 @@ class EnquiryCommentTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? EnquiryCommentTableMap::CLASS_DEFAULT : EnquiryCommentTableMap::OM_CLASS;
+        return $withPrefix ? QuoteTableMap::CLASS_DEFAULT : QuoteTableMap::OM_CLASS;
     }
 
     /**
@@ -245,22 +225,22 @@ class EnquiryCommentTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (EnquiryComment object, last column rank)
+     * @return array           (Quote object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = EnquiryCommentTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = EnquiryCommentTableMap::getInstanceFromPool($key))) {
+        $key = QuoteTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = QuoteTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + EnquiryCommentTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + QuoteTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = EnquiryCommentTableMap::OM_CLASS;
-            /** @var EnquiryComment $obj */
+            $cls = QuoteTableMap::OM_CLASS;
+            /** @var Quote $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            EnquiryCommentTableMap::addInstanceToPool($obj, $key);
+            QuoteTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -283,18 +263,18 @@ class EnquiryCommentTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = EnquiryCommentTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = EnquiryCommentTableMap::getInstanceFromPool($key))) {
+            $key = QuoteTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = QuoteTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var EnquiryComment $obj */
+                /** @var Quote $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                EnquiryCommentTableMap::addInstanceToPool($obj, $key);
+                QuoteTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -315,17 +295,15 @@ class EnquiryCommentTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(EnquiryCommentTableMap::COL_ENTITY_ID);
-            $criteria->addSelectColumn(EnquiryCommentTableMap::COL_ENQUIRY_ID);
-            $criteria->addSelectColumn(EnquiryCommentTableMap::COL_STAFF_ID);
-            $criteria->addSelectColumn(EnquiryCommentTableMap::COL_COMMENT);
-            $criteria->addSelectColumn(EnquiryCommentTableMap::COL_CREATED_AT);
+            $criteria->addSelectColumn(QuoteTableMap::COL_ENTITY_ID);
+            $criteria->addSelectColumn(QuoteTableMap::COL_ENQUIRY_ID);
+            $criteria->addSelectColumn(QuoteTableMap::COL_CREATED_AT);
+            $criteria->addSelectColumn(QuoteTableMap::COL_UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.entity_id');
             $criteria->addSelectColumn($alias . '.enquiry_id');
-            $criteria->addSelectColumn($alias . '.staff_id');
-            $criteria->addSelectColumn($alias . '.comment');
             $criteria->addSelectColumn($alias . '.created_at');
+            $criteria->addSelectColumn($alias . '.updated_at');
         }
     }
 
@@ -338,7 +316,7 @@ class EnquiryCommentTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(EnquiryCommentTableMap::DATABASE_NAME)->getTable(EnquiryCommentTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(QuoteTableMap::DATABASE_NAME)->getTable(QuoteTableMap::TABLE_NAME);
     }
 
     /**
@@ -346,16 +324,16 @@ class EnquiryCommentTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(EnquiryCommentTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(EnquiryCommentTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new EnquiryCommentTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(QuoteTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(QuoteTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new QuoteTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a EnquiryComment or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a Quote or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or EnquiryComment object or primary key or array of primary keys
+     * @param mixed               $values Criteria or Quote object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -366,27 +344,27 @@ class EnquiryCommentTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(EnquiryCommentTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(QuoteTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Wedding\EnquiryComment) { // it's a model object
+        } elseif ($values instanceof \Wedding\Quote) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(EnquiryCommentTableMap::DATABASE_NAME);
-            $criteria->add(EnquiryCommentTableMap::COL_ENTITY_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(QuoteTableMap::DATABASE_NAME);
+            $criteria->add(QuoteTableMap::COL_ENTITY_ID, (array) $values, Criteria::IN);
         }
 
-        $query = EnquiryCommentQuery::create()->mergeWith($criteria);
+        $query = QuoteQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            EnquiryCommentTableMap::clearInstancePool();
+            QuoteTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                EnquiryCommentTableMap::removeInstanceFromPool($singleval);
+                QuoteTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -394,20 +372,20 @@ class EnquiryCommentTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the enquiry_comment table.
+     * Deletes all rows from the quote table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return EnquiryCommentQuery::create()->doDeleteAll($con);
+        return QuoteQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a EnquiryComment or Criteria object.
+     * Performs an INSERT on the database, given a Quote or Criteria object.
      *
-     * @param mixed               $criteria Criteria or EnquiryComment object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or Quote object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -416,22 +394,22 @@ class EnquiryCommentTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(EnquiryCommentTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(QuoteTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from EnquiryComment object
+            $criteria = $criteria->buildCriteria(); // build Criteria from Quote object
         }
 
-        if ($criteria->containsKey(EnquiryCommentTableMap::COL_ENTITY_ID) && $criteria->keyContainsValue(EnquiryCommentTableMap::COL_ENTITY_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.EnquiryCommentTableMap::COL_ENTITY_ID.')');
+        if ($criteria->containsKey(QuoteTableMap::COL_ENTITY_ID) && $criteria->keyContainsValue(QuoteTableMap::COL_ENTITY_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.QuoteTableMap::COL_ENTITY_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = EnquiryCommentQuery::create()->mergeWith($criteria);
+        $query = QuoteQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -440,7 +418,7 @@ class EnquiryCommentTableMap extends TableMap
         });
     }
 
-} // EnquiryCommentTableMap
+} // QuoteTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-EnquiryCommentTableMap::buildTableMap();
+QuoteTableMap::buildTableMap();

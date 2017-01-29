@@ -40,6 +40,16 @@ use Wedding\Map\EnquiryCommentTableMap;
  * @method     ChildEnquiryCommentQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildEnquiryCommentQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
+ * @method     ChildEnquiryCommentQuery leftJoinStaff($relationAlias = null) Adds a LEFT JOIN clause to the query using the Staff relation
+ * @method     ChildEnquiryCommentQuery rightJoinStaff($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Staff relation
+ * @method     ChildEnquiryCommentQuery innerJoinStaff($relationAlias = null) Adds a INNER JOIN clause to the query using the Staff relation
+ *
+ * @method     ChildEnquiryCommentQuery joinWithStaff($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Staff relation
+ *
+ * @method     ChildEnquiryCommentQuery leftJoinWithStaff() Adds a LEFT JOIN clause and with to the query using the Staff relation
+ * @method     ChildEnquiryCommentQuery rightJoinWithStaff() Adds a RIGHT JOIN clause and with to the query using the Staff relation
+ * @method     ChildEnquiryCommentQuery innerJoinWithStaff() Adds a INNER JOIN clause and with to the query using the Staff relation
+ *
  * @method     ChildEnquiryCommentQuery leftJoinEnquiry($relationAlias = null) Adds a LEFT JOIN clause to the query using the Enquiry relation
  * @method     ChildEnquiryCommentQuery rightJoinEnquiry($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Enquiry relation
  * @method     ChildEnquiryCommentQuery innerJoinEnquiry($relationAlias = null) Adds a INNER JOIN clause to the query using the Enquiry relation
@@ -50,7 +60,7 @@ use Wedding\Map\EnquiryCommentTableMap;
  * @method     ChildEnquiryCommentQuery rightJoinWithEnquiry() Adds a RIGHT JOIN clause and with to the query using the Enquiry relation
  * @method     ChildEnquiryCommentQuery innerJoinWithEnquiry() Adds a INNER JOIN clause and with to the query using the Enquiry relation
  *
- * @method     \Wedding\EnquiryQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Wedding\StaffQuery|\Wedding\EnquiryQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildEnquiryComment findOne(ConnectionInterface $con = null) Return the first ChildEnquiryComment matching the query
  * @method     ChildEnquiryComment findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEnquiryComment matching the query, or a new ChildEnquiryComment object populated from the query conditions when no match is found
@@ -358,6 +368,8 @@ abstract class EnquiryCommentQuery extends ModelCriteria
      * $query->filterByStaffId(array('min' => 12)); // WHERE staff_id > 12
      * </code>
      *
+     * @see       filterByStaff()
+     *
      * @param     mixed $staffId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
@@ -455,6 +467,83 @@ abstract class EnquiryCommentQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(EnquiryCommentTableMap::COL_CREATED_AT, $createdAt, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \Wedding\Staff object
+     *
+     * @param \Wedding\Staff|ObjectCollection $staff The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildEnquiryCommentQuery The current query, for fluid interface
+     */
+    public function filterByStaff($staff, $comparison = null)
+    {
+        if ($staff instanceof \Wedding\Staff) {
+            return $this
+                ->addUsingAlias(EnquiryCommentTableMap::COL_STAFF_ID, $staff->getEntityId(), $comparison);
+        } elseif ($staff instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(EnquiryCommentTableMap::COL_STAFF_ID, $staff->toKeyValue('PrimaryKey', 'EntityId'), $comparison);
+        } else {
+            throw new PropelException('filterByStaff() only accepts arguments of type \Wedding\Staff or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Staff relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildEnquiryCommentQuery The current query, for fluid interface
+     */
+    public function joinStaff($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Staff');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Staff');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Staff relation Staff object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Wedding\StaffQuery A secondary query class using the current class as primary query
+     */
+    public function useStaffQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinStaff($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Staff', '\Wedding\StaffQuery');
     }
 
     /**

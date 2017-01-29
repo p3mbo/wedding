@@ -18,29 +18,29 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
-use Wedding\Enquiry as ChildEnquiry;
 use Wedding\EnquiryComment as ChildEnquiryComment;
 use Wedding\EnquiryCommentQuery as ChildEnquiryCommentQuery;
-use Wedding\EnquiryQuery as ChildEnquiryQuery;
+use Wedding\Staff as ChildStaff;
+use Wedding\StaffQuery as ChildStaffQuery;
 use Wedding\Viewing as ChildViewing;
 use Wedding\ViewingQuery as ChildViewingQuery;
 use Wedding\Map\EnquiryCommentTableMap;
-use Wedding\Map\EnquiryTableMap;
+use Wedding\Map\StaffTableMap;
 use Wedding\Map\ViewingTableMap;
 
 /**
- * Base class that represents a row from the 'enquiry' table.
+ * Base class that represents a row from the 'staff' table.
  *
  * 
  *
  * @package    propel.generator.Wedding.Base
  */
-abstract class Enquiry implements ActiveRecordInterface 
+abstract class Staff implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Wedding\\Map\\EnquiryTableMap';
+    const TABLE_MAP = '\\Wedding\\Map\\StaffTableMap';
 
 
     /**
@@ -77,25 +77,11 @@ abstract class Enquiry implements ActiveRecordInterface
     protected $entity_id;
 
     /**
-     * The value for the title field.
-     * 
-     * @var        string
-     */
-    protected $title;
-
-    /**
      * The value for the name field.
      * 
      * @var        string
      */
     protected $name;
-
-    /**
-     * The value for the partner_name field.
-     * 
-     * @var        string
-     */
-    protected $partner_name;
 
     /**
      * The value for the email field.
@@ -105,69 +91,11 @@ abstract class Enquiry implements ActiveRecordInterface
     protected $email;
 
     /**
-     * The value for the telephone field.
+     * The value for the password field.
      * 
      * @var        string
      */
-    protected $telephone;
-
-    /**
-     * The value for the mobile field.
-     * 
-     * @var        string
-     */
-    protected $mobile;
-
-    /**
-     * The value for the address field.
-     * 
-     * @var        string
-     */
-    protected $address;
-
-    /**
-     * The value for the day_guests field.
-     * 
-     * Note: this column has a database default value of: 0
-     * @var        int
-     */
-    protected $day_guests;
-
-    /**
-     * The value for the evening_guests field.
-     * 
-     * Note: this column has a database default value of: 0
-     * @var        int
-     */
-    protected $evening_guests;
-
-    /**
-     * The value for the year field.
-     * 
-     * @var        string
-     */
-    protected $year;
-
-    /**
-     * The value for the budget field.
-     * 
-     * @var        string
-     */
-    protected $budget;
-
-    /**
-     * The value for the heard field.
-     * 
-     * @var        string
-     */
-    protected $heard;
-
-    /**
-     * The value for the comment field.
-     * 
-     * @var        string
-     */
-    protected $comment;
+    protected $password;
 
     /**
      * The value for the created_at field.
@@ -184,25 +112,11 @@ abstract class Enquiry implements ActiveRecordInterface
     protected $updated_at;
 
     /**
-     * The value for the lost_at field.
+     * The value for the archived_at field.
      * 
      * @var        DateTime
      */
-    protected $lost_at;
-
-    /**
-     * The value for the promted_at field.
-     * 
-     * @var        DateTime
-     */
-    protected $promted_at;
-
-    /**
-     * The value for the contacted_at field.
-     * 
-     * @var        DateTime
-     */
-    protected $contacted_at;
+    protected $archived_at;
 
     /**
      * @var        ObjectCollection|ChildEnquiryComment[] Collection to store aggregation of ChildEnquiryComment objects.
@@ -237,24 +151,10 @@ abstract class Enquiry implements ActiveRecordInterface
     protected $viewingsScheduledForDeletion = null;
 
     /**
-     * Applies default values to this object.
-     * This method should be called from the object's constructor (or
-     * equivalent initialization method).
-     * @see __construct()
-     */
-    public function applyDefaultValues()
-    {
-        $this->day_guests = 0;
-        $this->evening_guests = 0;
-    }
-
-    /**
-     * Initializes internal state of Wedding\Base\Enquiry object.
-     * @see applyDefaults()
+     * Initializes internal state of Wedding\Base\Staff object.
      */
     public function __construct()
     {
-        $this->applyDefaultValues();
     }
 
     /**
@@ -346,9 +246,9 @@ abstract class Enquiry implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Enquiry</code> instance.  If
-     * <code>obj</code> is an instance of <code>Enquiry</code>, delegates to
-     * <code>equals(Enquiry)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>Staff</code> instance.  If
+     * <code>obj</code> is an instance of <code>Staff</code>, delegates to
+     * <code>equals(Staff)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -414,7 +314,7 @@ abstract class Enquiry implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|Enquiry The current object, for fluid interface
+     * @return $this|Staff The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -486,16 +386,6 @@ abstract class Enquiry implements ActiveRecordInterface
     }
 
     /**
-     * Get the [title] column value.
-     * 
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
      * Get the [name] column value.
      * 
      * @return string
@@ -503,16 +393,6 @@ abstract class Enquiry implements ActiveRecordInterface
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Get the [partner_name] column value.
-     * 
-     * @return string
-     */
-    public function getPartnerName()
-    {
-        return $this->partner_name;
     }
 
     /**
@@ -526,93 +406,13 @@ abstract class Enquiry implements ActiveRecordInterface
     }
 
     /**
-     * Get the [telephone] column value.
+     * Get the [password] column value.
      * 
      * @return string
      */
-    public function getTelephone()
+    public function getPassword()
     {
-        return $this->telephone;
-    }
-
-    /**
-     * Get the [mobile] column value.
-     * 
-     * @return string
-     */
-    public function getMobile()
-    {
-        return $this->mobile;
-    }
-
-    /**
-     * Get the [address] column value.
-     * 
-     * @return string
-     */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
-     * Get the [day_guests] column value.
-     * 
-     * @return int
-     */
-    public function getDayGuests()
-    {
-        return $this->day_guests;
-    }
-
-    /**
-     * Get the [evening_guests] column value.
-     * 
-     * @return int
-     */
-    public function getEveningGuests()
-    {
-        return $this->evening_guests;
-    }
-
-    /**
-     * Get the [year] column value.
-     * 
-     * @return string
-     */
-    public function getYear()
-    {
-        return $this->year;
-    }
-
-    /**
-     * Get the [budget] column value.
-     * 
-     * @return string
-     */
-    public function getBudget()
-    {
-        return $this->budget;
-    }
-
-    /**
-     * Get the [heard] column value.
-     * 
-     * @return string
-     */
-    public function getHeard()
-    {
-        return $this->heard;
-    }
-
-    /**
-     * Get the [comment] column value.
-     * 
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
+        return $this->password;
     }
 
     /**
@@ -656,7 +456,7 @@ abstract class Enquiry implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [lost_at] column value.
+     * Get the [optionally formatted] temporal [archived_at] column value.
      * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
@@ -666,52 +466,12 @@ abstract class Enquiry implements ActiveRecordInterface
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getLostAt($format = NULL)
+    public function getArchivedAt($format = NULL)
     {
         if ($format === null) {
-            return $this->lost_at;
+            return $this->archived_at;
         } else {
-            return $this->lost_at instanceof \DateTimeInterface ? $this->lost_at->format($format) : null;
-        }
-    }
-
-    /**
-     * Get the [optionally formatted] temporal [promted_at] column value.
-     * 
-     *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
-     *                            If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     */
-    public function getPromtedAt($format = NULL)
-    {
-        if ($format === null) {
-            return $this->promted_at;
-        } else {
-            return $this->promted_at instanceof \DateTimeInterface ? $this->promted_at->format($format) : null;
-        }
-    }
-
-    /**
-     * Get the [optionally formatted] temporal [contacted_at] column value.
-     * 
-     *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
-     *                            If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     */
-    public function getContactedAt($format = NULL)
-    {
-        if ($format === null) {
-            return $this->contacted_at;
-        } else {
-            return $this->contacted_at instanceof \DateTimeInterface ? $this->contacted_at->format($format) : null;
+            return $this->archived_at instanceof \DateTimeInterface ? $this->archived_at->format($format) : null;
         }
     }
 
@@ -719,7 +479,7 @@ abstract class Enquiry implements ActiveRecordInterface
      * Set the value of [entity_id] column.
      * 
      * @param int $v new value
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
+     * @return $this|\Wedding\Staff The current object (for fluent API support)
      */
     public function setEntityId($v)
     {
@@ -729,37 +489,17 @@ abstract class Enquiry implements ActiveRecordInterface
 
         if ($this->entity_id !== $v) {
             $this->entity_id = $v;
-            $this->modifiedColumns[EnquiryTableMap::COL_ENTITY_ID] = true;
+            $this->modifiedColumns[StaffTableMap::COL_ENTITY_ID] = true;
         }
 
         return $this;
     } // setEntityId()
 
     /**
-     * Set the value of [title] column.
-     * 
-     * @param string $v new value
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
-     */
-    public function setTitle($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->title !== $v) {
-            $this->title = $v;
-            $this->modifiedColumns[EnquiryTableMap::COL_TITLE] = true;
-        }
-
-        return $this;
-    } // setTitle()
-
-    /**
      * Set the value of [name] column.
      * 
      * @param string $v new value
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
+     * @return $this|\Wedding\Staff The current object (for fluent API support)
      */
     public function setName($v)
     {
@@ -769,37 +509,17 @@ abstract class Enquiry implements ActiveRecordInterface
 
         if ($this->name !== $v) {
             $this->name = $v;
-            $this->modifiedColumns[EnquiryTableMap::COL_NAME] = true;
+            $this->modifiedColumns[StaffTableMap::COL_NAME] = true;
         }
 
         return $this;
     } // setName()
 
     /**
-     * Set the value of [partner_name] column.
-     * 
-     * @param string $v new value
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
-     */
-    public function setPartnerName($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->partner_name !== $v) {
-            $this->partner_name = $v;
-            $this->modifiedColumns[EnquiryTableMap::COL_PARTNER_NAME] = true;
-        }
-
-        return $this;
-    } // setPartnerName()
-
-    /**
      * Set the value of [email] column.
      * 
      * @param string $v new value
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
+     * @return $this|\Wedding\Staff The current object (for fluent API support)
      */
     public function setEmail($v)
     {
@@ -809,198 +529,38 @@ abstract class Enquiry implements ActiveRecordInterface
 
         if ($this->email !== $v) {
             $this->email = $v;
-            $this->modifiedColumns[EnquiryTableMap::COL_EMAIL] = true;
+            $this->modifiedColumns[StaffTableMap::COL_EMAIL] = true;
         }
 
         return $this;
     } // setEmail()
 
     /**
-     * Set the value of [telephone] column.
+     * Set the value of [password] column.
      * 
      * @param string $v new value
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
+     * @return $this|\Wedding\Staff The current object (for fluent API support)
      */
-    public function setTelephone($v)
+    public function setPassword($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->telephone !== $v) {
-            $this->telephone = $v;
-            $this->modifiedColumns[EnquiryTableMap::COL_TELEPHONE] = true;
+        if ($this->password !== $v) {
+            $this->password = $v;
+            $this->modifiedColumns[StaffTableMap::COL_PASSWORD] = true;
         }
 
         return $this;
-    } // setTelephone()
-
-    /**
-     * Set the value of [mobile] column.
-     * 
-     * @param string $v new value
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
-     */
-    public function setMobile($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->mobile !== $v) {
-            $this->mobile = $v;
-            $this->modifiedColumns[EnquiryTableMap::COL_MOBILE] = true;
-        }
-
-        return $this;
-    } // setMobile()
-
-    /**
-     * Set the value of [address] column.
-     * 
-     * @param string $v new value
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
-     */
-    public function setAddress($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->address !== $v) {
-            $this->address = $v;
-            $this->modifiedColumns[EnquiryTableMap::COL_ADDRESS] = true;
-        }
-
-        return $this;
-    } // setAddress()
-
-    /**
-     * Set the value of [day_guests] column.
-     * 
-     * @param int $v new value
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
-     */
-    public function setDayGuests($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->day_guests !== $v) {
-            $this->day_guests = $v;
-            $this->modifiedColumns[EnquiryTableMap::COL_DAY_GUESTS] = true;
-        }
-
-        return $this;
-    } // setDayGuests()
-
-    /**
-     * Set the value of [evening_guests] column.
-     * 
-     * @param int $v new value
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
-     */
-    public function setEveningGuests($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->evening_guests !== $v) {
-            $this->evening_guests = $v;
-            $this->modifiedColumns[EnquiryTableMap::COL_EVENING_GUESTS] = true;
-        }
-
-        return $this;
-    } // setEveningGuests()
-
-    /**
-     * Set the value of [year] column.
-     * 
-     * @param string $v new value
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
-     */
-    public function setYear($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->year !== $v) {
-            $this->year = $v;
-            $this->modifiedColumns[EnquiryTableMap::COL_YEAR] = true;
-        }
-
-        return $this;
-    } // setYear()
-
-    /**
-     * Set the value of [budget] column.
-     * 
-     * @param string $v new value
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
-     */
-    public function setBudget($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->budget !== $v) {
-            $this->budget = $v;
-            $this->modifiedColumns[EnquiryTableMap::COL_BUDGET] = true;
-        }
-
-        return $this;
-    } // setBudget()
-
-    /**
-     * Set the value of [heard] column.
-     * 
-     * @param string $v new value
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
-     */
-    public function setHeard($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->heard !== $v) {
-            $this->heard = $v;
-            $this->modifiedColumns[EnquiryTableMap::COL_HEARD] = true;
-        }
-
-        return $this;
-    } // setHeard()
-
-    /**
-     * Set the value of [comment] column.
-     * 
-     * @param string $v new value
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
-     */
-    public function setComment($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->comment !== $v) {
-            $this->comment = $v;
-            $this->modifiedColumns[EnquiryTableMap::COL_COMMENT] = true;
-        }
-
-        return $this;
-    } // setComment()
+    } // setPassword()
 
     /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
+     * @return $this|\Wedding\Staff The current object (for fluent API support)
      */
     public function setCreatedAt($v)
     {
@@ -1008,7 +568,7 @@ abstract class Enquiry implements ActiveRecordInterface
         if ($this->created_at !== null || $dt !== null) {
             if ($this->created_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->created_at->format("Y-m-d H:i:s.u")) {
                 $this->created_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[EnquiryTableMap::COL_CREATED_AT] = true;
+                $this->modifiedColumns[StaffTableMap::COL_CREATED_AT] = true;
             }
         } // if either are not null
 
@@ -1020,7 +580,7 @@ abstract class Enquiry implements ActiveRecordInterface
      * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
+     * @return $this|\Wedding\Staff The current object (for fluent API support)
      */
     public function setUpdatedAt($v)
     {
@@ -1028,7 +588,7 @@ abstract class Enquiry implements ActiveRecordInterface
         if ($this->updated_at !== null || $dt !== null) {
             if ($this->updated_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->updated_at->format("Y-m-d H:i:s.u")) {
                 $this->updated_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[EnquiryTableMap::COL_UPDATED_AT] = true;
+                $this->modifiedColumns[StaffTableMap::COL_UPDATED_AT] = true;
             }
         } // if either are not null
 
@@ -1036,64 +596,24 @@ abstract class Enquiry implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
-     * Sets the value of [lost_at] column to a normalized version of the date/time value specified.
+     * Sets the value of [archived_at] column to a normalized version of the date/time value specified.
      * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
+     * @return $this|\Wedding\Staff The current object (for fluent API support)
      */
-    public function setLostAt($v)
+    public function setArchivedAt($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->lost_at !== null || $dt !== null) {
-            if ($this->lost_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->lost_at->format("Y-m-d H:i:s.u")) {
-                $this->lost_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[EnquiryTableMap::COL_LOST_AT] = true;
+        if ($this->archived_at !== null || $dt !== null) {
+            if ($this->archived_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->archived_at->format("Y-m-d H:i:s.u")) {
+                $this->archived_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[StaffTableMap::COL_ARCHIVED_AT] = true;
             }
         } // if either are not null
 
         return $this;
-    } // setLostAt()
-
-    /**
-     * Sets the value of [promted_at] column to a normalized version of the date/time value specified.
-     * 
-     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
-     */
-    public function setPromtedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->promted_at !== null || $dt !== null) {
-            if ($this->promted_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->promted_at->format("Y-m-d H:i:s.u")) {
-                $this->promted_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[EnquiryTableMap::COL_PROMTED_AT] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setPromtedAt()
-
-    /**
-     * Sets the value of [contacted_at] column to a normalized version of the date/time value specified.
-     * 
-     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
-     */
-    public function setContactedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->contacted_at !== null || $dt !== null) {
-            if ($this->contacted_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->contacted_at->format("Y-m-d H:i:s.u")) {
-                $this->contacted_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[EnquiryTableMap::COL_CONTACTED_AT] = true;
-            }
-        } // if either are not null
-
-        return $this;
-    } // setContactedAt()
+    } // setArchivedAt()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -1105,14 +625,6 @@ abstract class Enquiry implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->day_guests !== 0) {
-                return false;
-            }
-
-            if ($this->evening_guests !== 0) {
-                return false;
-            }
-
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -1139,77 +651,35 @@ abstract class Enquiry implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : EnquiryTableMap::translateFieldName('EntityId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : StaffTableMap::translateFieldName('EntityId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->entity_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : EnquiryTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->title = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : EnquiryTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : StaffTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
             $this->name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : EnquiryTableMap::translateFieldName('PartnerName', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->partner_name = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : EnquiryTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : StaffTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
             $this->email = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : EnquiryTableMap::translateFieldName('Telephone', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->telephone = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : StaffTableMap::translateFieldName('Password', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->password = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : EnquiryTableMap::translateFieldName('Mobile', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->mobile = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : EnquiryTableMap::translateFieldName('Address', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->address = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : EnquiryTableMap::translateFieldName('DayGuests', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->day_guests = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : EnquiryTableMap::translateFieldName('EveningGuests', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->evening_guests = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : EnquiryTableMap::translateFieldName('Year', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->year = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : EnquiryTableMap::translateFieldName('Budget', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->budget = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : EnquiryTableMap::translateFieldName('Heard', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->heard = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : EnquiryTableMap::translateFieldName('Comment', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->comment = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : EnquiryTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : StaffTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 15 + $startcol : EnquiryTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : StaffTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->updated_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 16 + $startcol : EnquiryTableMap::translateFieldName('LostAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : StaffTableMap::translateFieldName('ArchivedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->lost_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : EnquiryTableMap::translateFieldName('PromtedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->promted_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : EnquiryTableMap::translateFieldName('ContactedAt', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->contacted_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->archived_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1218,10 +688,10 @@ abstract class Enquiry implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 19; // 19 = EnquiryTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = StaffTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Wedding\\Enquiry'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Wedding\\Staff'), 0, $e);
         }
     }
 
@@ -1263,13 +733,13 @@ abstract class Enquiry implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(EnquiryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(StaffTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildEnquiryQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildStaffQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -1292,8 +762,8 @@ abstract class Enquiry implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Enquiry::setDeleted()
-     * @see Enquiry::isDeleted()
+     * @see Staff::setDeleted()
+     * @see Staff::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -1302,11 +772,11 @@ abstract class Enquiry implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(EnquiryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(StaffTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildEnquiryQuery::create()
+            $deleteQuery = ChildStaffQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -1341,7 +811,7 @@ abstract class Enquiry implements ActiveRecordInterface
         }
  
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(EnquiryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(StaffTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -1360,7 +830,7 @@ abstract class Enquiry implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                EnquiryTableMap::addInstanceToPool($this);
+                StaffTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -1451,72 +921,36 @@ abstract class Enquiry implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[EnquiryTableMap::COL_ENTITY_ID] = true;
+        $this->modifiedColumns[StaffTableMap::COL_ENTITY_ID] = true;
         if (null !== $this->entity_id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . EnquiryTableMap::COL_ENTITY_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . StaffTableMap::COL_ENTITY_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(EnquiryTableMap::COL_ENTITY_ID)) {
+        if ($this->isColumnModified(StaffTableMap::COL_ENTITY_ID)) {
             $modifiedColumns[':p' . $index++]  = 'entity_id';
         }
-        if ($this->isColumnModified(EnquiryTableMap::COL_TITLE)) {
-            $modifiedColumns[':p' . $index++]  = 'title';
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_NAME)) {
+        if ($this->isColumnModified(StaffTableMap::COL_NAME)) {
             $modifiedColumns[':p' . $index++]  = 'name';
         }
-        if ($this->isColumnModified(EnquiryTableMap::COL_PARTNER_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'partner_name';
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_EMAIL)) {
+        if ($this->isColumnModified(StaffTableMap::COL_EMAIL)) {
             $modifiedColumns[':p' . $index++]  = 'email';
         }
-        if ($this->isColumnModified(EnquiryTableMap::COL_TELEPHONE)) {
-            $modifiedColumns[':p' . $index++]  = 'telephone';
+        if ($this->isColumnModified(StaffTableMap::COL_PASSWORD)) {
+            $modifiedColumns[':p' . $index++]  = 'password';
         }
-        if ($this->isColumnModified(EnquiryTableMap::COL_MOBILE)) {
-            $modifiedColumns[':p' . $index++]  = 'mobile';
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_ADDRESS)) {
-            $modifiedColumns[':p' . $index++]  = 'address';
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_DAY_GUESTS)) {
-            $modifiedColumns[':p' . $index++]  = 'day_guests';
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_EVENING_GUESTS)) {
-            $modifiedColumns[':p' . $index++]  = 'evening_guests';
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_YEAR)) {
-            $modifiedColumns[':p' . $index++]  = 'year';
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_BUDGET)) {
-            $modifiedColumns[':p' . $index++]  = 'budget';
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_HEARD)) {
-            $modifiedColumns[':p' . $index++]  = 'heard';
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_COMMENT)) {
-            $modifiedColumns[':p' . $index++]  = 'comment';
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_CREATED_AT)) {
+        if ($this->isColumnModified(StaffTableMap::COL_CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'created_at';
         }
-        if ($this->isColumnModified(EnquiryTableMap::COL_UPDATED_AT)) {
+        if ($this->isColumnModified(StaffTableMap::COL_UPDATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'updated_at';
         }
-        if ($this->isColumnModified(EnquiryTableMap::COL_LOST_AT)) {
-            $modifiedColumns[':p' . $index++]  = 'lost_at';
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_PROMTED_AT)) {
-            $modifiedColumns[':p' . $index++]  = 'promted_at';
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_CONTACTED_AT)) {
-            $modifiedColumns[':p' . $index++]  = 'contacted_at';
+        if ($this->isColumnModified(StaffTableMap::COL_ARCHIVED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'archived_at';
         }
 
         $sql = sprintf(
-            'INSERT INTO enquiry (%s) VALUES (%s)',
+            'INSERT INTO staff (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -1528,44 +962,14 @@ abstract class Enquiry implements ActiveRecordInterface
                     case 'entity_id':                        
                         $stmt->bindValue($identifier, $this->entity_id, PDO::PARAM_INT);
                         break;
-                    case 'title':                        
-                        $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
-                        break;
                     case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
-                        break;
-                    case 'partner_name':                        
-                        $stmt->bindValue($identifier, $this->partner_name, PDO::PARAM_STR);
                         break;
                     case 'email':                        
                         $stmt->bindValue($identifier, $this->email, PDO::PARAM_STR);
                         break;
-                    case 'telephone':                        
-                        $stmt->bindValue($identifier, $this->telephone, PDO::PARAM_STR);
-                        break;
-                    case 'mobile':                        
-                        $stmt->bindValue($identifier, $this->mobile, PDO::PARAM_STR);
-                        break;
-                    case 'address':                        
-                        $stmt->bindValue($identifier, $this->address, PDO::PARAM_STR);
-                        break;
-                    case 'day_guests':                        
-                        $stmt->bindValue($identifier, $this->day_guests, PDO::PARAM_INT);
-                        break;
-                    case 'evening_guests':                        
-                        $stmt->bindValue($identifier, $this->evening_guests, PDO::PARAM_INT);
-                        break;
-                    case 'year':                        
-                        $stmt->bindValue($identifier, $this->year, PDO::PARAM_STR);
-                        break;
-                    case 'budget':                        
-                        $stmt->bindValue($identifier, $this->budget, PDO::PARAM_STR);
-                        break;
-                    case 'heard':                        
-                        $stmt->bindValue($identifier, $this->heard, PDO::PARAM_STR);
-                        break;
-                    case 'comment':                        
-                        $stmt->bindValue($identifier, $this->comment, PDO::PARAM_STR);
+                    case 'password':                        
+                        $stmt->bindValue($identifier, $this->password, PDO::PARAM_STR);
                         break;
                     case 'created_at':                        
                         $stmt->bindValue($identifier, $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
@@ -1573,14 +977,8 @@ abstract class Enquiry implements ActiveRecordInterface
                     case 'updated_at':                        
                         $stmt->bindValue($identifier, $this->updated_at ? $this->updated_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'lost_at':                        
-                        $stmt->bindValue($identifier, $this->lost_at ? $this->lost_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'promted_at':                        
-                        $stmt->bindValue($identifier, $this->promted_at ? $this->promted_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
-                        break;
-                    case 'contacted_at':                        
-                        $stmt->bindValue($identifier, $this->contacted_at ? $this->contacted_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'archived_at':                        
+                        $stmt->bindValue($identifier, $this->archived_at ? $this->archived_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1628,7 +1026,7 @@ abstract class Enquiry implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = EnquiryTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = StaffTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1648,58 +1046,22 @@ abstract class Enquiry implements ActiveRecordInterface
                 return $this->getEntityId();
                 break;
             case 1:
-                return $this->getTitle();
-                break;
-            case 2:
                 return $this->getName();
                 break;
-            case 3:
-                return $this->getPartnerName();
-                break;
-            case 4:
+            case 2:
                 return $this->getEmail();
                 break;
-            case 5:
-                return $this->getTelephone();
+            case 3:
+                return $this->getPassword();
                 break;
-            case 6:
-                return $this->getMobile();
-                break;
-            case 7:
-                return $this->getAddress();
-                break;
-            case 8:
-                return $this->getDayGuests();
-                break;
-            case 9:
-                return $this->getEveningGuests();
-                break;
-            case 10:
-                return $this->getYear();
-                break;
-            case 11:
-                return $this->getBudget();
-                break;
-            case 12:
-                return $this->getHeard();
-                break;
-            case 13:
-                return $this->getComment();
-                break;
-            case 14:
+            case 4:
                 return $this->getCreatedAt();
                 break;
-            case 15:
+            case 5:
                 return $this->getUpdatedAt();
                 break;
-            case 16:
-                return $this->getLostAt();
-                break;
-            case 17:
-                return $this->getPromtedAt();
-                break;
-            case 18:
-                return $this->getContactedAt();
+            case 6:
+                return $this->getArchivedAt();
                 break;
             default:
                 return null;
@@ -1725,50 +1087,30 @@ abstract class Enquiry implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['Enquiry'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['Staff'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Enquiry'][$this->hashCode()] = true;
-        $keys = EnquiryTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['Staff'][$this->hashCode()] = true;
+        $keys = StaffTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getEntityId(),
-            $keys[1] => $this->getTitle(),
-            $keys[2] => $this->getName(),
-            $keys[3] => $this->getPartnerName(),
-            $keys[4] => $this->getEmail(),
-            $keys[5] => $this->getTelephone(),
-            $keys[6] => $this->getMobile(),
-            $keys[7] => $this->getAddress(),
-            $keys[8] => $this->getDayGuests(),
-            $keys[9] => $this->getEveningGuests(),
-            $keys[10] => $this->getYear(),
-            $keys[11] => $this->getBudget(),
-            $keys[12] => $this->getHeard(),
-            $keys[13] => $this->getComment(),
-            $keys[14] => $this->getCreatedAt(),
-            $keys[15] => $this->getUpdatedAt(),
-            $keys[16] => $this->getLostAt(),
-            $keys[17] => $this->getPromtedAt(),
-            $keys[18] => $this->getContactedAt(),
+            $keys[1] => $this->getName(),
+            $keys[2] => $this->getEmail(),
+            $keys[3] => $this->getPassword(),
+            $keys[4] => $this->getCreatedAt(),
+            $keys[5] => $this->getUpdatedAt(),
+            $keys[6] => $this->getArchivedAt(),
         );
-        if ($result[$keys[14]] instanceof \DateTime) {
-            $result[$keys[14]] = $result[$keys[14]]->format('c');
+        if ($result[$keys[4]] instanceof \DateTime) {
+            $result[$keys[4]] = $result[$keys[4]]->format('c');
         }
         
-        if ($result[$keys[15]] instanceof \DateTime) {
-            $result[$keys[15]] = $result[$keys[15]]->format('c');
+        if ($result[$keys[5]] instanceof \DateTime) {
+            $result[$keys[5]] = $result[$keys[5]]->format('c');
         }
         
-        if ($result[$keys[16]] instanceof \DateTime) {
-            $result[$keys[16]] = $result[$keys[16]]->format('c');
-        }
-        
-        if ($result[$keys[17]] instanceof \DateTime) {
-            $result[$keys[17]] = $result[$keys[17]]->format('c');
-        }
-        
-        if ($result[$keys[18]] instanceof \DateTime) {
-            $result[$keys[18]] = $result[$keys[18]]->format('c');
+        if ($result[$keys[6]] instanceof \DateTime) {
+            $result[$keys[6]] = $result[$keys[6]]->format('c');
         }
         
         $virtualColumns = $this->virtualColumns;
@@ -1821,11 +1163,11 @@ abstract class Enquiry implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\Wedding\Enquiry
+     * @return $this|\Wedding\Staff
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = EnquiryTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = StaffTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -1836,7 +1178,7 @@ abstract class Enquiry implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\Wedding\Enquiry
+     * @return $this|\Wedding\Staff
      */
     public function setByPosition($pos, $value)
     {
@@ -1845,58 +1187,22 @@ abstract class Enquiry implements ActiveRecordInterface
                 $this->setEntityId($value);
                 break;
             case 1:
-                $this->setTitle($value);
-                break;
-            case 2:
                 $this->setName($value);
                 break;
-            case 3:
-                $this->setPartnerName($value);
-                break;
-            case 4:
+            case 2:
                 $this->setEmail($value);
                 break;
-            case 5:
-                $this->setTelephone($value);
+            case 3:
+                $this->setPassword($value);
                 break;
-            case 6:
-                $this->setMobile($value);
-                break;
-            case 7:
-                $this->setAddress($value);
-                break;
-            case 8:
-                $this->setDayGuests($value);
-                break;
-            case 9:
-                $this->setEveningGuests($value);
-                break;
-            case 10:
-                $this->setYear($value);
-                break;
-            case 11:
-                $this->setBudget($value);
-                break;
-            case 12:
-                $this->setHeard($value);
-                break;
-            case 13:
-                $this->setComment($value);
-                break;
-            case 14:
+            case 4:
                 $this->setCreatedAt($value);
                 break;
-            case 15:
+            case 5:
                 $this->setUpdatedAt($value);
                 break;
-            case 16:
-                $this->setLostAt($value);
-                break;
-            case 17:
-                $this->setPromtedAt($value);
-                break;
-            case 18:
-                $this->setContactedAt($value);
+            case 6:
+                $this->setArchivedAt($value);
                 break;
         } // switch()
 
@@ -1922,64 +1228,28 @@ abstract class Enquiry implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = EnquiryTableMap::getFieldNames($keyType);
+        $keys = StaffTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setEntityId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setTitle($arr[$keys[1]]);
+            $this->setName($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setName($arr[$keys[2]]);
+            $this->setEmail($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setPartnerName($arr[$keys[3]]);
+            $this->setPassword($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setEmail($arr[$keys[4]]);
+            $this->setCreatedAt($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setTelephone($arr[$keys[5]]);
+            $this->setUpdatedAt($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setMobile($arr[$keys[6]]);
-        }
-        if (array_key_exists($keys[7], $arr)) {
-            $this->setAddress($arr[$keys[7]]);
-        }
-        if (array_key_exists($keys[8], $arr)) {
-            $this->setDayGuests($arr[$keys[8]]);
-        }
-        if (array_key_exists($keys[9], $arr)) {
-            $this->setEveningGuests($arr[$keys[9]]);
-        }
-        if (array_key_exists($keys[10], $arr)) {
-            $this->setYear($arr[$keys[10]]);
-        }
-        if (array_key_exists($keys[11], $arr)) {
-            $this->setBudget($arr[$keys[11]]);
-        }
-        if (array_key_exists($keys[12], $arr)) {
-            $this->setHeard($arr[$keys[12]]);
-        }
-        if (array_key_exists($keys[13], $arr)) {
-            $this->setComment($arr[$keys[13]]);
-        }
-        if (array_key_exists($keys[14], $arr)) {
-            $this->setCreatedAt($arr[$keys[14]]);
-        }
-        if (array_key_exists($keys[15], $arr)) {
-            $this->setUpdatedAt($arr[$keys[15]]);
-        }
-        if (array_key_exists($keys[16], $arr)) {
-            $this->setLostAt($arr[$keys[16]]);
-        }
-        if (array_key_exists($keys[17], $arr)) {
-            $this->setPromtedAt($arr[$keys[17]]);
-        }
-        if (array_key_exists($keys[18], $arr)) {
-            $this->setContactedAt($arr[$keys[18]]);
+            $this->setArchivedAt($arr[$keys[6]]);
         }
     }
 
@@ -2000,7 +1270,7 @@ abstract class Enquiry implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\Wedding\Enquiry The current object, for fluid interface
+     * @return $this|\Wedding\Staff The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -2020,64 +1290,28 @@ abstract class Enquiry implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(EnquiryTableMap::DATABASE_NAME);
+        $criteria = new Criteria(StaffTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(EnquiryTableMap::COL_ENTITY_ID)) {
-            $criteria->add(EnquiryTableMap::COL_ENTITY_ID, $this->entity_id);
+        if ($this->isColumnModified(StaffTableMap::COL_ENTITY_ID)) {
+            $criteria->add(StaffTableMap::COL_ENTITY_ID, $this->entity_id);
         }
-        if ($this->isColumnModified(EnquiryTableMap::COL_TITLE)) {
-            $criteria->add(EnquiryTableMap::COL_TITLE, $this->title);
+        if ($this->isColumnModified(StaffTableMap::COL_NAME)) {
+            $criteria->add(StaffTableMap::COL_NAME, $this->name);
         }
-        if ($this->isColumnModified(EnquiryTableMap::COL_NAME)) {
-            $criteria->add(EnquiryTableMap::COL_NAME, $this->name);
+        if ($this->isColumnModified(StaffTableMap::COL_EMAIL)) {
+            $criteria->add(StaffTableMap::COL_EMAIL, $this->email);
         }
-        if ($this->isColumnModified(EnquiryTableMap::COL_PARTNER_NAME)) {
-            $criteria->add(EnquiryTableMap::COL_PARTNER_NAME, $this->partner_name);
+        if ($this->isColumnModified(StaffTableMap::COL_PASSWORD)) {
+            $criteria->add(StaffTableMap::COL_PASSWORD, $this->password);
         }
-        if ($this->isColumnModified(EnquiryTableMap::COL_EMAIL)) {
-            $criteria->add(EnquiryTableMap::COL_EMAIL, $this->email);
+        if ($this->isColumnModified(StaffTableMap::COL_CREATED_AT)) {
+            $criteria->add(StaffTableMap::COL_CREATED_AT, $this->created_at);
         }
-        if ($this->isColumnModified(EnquiryTableMap::COL_TELEPHONE)) {
-            $criteria->add(EnquiryTableMap::COL_TELEPHONE, $this->telephone);
+        if ($this->isColumnModified(StaffTableMap::COL_UPDATED_AT)) {
+            $criteria->add(StaffTableMap::COL_UPDATED_AT, $this->updated_at);
         }
-        if ($this->isColumnModified(EnquiryTableMap::COL_MOBILE)) {
-            $criteria->add(EnquiryTableMap::COL_MOBILE, $this->mobile);
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_ADDRESS)) {
-            $criteria->add(EnquiryTableMap::COL_ADDRESS, $this->address);
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_DAY_GUESTS)) {
-            $criteria->add(EnquiryTableMap::COL_DAY_GUESTS, $this->day_guests);
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_EVENING_GUESTS)) {
-            $criteria->add(EnquiryTableMap::COL_EVENING_GUESTS, $this->evening_guests);
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_YEAR)) {
-            $criteria->add(EnquiryTableMap::COL_YEAR, $this->year);
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_BUDGET)) {
-            $criteria->add(EnquiryTableMap::COL_BUDGET, $this->budget);
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_HEARD)) {
-            $criteria->add(EnquiryTableMap::COL_HEARD, $this->heard);
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_COMMENT)) {
-            $criteria->add(EnquiryTableMap::COL_COMMENT, $this->comment);
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_CREATED_AT)) {
-            $criteria->add(EnquiryTableMap::COL_CREATED_AT, $this->created_at);
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_UPDATED_AT)) {
-            $criteria->add(EnquiryTableMap::COL_UPDATED_AT, $this->updated_at);
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_LOST_AT)) {
-            $criteria->add(EnquiryTableMap::COL_LOST_AT, $this->lost_at);
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_PROMTED_AT)) {
-            $criteria->add(EnquiryTableMap::COL_PROMTED_AT, $this->promted_at);
-        }
-        if ($this->isColumnModified(EnquiryTableMap::COL_CONTACTED_AT)) {
-            $criteria->add(EnquiryTableMap::COL_CONTACTED_AT, $this->contacted_at);
+        if ($this->isColumnModified(StaffTableMap::COL_ARCHIVED_AT)) {
+            $criteria->add(StaffTableMap::COL_ARCHIVED_AT, $this->archived_at);
         }
 
         return $criteria;
@@ -2095,8 +1329,8 @@ abstract class Enquiry implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildEnquiryQuery::create();
-        $criteria->add(EnquiryTableMap::COL_ENTITY_ID, $this->entity_id);
+        $criteria = ChildStaffQuery::create();
+        $criteria->add(StaffTableMap::COL_ENTITY_ID, $this->entity_id);
 
         return $criteria;
     }
@@ -2158,31 +1392,19 @@ abstract class Enquiry implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \Wedding\Enquiry (or compatible) type.
+     * @param      object $copyObj An object of \Wedding\Staff (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setTitle($this->getTitle());
         $copyObj->setName($this->getName());
-        $copyObj->setPartnerName($this->getPartnerName());
         $copyObj->setEmail($this->getEmail());
-        $copyObj->setTelephone($this->getTelephone());
-        $copyObj->setMobile($this->getMobile());
-        $copyObj->setAddress($this->getAddress());
-        $copyObj->setDayGuests($this->getDayGuests());
-        $copyObj->setEveningGuests($this->getEveningGuests());
-        $copyObj->setYear($this->getYear());
-        $copyObj->setBudget($this->getBudget());
-        $copyObj->setHeard($this->getHeard());
-        $copyObj->setComment($this->getComment());
+        $copyObj->setPassword($this->getPassword());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
-        $copyObj->setLostAt($this->getLostAt());
-        $copyObj->setPromtedAt($this->getPromtedAt());
-        $copyObj->setContactedAt($this->getContactedAt());
+        $copyObj->setArchivedAt($this->getArchivedAt());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2218,7 +1440,7 @@ abstract class Enquiry implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Wedding\Enquiry Clone of current object.
+     * @return \Wedding\Staff Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -2302,7 +1524,7 @@ abstract class Enquiry implements ActiveRecordInterface
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildEnquiry is new, it will return
+     * If this ChildStaff is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
@@ -2319,7 +1541,7 @@ abstract class Enquiry implements ActiveRecordInterface
                 $this->initEnquiryComments();
             } else {
                 $collEnquiryComments = ChildEnquiryCommentQuery::create(null, $criteria)
-                    ->filterByEnquiry($this)
+                    ->filterByStaff($this)
                     ->find($con);
 
                 if (null !== $criteria) {
@@ -2362,7 +1584,7 @@ abstract class Enquiry implements ActiveRecordInterface
      *
      * @param      Collection $enquiryComments A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildEnquiry The current object (for fluent API support)
+     * @return $this|ChildStaff The current object (for fluent API support)
      */
     public function setEnquiryComments(Collection $enquiryComments, ConnectionInterface $con = null)
     {
@@ -2373,7 +1595,7 @@ abstract class Enquiry implements ActiveRecordInterface
         $this->enquiryCommentsScheduledForDeletion = $enquiryCommentsToDelete;
 
         foreach ($enquiryCommentsToDelete as $enquiryCommentRemoved) {
-            $enquiryCommentRemoved->setEnquiry(null);
+            $enquiryCommentRemoved->setStaff(null);
         }
 
         $this->collEnquiryComments = null;
@@ -2414,7 +1636,7 @@ abstract class Enquiry implements ActiveRecordInterface
             }
 
             return $query
-                ->filterByEnquiry($this)
+                ->filterByStaff($this)
                 ->count($con);
         }
 
@@ -2426,7 +1648,7 @@ abstract class Enquiry implements ActiveRecordInterface
      * through the ChildEnquiryComment foreign key attribute.
      *
      * @param  ChildEnquiryComment $l ChildEnquiryComment
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
+     * @return $this|\Wedding\Staff The current object (for fluent API support)
      */
     public function addEnquiryComment(ChildEnquiryComment $l)
     {
@@ -2452,12 +1674,12 @@ abstract class Enquiry implements ActiveRecordInterface
     protected function doAddEnquiryComment(ChildEnquiryComment $enquiryComment)
     {
         $this->collEnquiryComments[]= $enquiryComment;
-        $enquiryComment->setEnquiry($this);
+        $enquiryComment->setStaff($this);
     }
 
     /**
      * @param  ChildEnquiryComment $enquiryComment The ChildEnquiryComment object to remove.
-     * @return $this|ChildEnquiry The current object (for fluent API support)
+     * @return $this|ChildStaff The current object (for fluent API support)
      */
     public function removeEnquiryComment(ChildEnquiryComment $enquiryComment)
     {
@@ -2469,7 +1691,7 @@ abstract class Enquiry implements ActiveRecordInterface
                 $this->enquiryCommentsScheduledForDeletion->clear();
             }
             $this->enquiryCommentsScheduledForDeletion[]= $enquiryComment;
-            $enquiryComment->setEnquiry(null);
+            $enquiryComment->setStaff(null);
         }
 
         return $this;
@@ -2479,23 +1701,23 @@ abstract class Enquiry implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this Enquiry is new, it will return
-     * an empty collection; or if this Enquiry has previously
+     * Otherwise if this Staff is new, it will return
+     * an empty collection; or if this Staff has previously
      * been saved, it will retrieve related EnquiryComments from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in Enquiry.
+     * actually need in Staff.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildEnquiryComment[] List of ChildEnquiryComment objects
      */
-    public function getEnquiryCommentsJoinStaff(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getEnquiryCommentsJoinEnquiry(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildEnquiryCommentQuery::create(null, $criteria);
-        $query->joinWith('Staff', $joinBehavior);
+        $query->joinWith('Enquiry', $joinBehavior);
 
         return $this->getEnquiryComments($query, $con);
     }
@@ -2552,7 +1774,7 @@ abstract class Enquiry implements ActiveRecordInterface
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildEnquiry is new, it will return
+     * If this ChildStaff is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
@@ -2569,7 +1791,7 @@ abstract class Enquiry implements ActiveRecordInterface
                 $this->initViewings();
             } else {
                 $collViewings = ChildViewingQuery::create(null, $criteria)
-                    ->filterByEnquiry($this)
+                    ->filterByStaff($this)
                     ->find($con);
 
                 if (null !== $criteria) {
@@ -2612,7 +1834,7 @@ abstract class Enquiry implements ActiveRecordInterface
      *
      * @param      Collection $viewings A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildEnquiry The current object (for fluent API support)
+     * @return $this|ChildStaff The current object (for fluent API support)
      */
     public function setViewings(Collection $viewings, ConnectionInterface $con = null)
     {
@@ -2623,7 +1845,7 @@ abstract class Enquiry implements ActiveRecordInterface
         $this->viewingsScheduledForDeletion = $viewingsToDelete;
 
         foreach ($viewingsToDelete as $viewingRemoved) {
-            $viewingRemoved->setEnquiry(null);
+            $viewingRemoved->setStaff(null);
         }
 
         $this->collViewings = null;
@@ -2664,7 +1886,7 @@ abstract class Enquiry implements ActiveRecordInterface
             }
 
             return $query
-                ->filterByEnquiry($this)
+                ->filterByStaff($this)
                 ->count($con);
         }
 
@@ -2676,7 +1898,7 @@ abstract class Enquiry implements ActiveRecordInterface
      * through the ChildViewing foreign key attribute.
      *
      * @param  ChildViewing $l ChildViewing
-     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
+     * @return $this|\Wedding\Staff The current object (for fluent API support)
      */
     public function addViewing(ChildViewing $l)
     {
@@ -2702,12 +1924,12 @@ abstract class Enquiry implements ActiveRecordInterface
     protected function doAddViewing(ChildViewing $viewing)
     {
         $this->collViewings[]= $viewing;
-        $viewing->setEnquiry($this);
+        $viewing->setStaff($this);
     }
 
     /**
      * @param  ChildViewing $viewing The ChildViewing object to remove.
-     * @return $this|ChildEnquiry The current object (for fluent API support)
+     * @return $this|ChildStaff The current object (for fluent API support)
      */
     public function removeViewing(ChildViewing $viewing)
     {
@@ -2719,7 +1941,7 @@ abstract class Enquiry implements ActiveRecordInterface
                 $this->viewingsScheduledForDeletion->clear();
             }
             $this->viewingsScheduledForDeletion[]= $viewing;
-            $viewing->setEnquiry(null);
+            $viewing->setStaff(null);
         }
 
         return $this;
@@ -2729,23 +1951,23 @@ abstract class Enquiry implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this Enquiry is new, it will return
-     * an empty collection; or if this Enquiry has previously
+     * Otherwise if this Staff is new, it will return
+     * an empty collection; or if this Staff has previously
      * been saved, it will retrieve related Viewings from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in Enquiry.
+     * actually need in Staff.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildViewing[] List of ChildViewing objects
      */
-    public function getViewingsJoinStaff(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getViewingsJoinEnquiry(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildViewingQuery::create(null, $criteria);
-        $query->joinWith('Staff', $joinBehavior);
+        $query->joinWith('Enquiry', $joinBehavior);
 
         return $this->getViewings($query, $con);
     }
@@ -2758,27 +1980,14 @@ abstract class Enquiry implements ActiveRecordInterface
     public function clear()
     {
         $this->entity_id = null;
-        $this->title = null;
         $this->name = null;
-        $this->partner_name = null;
         $this->email = null;
-        $this->telephone = null;
-        $this->mobile = null;
-        $this->address = null;
-        $this->day_guests = null;
-        $this->evening_guests = null;
-        $this->year = null;
-        $this->budget = null;
-        $this->heard = null;
-        $this->comment = null;
+        $this->password = null;
         $this->created_at = null;
         $this->updated_at = null;
-        $this->lost_at = null;
-        $this->promted_at = null;
-        $this->contacted_at = null;
+        $this->archived_at = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
-        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
@@ -2818,7 +2027,7 @@ abstract class Enquiry implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(EnquiryTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(StaffTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**

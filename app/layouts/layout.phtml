@@ -51,7 +51,10 @@ $this->title('The Sheene Mill Weddings');
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/lead"><span class=" glyphicon glyphicon-list"></span> Leads <span class="badge badge-primary">2</span></a></li>
+                <li><a href="/lead"><span class=" glyphicon glyphicon-list"></span> Leads</a></li>
+                <li><a href="/lead"><span class=" glyphicon glyphicon-home"></span> Viewings</a></li>
+                <li><a href="/lead"><span class=" glyphicon glyphicon-tag"></span> Quotes</a></li>
+                <li><a href="/lead"><span class=" glyphicon glyphicon-book"></span> Bookings</a></li>
                 <li><a href="/login/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
         </div>
@@ -64,6 +67,8 @@ $this->title('The Sheene Mill Weddings');
 </div>
 
 
+
+<?php echo $this->partial('partial/modal/viewing.phtml', []); ?>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"

@@ -6,6 +6,8 @@ class LeadController extends CoreController
     {
         $collection = \Wedding\EnquiryQuery::create()->find();
         $this->view->collection = $collection;
+
+        $this->view->js('/js/viewing.js');
     }
 
     public function addAction()
@@ -13,8 +15,59 @@ class LeadController extends CoreController
         $this->view->title('Add Lead');
     }
 
+    public function promoteAction()
+    {
+        $enq = $this->_initEnquiry();
+        if($enq->markPromoted()) {
+            \Wedding\Messages::addSuccess('Lead marked as promoted.');
+        }
+
+        $this->redirectReferer();
+    }
+
+    public function loseAction()
+    {
+        $enq = $this->_initEnquiry();
+        if($enq->markLost()) {
+            \Wedding\Messages::addSuccess('Lead marked as lost.');
+        }
+
+        $this->redirectReferer();
+    }
+
+    public function resetAction()
+    {
+        $enq = $this->_initEnquiry();
+        if($enq->reset()) {
+            \Wedding\Messages::addSuccess('Lead marked as lost.');
+        }
+
+        $this->redirectReferer();
+    }
+
+    public function contactedAction()
+    {
+        $enq = $this->_initEnquiry();
+        if($enq->markContacted()) {
+            \Wedding\Messages::addSuccess('Lead marked as contacted.');
+        }
+
+        $this->redirectReferer();
+    }
 
     public function editAction()
+    {
+        $enq = $this->_initEnquiry();
+
+        $this->view->enq = $enq;
+        $this->view->title(sprintf('Edit Enquiry %s', $enq->getFormattedId()));
+
+    }
+
+    /**
+     * @return \Wedding\Enquiry
+     */
+    private function _initEnquiry()
     {
         /** @var Request $request */
         $request = $this->getRequest();
@@ -28,9 +81,13 @@ class LeadController extends CoreController
 
 
         $enq = \Wedding\EnquiryQuery::create()->findOneByEntityId($params['id']);
-        $this->view->enq = $enq;
-        $this->view->title(sprintf('Edit Enquiry %s', $enq->getFormattedId()));
 
+        if(!$enq) {
+            \Wedding\Messages::addError('Invalid params encountered');
+            $this->redirectReferer();
+        }
+
+        return $enq;
     }
 
     public function editPostAction()

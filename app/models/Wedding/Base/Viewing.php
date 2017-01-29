@@ -18,25 +18,25 @@ use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
 use Wedding\Enquiry as ChildEnquiry;
-use Wedding\EnquiryCommentQuery as ChildEnquiryCommentQuery;
 use Wedding\EnquiryQuery as ChildEnquiryQuery;
 use Wedding\Staff as ChildStaff;
 use Wedding\StaffQuery as ChildStaffQuery;
-use Wedding\Map\EnquiryCommentTableMap;
+use Wedding\ViewingQuery as ChildViewingQuery;
+use Wedding\Map\ViewingTableMap;
 
 /**
- * Base class that represents a row from the 'enquiry_comment' table.
+ * Base class that represents a row from the 'viewing' table.
  *
  * 
  *
  * @package    propel.generator.Wedding.Base
  */
-abstract class EnquiryComment implements ActiveRecordInterface 
+abstract class Viewing implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Wedding\\Map\\EnquiryCommentTableMap';
+    const TABLE_MAP = '\\Wedding\\Map\\ViewingTableMap';
 
 
     /**
@@ -80,18 +80,25 @@ abstract class EnquiryComment implements ActiveRecordInterface
     protected $enquiry_id;
 
     /**
-     * The value for the staff_id field.
+     * The value for the viewing_at field.
+     * 
+     * @var        DateTime
+     */
+    protected $viewing_at;
+
+    /**
+     * The value for the assigned_to field.
      * 
      * @var        int
      */
-    protected $staff_id;
+    protected $assigned_to;
 
     /**
-     * The value for the comment field.
+     * The value for the noshow_at field.
      * 
-     * @var        string
+     * @var        DateTime
      */
-    protected $comment;
+    protected $noshow_at;
 
     /**
      * The value for the created_at field.
@@ -99,6 +106,13 @@ abstract class EnquiryComment implements ActiveRecordInterface
      * @var        DateTime
      */
     protected $created_at;
+
+    /**
+     * The value for the updated_at field.
+     * 
+     * @var        DateTime
+     */
+    protected $updated_at;
 
     /**
      * @var        ChildStaff
@@ -119,7 +133,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Initializes internal state of Wedding\Base\EnquiryComment object.
+     * Initializes internal state of Wedding\Base\Viewing object.
      */
     public function __construct()
     {
@@ -214,9 +228,9 @@ abstract class EnquiryComment implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>EnquiryComment</code> instance.  If
-     * <code>obj</code> is an instance of <code>EnquiryComment</code>, delegates to
-     * <code>equals(EnquiryComment)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>Viewing</code> instance.  If
+     * <code>obj</code> is an instance of <code>Viewing</code>, delegates to
+     * <code>equals(Viewing)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -282,7 +296,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|EnquiryComment The current object, for fluid interface
+     * @return $this|Viewing The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -364,23 +378,53 @@ abstract class EnquiryComment implements ActiveRecordInterface
     }
 
     /**
-     * Get the [staff_id] column value.
+     * Get the [optionally formatted] temporal [viewing_at] column value.
      * 
-     * @return int
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getStaffId()
+    public function getViewingAt($format = NULL)
     {
-        return $this->staff_id;
+        if ($format === null) {
+            return $this->viewing_at;
+        } else {
+            return $this->viewing_at instanceof \DateTimeInterface ? $this->viewing_at->format($format) : null;
+        }
     }
 
     /**
-     * Get the [comment] column value.
+     * Get the [assigned_to] column value.
      * 
-     * @return string
+     * @return int
      */
-    public function getComment()
+    public function getAssignedTo()
     {
-        return $this->comment;
+        return $this->assigned_to;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [noshow_at] column value.
+     * 
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getNoshowAt($format = NULL)
+    {
+        if ($format === null) {
+            return $this->noshow_at;
+        } else {
+            return $this->noshow_at instanceof \DateTimeInterface ? $this->noshow_at->format($format) : null;
+        }
     }
 
     /**
@@ -404,10 +448,30 @@ abstract class EnquiryComment implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [updated_at] column value.
+     * 
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getUpdatedAt($format = NULL)
+    {
+        if ($format === null) {
+            return $this->updated_at;
+        } else {
+            return $this->updated_at instanceof \DateTimeInterface ? $this->updated_at->format($format) : null;
+        }
+    }
+
+    /**
      * Set the value of [entity_id] column.
      * 
      * @param int $v new value
-     * @return $this|\Wedding\EnquiryComment The current object (for fluent API support)
+     * @return $this|\Wedding\Viewing The current object (for fluent API support)
      */
     public function setEntityId($v)
     {
@@ -417,7 +481,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
 
         if ($this->entity_id !== $v) {
             $this->entity_id = $v;
-            $this->modifiedColumns[EnquiryCommentTableMap::COL_ENTITY_ID] = true;
+            $this->modifiedColumns[ViewingTableMap::COL_ENTITY_ID] = true;
         }
 
         return $this;
@@ -427,7 +491,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
      * Set the value of [enquiry_id] column.
      * 
      * @param int $v new value
-     * @return $this|\Wedding\EnquiryComment The current object (for fluent API support)
+     * @return $this|\Wedding\Viewing The current object (for fluent API support)
      */
     public function setEnquiryId($v)
     {
@@ -437,7 +501,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
 
         if ($this->enquiry_id !== $v) {
             $this->enquiry_id = $v;
-            $this->modifiedColumns[EnquiryCommentTableMap::COL_ENQUIRY_ID] = true;
+            $this->modifiedColumns[ViewingTableMap::COL_ENQUIRY_ID] = true;
         }
 
         if ($this->aEnquiry !== null && $this->aEnquiry->getEntityId() !== $v) {
@@ -448,20 +512,40 @@ abstract class EnquiryComment implements ActiveRecordInterface
     } // setEnquiryId()
 
     /**
-     * Set the value of [staff_id] column.
+     * Sets the value of [viewing_at] column to a normalized version of the date/time value specified.
+     * 
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\Wedding\Viewing The current object (for fluent API support)
+     */
+    public function setViewingAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->viewing_at !== null || $dt !== null) {
+            if ($this->viewing_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->viewing_at->format("Y-m-d H:i:s.u")) {
+                $this->viewing_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[ViewingTableMap::COL_VIEWING_AT] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setViewingAt()
+
+    /**
+     * Set the value of [assigned_to] column.
      * 
      * @param int $v new value
-     * @return $this|\Wedding\EnquiryComment The current object (for fluent API support)
+     * @return $this|\Wedding\Viewing The current object (for fluent API support)
      */
-    public function setStaffId($v)
+    public function setAssignedTo($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->staff_id !== $v) {
-            $this->staff_id = $v;
-            $this->modifiedColumns[EnquiryCommentTableMap::COL_STAFF_ID] = true;
+        if ($this->assigned_to !== $v) {
+            $this->assigned_to = $v;
+            $this->modifiedColumns[ViewingTableMap::COL_ASSIGNED_TO] = true;
         }
 
         if ($this->aStaff !== null && $this->aStaff->getEntityId() !== $v) {
@@ -469,34 +553,34 @@ abstract class EnquiryComment implements ActiveRecordInterface
         }
 
         return $this;
-    } // setStaffId()
+    } // setAssignedTo()
 
     /**
-     * Set the value of [comment] column.
+     * Sets the value of [noshow_at] column to a normalized version of the date/time value specified.
      * 
-     * @param string $v new value
-     * @return $this|\Wedding\EnquiryComment The current object (for fluent API support)
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\Wedding\Viewing The current object (for fluent API support)
      */
-    public function setComment($v)
+    public function setNoshowAt($v)
     {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->comment !== $v) {
-            $this->comment = $v;
-            $this->modifiedColumns[EnquiryCommentTableMap::COL_COMMENT] = true;
-        }
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->noshow_at !== null || $dt !== null) {
+            if ($this->noshow_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->noshow_at->format("Y-m-d H:i:s.u")) {
+                $this->noshow_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[ViewingTableMap::COL_NOSHOW_AT] = true;
+            }
+        } // if either are not null
 
         return $this;
-    } // setComment()
+    } // setNoshowAt()
 
     /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\Wedding\EnquiryComment The current object (for fluent API support)
+     * @return $this|\Wedding\Viewing The current object (for fluent API support)
      */
     public function setCreatedAt($v)
     {
@@ -504,12 +588,32 @@ abstract class EnquiryComment implements ActiveRecordInterface
         if ($this->created_at !== null || $dt !== null) {
             if ($this->created_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->created_at->format("Y-m-d H:i:s.u")) {
                 $this->created_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[EnquiryCommentTableMap::COL_CREATED_AT] = true;
+                $this->modifiedColumns[ViewingTableMap::COL_CREATED_AT] = true;
             }
         } // if either are not null
 
         return $this;
     } // setCreatedAt()
+
+    /**
+     * Sets the value of [updated_at] column to a normalized version of the date/time value specified.
+     * 
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\Wedding\Viewing The current object (for fluent API support)
+     */
+    public function setUpdatedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->updated_at !== null || $dt !== null) {
+            if ($this->updated_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->updated_at->format("Y-m-d H:i:s.u")) {
+                $this->updated_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[ViewingTableMap::COL_UPDATED_AT] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setUpdatedAt()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -547,23 +651,38 @@ abstract class EnquiryComment implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : EnquiryCommentTableMap::translateFieldName('EntityId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : ViewingTableMap::translateFieldName('EntityId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->entity_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : EnquiryCommentTableMap::translateFieldName('EnquiryId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : ViewingTableMap::translateFieldName('EnquiryId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->enquiry_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : EnquiryCommentTableMap::translateFieldName('StaffId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->staff_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : ViewingTableMap::translateFieldName('ViewingAt', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->viewing_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : EnquiryCommentTableMap::translateFieldName('Comment', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->comment = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : ViewingTableMap::translateFieldName('AssignedTo', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->assigned_to = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : EnquiryCommentTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : ViewingTableMap::translateFieldName('NoshowAt', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->noshow_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : ViewingTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : ViewingTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->updated_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -572,10 +691,10 @@ abstract class EnquiryComment implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 5; // 5 = EnquiryCommentTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = ViewingTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Wedding\\EnquiryComment'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Wedding\\Viewing'), 0, $e);
         }
     }
 
@@ -597,7 +716,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
         if ($this->aEnquiry !== null && $this->enquiry_id !== $this->aEnquiry->getEntityId()) {
             $this->aEnquiry = null;
         }
-        if ($this->aStaff !== null && $this->staff_id !== $this->aStaff->getEntityId()) {
+        if ($this->aStaff !== null && $this->assigned_to !== $this->aStaff->getEntityId()) {
             $this->aStaff = null;
         }
     } // ensureConsistency
@@ -623,13 +742,13 @@ abstract class EnquiryComment implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(EnquiryCommentTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(ViewingTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildEnquiryCommentQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildViewingQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -650,8 +769,8 @@ abstract class EnquiryComment implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see EnquiryComment::setDeleted()
-     * @see EnquiryComment::isDeleted()
+     * @see Viewing::setDeleted()
+     * @see Viewing::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -660,11 +779,11 @@ abstract class EnquiryComment implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(EnquiryCommentTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(ViewingTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildEnquiryCommentQuery::create()
+            $deleteQuery = ChildViewingQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -699,7 +818,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
         }
  
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(EnquiryCommentTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(ViewingTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -718,7 +837,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                EnquiryCommentTableMap::addInstanceToPool($this);
+                ViewingTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -794,30 +913,36 @@ abstract class EnquiryComment implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[EnquiryCommentTableMap::COL_ENTITY_ID] = true;
+        $this->modifiedColumns[ViewingTableMap::COL_ENTITY_ID] = true;
         if (null !== $this->entity_id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . EnquiryCommentTableMap::COL_ENTITY_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . ViewingTableMap::COL_ENTITY_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(EnquiryCommentTableMap::COL_ENTITY_ID)) {
+        if ($this->isColumnModified(ViewingTableMap::COL_ENTITY_ID)) {
             $modifiedColumns[':p' . $index++]  = 'entity_id';
         }
-        if ($this->isColumnModified(EnquiryCommentTableMap::COL_ENQUIRY_ID)) {
+        if ($this->isColumnModified(ViewingTableMap::COL_ENQUIRY_ID)) {
             $modifiedColumns[':p' . $index++]  = 'enquiry_id';
         }
-        if ($this->isColumnModified(EnquiryCommentTableMap::COL_STAFF_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'staff_id';
+        if ($this->isColumnModified(ViewingTableMap::COL_VIEWING_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'viewing_at';
         }
-        if ($this->isColumnModified(EnquiryCommentTableMap::COL_COMMENT)) {
-            $modifiedColumns[':p' . $index++]  = 'comment';
+        if ($this->isColumnModified(ViewingTableMap::COL_ASSIGNED_TO)) {
+            $modifiedColumns[':p' . $index++]  = 'assigned_to';
         }
-        if ($this->isColumnModified(EnquiryCommentTableMap::COL_CREATED_AT)) {
+        if ($this->isColumnModified(ViewingTableMap::COL_NOSHOW_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'noshow_at';
+        }
+        if ($this->isColumnModified(ViewingTableMap::COL_CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'created_at';
+        }
+        if ($this->isColumnModified(ViewingTableMap::COL_UPDATED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'updated_at';
         }
 
         $sql = sprintf(
-            'INSERT INTO enquiry_comment (%s) VALUES (%s)',
+            'INSERT INTO viewing (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -832,14 +957,20 @@ abstract class EnquiryComment implements ActiveRecordInterface
                     case 'enquiry_id':                        
                         $stmt->bindValue($identifier, $this->enquiry_id, PDO::PARAM_INT);
                         break;
-                    case 'staff_id':                        
-                        $stmt->bindValue($identifier, $this->staff_id, PDO::PARAM_INT);
+                    case 'viewing_at':                        
+                        $stmt->bindValue($identifier, $this->viewing_at ? $this->viewing_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'comment':                        
-                        $stmt->bindValue($identifier, $this->comment, PDO::PARAM_STR);
+                    case 'assigned_to':                        
+                        $stmt->bindValue($identifier, $this->assigned_to, PDO::PARAM_INT);
+                        break;
+                    case 'noshow_at':                        
+                        $stmt->bindValue($identifier, $this->noshow_at ? $this->noshow_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case 'created_at':                        
                         $stmt->bindValue($identifier, $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case 'updated_at':                        
+                        $stmt->bindValue($identifier, $this->updated_at ? $this->updated_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -887,7 +1018,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = EnquiryCommentTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = ViewingTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -910,13 +1041,19 @@ abstract class EnquiryComment implements ActiveRecordInterface
                 return $this->getEnquiryId();
                 break;
             case 2:
-                return $this->getStaffId();
+                return $this->getViewingAt();
                 break;
             case 3:
-                return $this->getComment();
+                return $this->getAssignedTo();
                 break;
             case 4:
+                return $this->getNoshowAt();
+                break;
+            case 5:
                 return $this->getCreatedAt();
+                break;
+            case 6:
+                return $this->getUpdatedAt();
                 break;
             default:
                 return null;
@@ -942,20 +1079,34 @@ abstract class EnquiryComment implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['EnquiryComment'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['Viewing'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['EnquiryComment'][$this->hashCode()] = true;
-        $keys = EnquiryCommentTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['Viewing'][$this->hashCode()] = true;
+        $keys = ViewingTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getEntityId(),
             $keys[1] => $this->getEnquiryId(),
-            $keys[2] => $this->getStaffId(),
-            $keys[3] => $this->getComment(),
-            $keys[4] => $this->getCreatedAt(),
+            $keys[2] => $this->getViewingAt(),
+            $keys[3] => $this->getAssignedTo(),
+            $keys[4] => $this->getNoshowAt(),
+            $keys[5] => $this->getCreatedAt(),
+            $keys[6] => $this->getUpdatedAt(),
         );
+        if ($result[$keys[2]] instanceof \DateTime) {
+            $result[$keys[2]] = $result[$keys[2]]->format('c');
+        }
+        
         if ($result[$keys[4]] instanceof \DateTime) {
             $result[$keys[4]] = $result[$keys[4]]->format('c');
+        }
+        
+        if ($result[$keys[5]] instanceof \DateTime) {
+            $result[$keys[5]] = $result[$keys[5]]->format('c');
+        }
+        
+        if ($result[$keys[6]] instanceof \DateTime) {
+            $result[$keys[6]] = $result[$keys[6]]->format('c');
         }
         
         $virtualColumns = $this->virtualColumns;
@@ -1008,11 +1159,11 @@ abstract class EnquiryComment implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\Wedding\EnquiryComment
+     * @return $this|\Wedding\Viewing
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = EnquiryCommentTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = ViewingTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -1023,7 +1174,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\Wedding\EnquiryComment
+     * @return $this|\Wedding\Viewing
      */
     public function setByPosition($pos, $value)
     {
@@ -1035,13 +1186,19 @@ abstract class EnquiryComment implements ActiveRecordInterface
                 $this->setEnquiryId($value);
                 break;
             case 2:
-                $this->setStaffId($value);
+                $this->setViewingAt($value);
                 break;
             case 3:
-                $this->setComment($value);
+                $this->setAssignedTo($value);
                 break;
             case 4:
+                $this->setNoshowAt($value);
+                break;
+            case 5:
                 $this->setCreatedAt($value);
+                break;
+            case 6:
+                $this->setUpdatedAt($value);
                 break;
         } // switch()
 
@@ -1067,7 +1224,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = EnquiryCommentTableMap::getFieldNames($keyType);
+        $keys = ViewingTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setEntityId($arr[$keys[0]]);
@@ -1076,13 +1233,19 @@ abstract class EnquiryComment implements ActiveRecordInterface
             $this->setEnquiryId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setStaffId($arr[$keys[2]]);
+            $this->setViewingAt($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setComment($arr[$keys[3]]);
+            $this->setAssignedTo($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setCreatedAt($arr[$keys[4]]);
+            $this->setNoshowAt($arr[$keys[4]]);
+        }
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setCreatedAt($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setUpdatedAt($arr[$keys[6]]);
         }
     }
 
@@ -1103,7 +1266,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\Wedding\EnquiryComment The current object, for fluid interface
+     * @return $this|\Wedding\Viewing The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1123,22 +1286,28 @@ abstract class EnquiryComment implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(EnquiryCommentTableMap::DATABASE_NAME);
+        $criteria = new Criteria(ViewingTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(EnquiryCommentTableMap::COL_ENTITY_ID)) {
-            $criteria->add(EnquiryCommentTableMap::COL_ENTITY_ID, $this->entity_id);
+        if ($this->isColumnModified(ViewingTableMap::COL_ENTITY_ID)) {
+            $criteria->add(ViewingTableMap::COL_ENTITY_ID, $this->entity_id);
         }
-        if ($this->isColumnModified(EnquiryCommentTableMap::COL_ENQUIRY_ID)) {
-            $criteria->add(EnquiryCommentTableMap::COL_ENQUIRY_ID, $this->enquiry_id);
+        if ($this->isColumnModified(ViewingTableMap::COL_ENQUIRY_ID)) {
+            $criteria->add(ViewingTableMap::COL_ENQUIRY_ID, $this->enquiry_id);
         }
-        if ($this->isColumnModified(EnquiryCommentTableMap::COL_STAFF_ID)) {
-            $criteria->add(EnquiryCommentTableMap::COL_STAFF_ID, $this->staff_id);
+        if ($this->isColumnModified(ViewingTableMap::COL_VIEWING_AT)) {
+            $criteria->add(ViewingTableMap::COL_VIEWING_AT, $this->viewing_at);
         }
-        if ($this->isColumnModified(EnquiryCommentTableMap::COL_COMMENT)) {
-            $criteria->add(EnquiryCommentTableMap::COL_COMMENT, $this->comment);
+        if ($this->isColumnModified(ViewingTableMap::COL_ASSIGNED_TO)) {
+            $criteria->add(ViewingTableMap::COL_ASSIGNED_TO, $this->assigned_to);
         }
-        if ($this->isColumnModified(EnquiryCommentTableMap::COL_CREATED_AT)) {
-            $criteria->add(EnquiryCommentTableMap::COL_CREATED_AT, $this->created_at);
+        if ($this->isColumnModified(ViewingTableMap::COL_NOSHOW_AT)) {
+            $criteria->add(ViewingTableMap::COL_NOSHOW_AT, $this->noshow_at);
+        }
+        if ($this->isColumnModified(ViewingTableMap::COL_CREATED_AT)) {
+            $criteria->add(ViewingTableMap::COL_CREATED_AT, $this->created_at);
+        }
+        if ($this->isColumnModified(ViewingTableMap::COL_UPDATED_AT)) {
+            $criteria->add(ViewingTableMap::COL_UPDATED_AT, $this->updated_at);
         }
 
         return $criteria;
@@ -1156,8 +1325,8 @@ abstract class EnquiryComment implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildEnquiryCommentQuery::create();
-        $criteria->add(EnquiryCommentTableMap::COL_ENTITY_ID, $this->entity_id);
+        $criteria = ChildViewingQuery::create();
+        $criteria->add(ViewingTableMap::COL_ENTITY_ID, $this->entity_id);
 
         return $criteria;
     }
@@ -1219,7 +1388,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \Wedding\EnquiryComment (or compatible) type.
+     * @param      object $copyObj An object of \Wedding\Viewing (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
@@ -1227,9 +1396,11 @@ abstract class EnquiryComment implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setEnquiryId($this->getEnquiryId());
-        $copyObj->setStaffId($this->getStaffId());
-        $copyObj->setComment($this->getComment());
+        $copyObj->setViewingAt($this->getViewingAt());
+        $copyObj->setAssignedTo($this->getAssignedTo());
+        $copyObj->setNoshowAt($this->getNoshowAt());
         $copyObj->setCreatedAt($this->getCreatedAt());
+        $copyObj->setUpdatedAt($this->getUpdatedAt());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setEntityId(NULL); // this is a auto-increment column, so set to default value
@@ -1245,7 +1416,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Wedding\EnquiryComment Clone of current object.
+     * @return \Wedding\Viewing Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1262,15 +1433,15 @@ abstract class EnquiryComment implements ActiveRecordInterface
      * Declares an association between this object and a ChildStaff object.
      *
      * @param  ChildStaff $v
-     * @return $this|\Wedding\EnquiryComment The current object (for fluent API support)
+     * @return $this|\Wedding\Viewing The current object (for fluent API support)
      * @throws PropelException
      */
     public function setStaff(ChildStaff $v = null)
     {
         if ($v === null) {
-            $this->setStaffId(NULL);
+            $this->setAssignedTo(NULL);
         } else {
-            $this->setStaffId($v->getEntityId());
+            $this->setAssignedTo($v->getEntityId());
         }
 
         $this->aStaff = $v;
@@ -1278,7 +1449,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildStaff object, it will not be re-added.
         if ($v !== null) {
-            $v->addEnquiryComment($this);
+            $v->addViewing($this);
         }
 
 
@@ -1295,14 +1466,14 @@ abstract class EnquiryComment implements ActiveRecordInterface
      */
     public function getStaff(ConnectionInterface $con = null)
     {
-        if ($this->aStaff === null && ($this->staff_id !== null)) {
-            $this->aStaff = ChildStaffQuery::create()->findPk($this->staff_id, $con);
+        if ($this->aStaff === null && ($this->assigned_to !== null)) {
+            $this->aStaff = ChildStaffQuery::create()->findPk($this->assigned_to, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aStaff->addEnquiryComments($this);
+                $this->aStaff->addViewings($this);
              */
         }
 
@@ -1313,7 +1484,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
      * Declares an association between this object and a ChildEnquiry object.
      *
      * @param  ChildEnquiry $v
-     * @return $this|\Wedding\EnquiryComment The current object (for fluent API support)
+     * @return $this|\Wedding\Viewing The current object (for fluent API support)
      * @throws PropelException
      */
     public function setEnquiry(ChildEnquiry $v = null)
@@ -1329,7 +1500,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the ChildEnquiry object, it will not be re-added.
         if ($v !== null) {
-            $v->addEnquiryComment($this);
+            $v->addViewing($this);
         }
 
 
@@ -1353,7 +1524,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aEnquiry->addEnquiryComments($this);
+                $this->aEnquiry->addViewings($this);
              */
         }
 
@@ -1368,16 +1539,18 @@ abstract class EnquiryComment implements ActiveRecordInterface
     public function clear()
     {
         if (null !== $this->aStaff) {
-            $this->aStaff->removeEnquiryComment($this);
+            $this->aStaff->removeViewing($this);
         }
         if (null !== $this->aEnquiry) {
-            $this->aEnquiry->removeEnquiryComment($this);
+            $this->aEnquiry->removeViewing($this);
         }
         $this->entity_id = null;
         $this->enquiry_id = null;
-        $this->staff_id = null;
-        $this->comment = null;
+        $this->viewing_at = null;
+        $this->assigned_to = null;
+        $this->noshow_at = null;
         $this->created_at = null;
+        $this->updated_at = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1409,7 +1582,7 @@ abstract class EnquiryComment implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(EnquiryCommentTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(ViewingTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**

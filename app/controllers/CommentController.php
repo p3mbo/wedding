@@ -18,10 +18,9 @@ class CommentController extends CoreController
         $commentData = $params['comment'];
 
 
-        $staffId = '';
+        $staffId = null;
         $enquiry = \Wedding\EnquiryQuery::create()->findOneByEntityId($commentData['enq_id']);
         if(!$enquiry) {
-
             \Wedding\Messages::addError('Could not locate enquiry to comment on');
             $this->redirectReferer();
         }
@@ -33,8 +32,6 @@ class CommentController extends CoreController
             \Wedding\Messages::addError($e->getMessage());
             $this->redirectReferer();
         }
-
-
 
 
 

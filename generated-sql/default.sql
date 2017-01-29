@@ -27,6 +27,9 @@ CREATE TABLE `enquiry`
     `comment` VARCHAR(255),
     `created_at` DATETIME,
     `updated_at` DATETIME,
+    `lost_at` DATETIME,
+    `promted_at` DATETIME,
+    `contacted_at` DATETIME,
     PRIMARY KEY (`entity_id`)
 ) ENGINE=InnoDB;
 
@@ -45,7 +48,76 @@ CREATE TABLE `enquiry_comment`
     `created_at` DATETIME,
     PRIMARY KEY (`entity_id`),
     INDEX `enquiry_id` (`enquiry_id`),
+    INDEX `staff_id` (`staff_id`),
+    CONSTRAINT `enquiry_comment_ibfk_2`
+        FOREIGN KEY (`staff_id`)
+        REFERENCES `staff` (`entity_id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
     CONSTRAINT `enquiry_comment_ibfk_1`
+        FOREIGN KEY (`enquiry_id`)
+        REFERENCES `enquiry` (`entity_id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- quote
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `quote`;
+
+CREATE TABLE `quote`
+(
+    `entity_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `enquiry_id` int(11) unsigned,
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    PRIMARY KEY (`entity_id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- staff
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `staff`;
+
+CREATE TABLE `staff`
+(
+    `entity_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255),
+    `email` VARCHAR(255),
+    `password` VARCHAR(255),
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    `archived_at` DATETIME,
+    PRIMARY KEY (`entity_id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- viewing
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `viewing`;
+
+CREATE TABLE `viewing`
+(
+    `entity_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `enquiry_id` int(11) unsigned,
+    `viewing_at` DATETIME,
+    `assigned_to` int(11) unsigned,
+    `noshow_at` DATETIME,
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    PRIMARY KEY (`entity_id`),
+    INDEX `enquiry_id` (`enquiry_id`),
+    INDEX `assigned_to` (`assigned_to`),
+    CONSTRAINT `viewing_ibfk_2`
+        FOREIGN KEY (`assigned_to`)
+        REFERENCES `staff` (`entity_id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `viewing_ibfk_1`
         FOREIGN KEY (`enquiry_id`)
         REFERENCES `enquiry` (`entity_id`)
         ON UPDATE CASCADE
