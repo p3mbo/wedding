@@ -24,7 +24,7 @@ class Enquiry extends BaseEnquiry
 
     public function markPromoted()
     {
-        $this->setPromtedAt(time());
+        $this->setPromotedAt(time());
         $this->setLostAt(null);
         $this->save();
 
@@ -33,7 +33,7 @@ class Enquiry extends BaseEnquiry
 
     public function markLost()
     {
-        $this->setPromtedAt(null);
+        $this->setPromotedAt(null);
         $this->setLostAt(time());
         $this->save();
 
@@ -42,7 +42,7 @@ class Enquiry extends BaseEnquiry
 
     public function reset()
     {
-        $this->setPromtedAt(null);
+        $this->setPromotedAt(null);
         $this->setLostAt(null);
         $this->save();
 

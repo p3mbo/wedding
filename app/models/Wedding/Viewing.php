@@ -35,4 +35,16 @@ class Viewing extends BaseViewing
 
         return false;
     }
+
+    public function getStatus()
+    {
+
+    }
+
+    public function getStatusClass()
+    {
+        $status = $this->getStatus();
+
+        return '';
+    }
 }

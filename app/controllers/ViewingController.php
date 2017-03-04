@@ -2,6 +2,13 @@
 
 class ViewingController extends CoreController
 {
+    public function indexAction()
+    {
+        $collection = \Wedding\ViewingQuery::create()->joinWithEnquiry()->find();
+        $this->view->collection = $collection;
+    }
+
+
     public function bookAction()
     {
         /** @var Request $request */

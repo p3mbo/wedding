@@ -2,28 +2,28 @@
 <div class="col-md-12 main">
 
     <div class="row">
-        <h1 class="page-header">Leads</h1>
+        <h1 class="page-header">Viewings</h1>
 
 
         <div id="lead-srt">
 
             <div class="row">
-                <div class="col-md-11">
+                <div class="col-md-12">
                     <div class="form-group">
                         <label for="name" class="hidden">Name</label>
-                        <input class="search form-control" placeholder="Search Leads..." />
+                        <input class="search form-control" placeholder="Search Viewings..." />
                     </div>
 
                 </div>
-                <div class="col-md-1">
-                    <a href="<?php echo \Wedding::getUrl('lead/add');?>" class="btn btn-primary pull-right">Add New</a>
-                </div>
+
             </div>
 
             <div class="table-responsive">
                 <table class="table table-striped">
                     <colgroup>
-                        <col width="200">
+                        <col width="140">
+                        <col width="80">
+                        <col width="150">
                         <col />
                         <col width="100">
                         <col width="100">
@@ -32,8 +32,10 @@
                     </colgroup>
                     <thead>
                     <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Emplyoee</th>
                         <th>Names</th>
-                        <th>Address</th>
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Mobile</th>
@@ -42,18 +44,31 @@
                     </thead>
                     <tbody class="list">
                     <?php
-                    /** @var \Wedding\Enquiry $enq */
-                    foreach($collection as $enq) : ?>
-                        <tr class="<?php echo $enq->getStatusClass();?>" data-lead-id="<?php echo $enq->getEntityId();?>" data-created-at="<?php echo $enq->getCreatedAt()->format('d/m/Y H:i');?>" data-email="<?php echo $enq->getEmail();?>" data-couple="<?php echo $enq->getCouple();?>">
+                    /** @var \Wedding\Viewing $viewing */
+                    foreach($collection as $viewing) :
+                        $enq = $viewing->getEnquiry();
+                        ?>
+                        <tr class="<?php echo $viewing->getStatusClass();?>"
+                            data-viewing-id="<?php echo $viewing->getEntityId();?>"
+                            data-lead-id="<?php echo $enq->getEntityId();?>"
+                            data-created-at="<?php echo $enq->getCreatedAt()->format('d/m/Y H:i');?>"
+                            data-email="<?php echo $enq->getEmail();?>"
+                            data-couple="<?php echo $enq->getCouple();?>">
+
+                            <td class="srt-date"><?php echo $viewing->getViewingAt()->format('D d/m/Y');?></td>
+                            <td class="srt-time"><?php echo $viewing->getViewingAt()->format('H:i');?></td>
+                            <td class="srt-employee employee"><?php echo \Wedding::__($viewing->getStaff()->getName());?></td>
                             <td class="srt-name name"><?php echo \Wedding::__($enq->getName());?><br /><?php echo  \Wedding::__($enq->getPartnerName());?></td>
-                            <td class="srt-addr addr"><?php echo \Wedding::__($enq->getAddress());?></td>
                             <td class="srt-email email"><?php echo \Wedding::__($enq->getEmail());?></td>
                             <td class="srt-name phone"><?php echo \Wedding::__($enq->getTelephone());?></td>
                             <td class="srt-name mobile"><?php echo \Wedding::__($enq->getMobile());?></td>
                             <td class="text-right">
-                                <a title="Edit Item" class="btn-sm btn-default js-entry-edit" href="<?php echo \Wedding::getUrl('lead/edit', ['id' => $enq->getEntityId()]);?>"><span class="glyphicon glyphicon-pencil"></span><span class="hidden">Edit</span></a>
 
+                                <a title="Edit Item" class="btn-sm btn-default js-entry-edit" href="<?php echo \Wedding::getUrl('viewing/edit', ['id' => $viewing->getEntityId()]);?>"><span class="glyphicon glyphicon-pencil"></span><span class="hidden">Edit</span></a>
+
+                                <?php /*
                                 <a title="Mark as Contacted" class="btn-sm <?php echo $enq->getContactedAt() === null ? 'btn-danger' : 'btn-success'; ?> js-entry-edit" href="<?php echo \Wedding::getUrl('lead/contacted', ['id' => $enq->getEntityId()]);?>"><span class="glyphicon glyphicon-envelope"></span><span class="hidden">Mark as Contacted</span></a>
+
 
                                 <?php if(!is_null($enq->getLostAt())) : ?>
                                     <a title="Mark as Lost" class="btn-sm btn-danger" href="<?php echo \Wedding::getUrl('lead/lose', ['id' => $enq->getEntityId()]);?>"><span class="hidden">Mark as </span>LOST</a>
@@ -65,6 +80,8 @@
                                     <a title="Mark as Lost" class="btn-sm btn-default" href="<?php echo \Wedding::getUrl('lead/lose', ['id' => $enq->getEntityId()]);?>"><span class="hidden">Mark as </span>LOST</a>
                                     <a href="javascript:;" title="Promote to Viewing" class="js-viewing-modal-request btn-sm btn-default" data-href="<?php echo \Wedding::getUrl('lead/promote', ['id' => $enq->getEntityId()]);?>">PROMOTE <span class="hidden">to viewing</span></a>
                                 <?php endif; ?>
+                                */
+                                ?>
                             </td>
                         </tr>
                     <?php endforeach;?>
