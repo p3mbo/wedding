@@ -44,16 +44,6 @@ use Wedding\Map\ViewingTableMap;
  * @method     ChildViewingQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildViewingQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildViewingQuery leftJoinStaff($relationAlias = null) Adds a LEFT JOIN clause to the query using the Staff relation
- * @method     ChildViewingQuery rightJoinStaff($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Staff relation
- * @method     ChildViewingQuery innerJoinStaff($relationAlias = null) Adds a INNER JOIN clause to the query using the Staff relation
- *
- * @method     ChildViewingQuery joinWithStaff($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Staff relation
- *
- * @method     ChildViewingQuery leftJoinWithStaff() Adds a LEFT JOIN clause and with to the query using the Staff relation
- * @method     ChildViewingQuery rightJoinWithStaff() Adds a RIGHT JOIN clause and with to the query using the Staff relation
- * @method     ChildViewingQuery innerJoinWithStaff() Adds a INNER JOIN clause and with to the query using the Staff relation
- *
  * @method     ChildViewingQuery leftJoinEnquiry($relationAlias = null) Adds a LEFT JOIN clause to the query using the Enquiry relation
  * @method     ChildViewingQuery rightJoinEnquiry($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Enquiry relation
  * @method     ChildViewingQuery innerJoinEnquiry($relationAlias = null) Adds a INNER JOIN clause to the query using the Enquiry relation
@@ -64,7 +54,17 @@ use Wedding\Map\ViewingTableMap;
  * @method     ChildViewingQuery rightJoinWithEnquiry() Adds a RIGHT JOIN clause and with to the query using the Enquiry relation
  * @method     ChildViewingQuery innerJoinWithEnquiry() Adds a INNER JOIN clause and with to the query using the Enquiry relation
  *
- * @method     \Wedding\StaffQuery|\Wedding\EnquiryQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildViewingQuery leftJoinStaff($relationAlias = null) Adds a LEFT JOIN clause to the query using the Staff relation
+ * @method     ChildViewingQuery rightJoinStaff($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Staff relation
+ * @method     ChildViewingQuery innerJoinStaff($relationAlias = null) Adds a INNER JOIN clause to the query using the Staff relation
+ *
+ * @method     ChildViewingQuery joinWithStaff($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Staff relation
+ *
+ * @method     ChildViewingQuery leftJoinWithStaff() Adds a LEFT JOIN clause and with to the query using the Staff relation
+ * @method     ChildViewingQuery rightJoinWithStaff() Adds a RIGHT JOIN clause and with to the query using the Staff relation
+ * @method     ChildViewingQuery innerJoinWithStaff() Adds a INNER JOIN clause and with to the query using the Staff relation
+ *
+ * @method     \Wedding\EnquiryQuery|\Wedding\StaffQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildViewing findOne(ConnectionInterface $con = null) Return the first ChildViewing matching the query
  * @method     ChildViewing findOneOrCreate(ConnectionInterface $con = null) Return the first ChildViewing matching the query, or a new ChildViewing object populated from the query conditions when no match is found
@@ -584,83 +584,6 @@ abstract class ViewingQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \Wedding\Staff object
-     *
-     * @param \Wedding\Staff|ObjectCollection $staff The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return ChildViewingQuery The current query, for fluid interface
-     */
-    public function filterByStaff($staff, $comparison = null)
-    {
-        if ($staff instanceof \Wedding\Staff) {
-            return $this
-                ->addUsingAlias(ViewingTableMap::COL_ASSIGNED_TO, $staff->getEntityId(), $comparison);
-        } elseif ($staff instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(ViewingTableMap::COL_ASSIGNED_TO, $staff->toKeyValue('PrimaryKey', 'EntityId'), $comparison);
-        } else {
-            throw new PropelException('filterByStaff() only accepts arguments of type \Wedding\Staff or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Staff relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildViewingQuery The current query, for fluid interface
-     */
-    public function joinStaff($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Staff');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Staff');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Staff relation Staff object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \Wedding\StaffQuery A secondary query class using the current class as primary query
-     */
-    public function useStaffQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        return $this
-            ->joinStaff($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Staff', '\Wedding\StaffQuery');
-    }
-
-    /**
      * Filter the query by a related \Wedding\Enquiry object
      *
      * @param \Wedding\Enquiry|ObjectCollection $enquiry The related object(s) to use as filter
@@ -735,6 +658,83 @@ abstract class ViewingQuery extends ModelCriteria
         return $this
             ->joinEnquiry($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Enquiry', '\Wedding\EnquiryQuery');
+    }
+
+    /**
+     * Filter the query by a related \Wedding\Staff object
+     *
+     * @param \Wedding\Staff|ObjectCollection $staff The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildViewingQuery The current query, for fluid interface
+     */
+    public function filterByStaff($staff, $comparison = null)
+    {
+        if ($staff instanceof \Wedding\Staff) {
+            return $this
+                ->addUsingAlias(ViewingTableMap::COL_ASSIGNED_TO, $staff->getEntityId(), $comparison);
+        } elseif ($staff instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(ViewingTableMap::COL_ASSIGNED_TO, $staff->toKeyValue('PrimaryKey', 'EntityId'), $comparison);
+        } else {
+            throw new PropelException('filterByStaff() only accepts arguments of type \Wedding\Staff or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Staff relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildViewingQuery The current query, for fluid interface
+     */
+    public function joinStaff($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Staff');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Staff');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Staff relation Staff object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Wedding\StaffQuery A secondary query class using the current class as primary query
+     */
+    public function useStaffQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinStaff($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Staff', '\Wedding\StaffQuery');
     }
 
     /**

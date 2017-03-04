@@ -44,7 +44,7 @@
                     <?php
                     /** @var \Wedding\Enquiry $enq */
                     foreach($collection as $enq) : ?>
-                        <tr class="<?php echo $enq->getStatusClass();?>" data-created-at="<?php echo $enq->getCreatedAt()->format('d/m/Y H:i');?>" data-email="<?php echo $enq->getEmail();?>" data-couple="<?php echo $enq->getCouple();?>">
+                        <tr class="<?php echo $enq->getStatusClass();?>" data-lead-id="<?php echo $enq->getEntityId();?>" data-created-at="<?php echo $enq->getCreatedAt()->format('d/m/Y H:i');?>" data-email="<?php echo $enq->getEmail();?>" data-couple="<?php echo $enq->getCouple();?>">
                             <td class="srt-name name"><?php echo \Wedding::__($enq->getName());?><br /><?php echo  \Wedding::__($enq->getPartnerName());?></td>
                             <td class="srt-addr addr"><?php echo \Wedding::__($enq->getAddress());?></td>
                             <td class="srt-email email"><?php echo \Wedding::__($enq->getEmail());?></td>

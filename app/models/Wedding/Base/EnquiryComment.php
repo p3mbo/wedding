@@ -101,14 +101,14 @@ abstract class EnquiryComment implements ActiveRecordInterface
     protected $created_at;
 
     /**
-     * @var        ChildStaff
-     */
-    protected $aStaff;
-
-    /**
      * @var        ChildEnquiry
      */
     protected $aEnquiry;
+
+    /**
+     * @var        ChildStaff
+     */
+    protected $aStaff;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -639,8 +639,8 @@ abstract class EnquiryComment implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aStaff = null;
             $this->aEnquiry = null;
+            $this->aStaff = null;
         } // if (deep)
     }
 
@@ -749,18 +749,18 @@ abstract class EnquiryComment implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aStaff !== null) {
-                if ($this->aStaff->isModified() || $this->aStaff->isNew()) {
-                    $affectedRows += $this->aStaff->save($con);
-                }
-                $this->setStaff($this->aStaff);
-            }
-
             if ($this->aEnquiry !== null) {
                 if ($this->aEnquiry->isModified() || $this->aEnquiry->isNew()) {
                     $affectedRows += $this->aEnquiry->save($con);
                 }
                 $this->setEnquiry($this->aEnquiry);
+            }
+
+            if ($this->aStaff !== null) {
+                if ($this->aStaff->isModified() || $this->aStaff->isNew()) {
+                    $affectedRows += $this->aStaff->save($con);
+                }
+                $this->setStaff($this->aStaff);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -964,21 +964,6 @@ abstract class EnquiryComment implements ActiveRecordInterface
         }
         
         if ($includeForeignObjects) {
-            if (null !== $this->aStaff) {
-                
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'staff';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'staff';
-                        break;
-                    default:
-                        $key = 'Staff';
-                }
-        
-                $result[$key] = $this->aStaff->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
             if (null !== $this->aEnquiry) {
                 
                 switch ($keyType) {
@@ -993,6 +978,21 @@ abstract class EnquiryComment implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->aEnquiry->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aStaff) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'staff';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'staff';
+                        break;
+                    default:
+                        $key = 'Staff';
+                }
+        
+                $result[$key] = $this->aStaff->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1259,57 +1259,6 @@ abstract class EnquiryComment implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildStaff object.
-     *
-     * @param  ChildStaff $v
-     * @return $this|\Wedding\EnquiryComment The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setStaff(ChildStaff $v = null)
-    {
-        if ($v === null) {
-            $this->setStaffId(NULL);
-        } else {
-            $this->setStaffId($v->getEntityId());
-        }
-
-        $this->aStaff = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildStaff object, it will not be re-added.
-        if ($v !== null) {
-            $v->addEnquiryComment($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildStaff object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildStaff The associated ChildStaff object.
-     * @throws PropelException
-     */
-    public function getStaff(ConnectionInterface $con = null)
-    {
-        if ($this->aStaff === null && ($this->staff_id !== null)) {
-            $this->aStaff = ChildStaffQuery::create()->findPk($this->staff_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aStaff->addEnquiryComments($this);
-             */
-        }
-
-        return $this->aStaff;
-    }
-
-    /**
      * Declares an association between this object and a ChildEnquiry object.
      *
      * @param  ChildEnquiry $v
@@ -1361,17 +1310,68 @@ abstract class EnquiryComment implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildStaff object.
+     *
+     * @param  ChildStaff $v
+     * @return $this|\Wedding\EnquiryComment The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setStaff(ChildStaff $v = null)
+    {
+        if ($v === null) {
+            $this->setStaffId(NULL);
+        } else {
+            $this->setStaffId($v->getEntityId());
+        }
+
+        $this->aStaff = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildStaff object, it will not be re-added.
+        if ($v !== null) {
+            $v->addEnquiryComment($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildStaff object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildStaff The associated ChildStaff object.
+     * @throws PropelException
+     */
+    public function getStaff(ConnectionInterface $con = null)
+    {
+        if ($this->aStaff === null && ($this->staff_id !== null)) {
+            $this->aStaff = ChildStaffQuery::create()->findPk($this->staff_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aStaff->addEnquiryComments($this);
+             */
+        }
+
+        return $this->aStaff;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
      */
     public function clear()
     {
-        if (null !== $this->aStaff) {
-            $this->aStaff->removeEnquiryComment($this);
-        }
         if (null !== $this->aEnquiry) {
             $this->aEnquiry->removeEnquiryComment($this);
+        }
+        if (null !== $this->aStaff) {
+            $this->aStaff->removeEnquiryComment($this);
         }
         $this->entity_id = null;
         $this->enquiry_id = null;
@@ -1398,8 +1398,8 @@ abstract class EnquiryComment implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aStaff = null;
         $this->aEnquiry = null;
+        $this->aStaff = null;
     }
 
     /**

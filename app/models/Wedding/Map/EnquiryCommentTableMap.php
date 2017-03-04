@@ -158,17 +158,17 @@ class EnquiryCommentTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Staff', '\\Wedding\\Staff', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':staff_id',
-    1 => ':entity_id',
-  ),
-), 'CASCADE', 'CASCADE', null, false);
         $this->addRelation('Enquiry', '\\Wedding\\Enquiry', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':enquiry_id',
+    1 => ':entity_id',
+  ),
+), 'CASCADE', 'CASCADE', null, false);
+        $this->addRelation('Staff', '\\Wedding\\Staff', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':staff_id',
     1 => ':entity_id',
   ),
 ), 'CASCADE', 'CASCADE', null, false);

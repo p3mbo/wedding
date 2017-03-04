@@ -26,6 +26,7 @@ class EnquiryComment extends BaseEnquiryComment
     {
         if(!empty($staffId)) {
             // Check if we have a staff id and if so; set it
+            // @todo: Handle this
         }
 
         $comment = new \Wedding\EnquiryComment();

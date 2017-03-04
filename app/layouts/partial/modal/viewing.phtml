@@ -2,34 +2,65 @@
 <div class="modal fade" id="viewingModal" tabindex="-1" role="dialog" aria-labelledby="viewingLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title h3" id="viewingLabel">Mark as Done</h4>
-            </div>
-            <div class="modal-body">
-                <div class="enquiry-information">
-                    <div class="row">
-                        <div class="col-md-2">Couple</div>
-                        <div class="col-md-10 js-viewing-couple"></div>
+            <form class="js-create-viewing-form" method="post" action="<?php echo Wedding::getUrl('viewing/book');?>">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title h3" id="viewingLabel">Promote Lead to Viewing</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="enquiry-information">
+                        <div class="row">
+                            <div class="col-md-2">Couple</div>
+                            <div class="col-md-10 js-viewing-couple"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2">Contact</div>
+                            <div class="col-md-10 js-viewing-email"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2">Created At</div>
+                            <div class="col-md-10 js-viewing-created-at"></div>
+                        </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-md-2">Contact</div>
-                        <div class="col-md-10 js-viewing-email"></div>
-                    </div>
+                        <div class="col-md-12">
 
-                    <div class="row">
-                        <div class="col-md-2">Created At</div>
-                        <div class="col-md-10 js-viewing-created-at"></div>
+                            <div class="form-group">
+                                <label for="vdate">Viewing Date Agreed</label>
+                                <input id="vdate" type="text" name="view[date]" class="form-control" placeholder="yyyy-mm-dd" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="vtime">Viewing Time Agreed</label>
+                                <input id="vtime" type="text" name="view[time]" class="form-control" placeholder="hh:mm"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="vstaff">Viewing Arranged For</label>
+                                <select id="vstaff" type="text" name="view[assigned_to]" class="form-control">
+                                    <?php foreach(\Wedding\Source\Staff::getOptions() as $staffId => $name) : ?>
+                                        <option value="<?php echo $staffId;?>"><?php echo $name;?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Mark as Done</button>
-            </div>
+
+                <div class="modal-footer">
+                    <div class="no-display hidden">
+                        <input type="hidden" name="view[enquiry_id]" class="js-enquiry-id" />
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary js-create-viewing">Book Viewing</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

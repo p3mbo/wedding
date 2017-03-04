@@ -16,5 +16,23 @@ use Wedding\Base\Viewing as BaseViewing;
  */
 class Viewing extends BaseViewing
 {
+    public static function add($data)
+    {
+        $enquiry = \Wedding\EnquiryQuery::create()->findOneByEntityId($data['enquiry_id']);
+        if($enquiry) {
+            $dt = implode(' ', [$data['date'], $data['time']]);
 
+            $viewing = new \Wedding\Viewing();
+            $viewing->setAssignedTo($data['assigned_to']);
+            $viewing->setViewingAt($dt);
+            $viewing->setEnquiryId($data['enquiry_id']);
+            $viewing->setCreatedAt(time());
+
+            if($viewing->save()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

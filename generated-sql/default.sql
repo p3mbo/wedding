@@ -28,7 +28,7 @@ CREATE TABLE `enquiry`
     `created_at` DATETIME,
     `updated_at` DATETIME,
     `lost_at` DATETIME,
-    `promted_at` DATETIME,
+    `promoted_at` DATETIME,
     `contacted_at` DATETIME,
     PRIMARY KEY (`entity_id`)
 ) ENGINE=InnoDB;
@@ -49,14 +49,14 @@ CREATE TABLE `enquiry_comment`
     PRIMARY KEY (`entity_id`),
     INDEX `enquiry_id` (`enquiry_id`),
     INDEX `staff_id` (`staff_id`),
-    CONSTRAINT `enquiry_comment_ibfk_2`
-        FOREIGN KEY (`staff_id`)
-        REFERENCES `staff` (`entity_id`)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
     CONSTRAINT `enquiry_comment_ibfk_1`
         FOREIGN KEY (`enquiry_id`)
         REFERENCES `enquiry` (`entity_id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `enquiry_comment_ibfk_2`
+        FOREIGN KEY (`staff_id`)
+        REFERENCES `staff` (`entity_id`)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
@@ -112,14 +112,14 @@ CREATE TABLE `viewing`
     PRIMARY KEY (`entity_id`),
     INDEX `enquiry_id` (`enquiry_id`),
     INDEX `assigned_to` (`assigned_to`),
-    CONSTRAINT `viewing_ibfk_2`
-        FOREIGN KEY (`assigned_to`)
-        REFERENCES `staff` (`entity_id`)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
     CONSTRAINT `viewing_ibfk_1`
         FOREIGN KEY (`enquiry_id`)
         REFERENCES `enquiry` (`entity_id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `viewing_ibfk_2`
+        FOREIGN KEY (`assigned_to`)
+        REFERENCES `staff` (`entity_id`)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 ) ENGINE=InnoDB;

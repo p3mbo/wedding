@@ -18,7 +18,7 @@
     <column name="created_at" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="updated_at" phpName="UpdatedAt" type="TIMESTAMP"/>
     <column name="lost_at" phpName="LostAt" type="TIMESTAMP"/>
-    <column name="promted_at" phpName="PromtedAt" type="TIMESTAMP"/>
+    <column name="promoted_at" phpName="PromotedAt" type="TIMESTAMP"/>
     <column name="contacted_at" phpName="ContactedAt" type="TIMESTAMP"/>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -30,11 +30,11 @@
     <column name="staff_id" phpName="StaffId" type="INTEGER" sqlType="int(11) unsigned"/>
     <column name="comment" phpName="Comment" type="LONGVARCHAR"/>
     <column name="created_at" phpName="CreatedAt" type="TIMESTAMP"/>
-    <foreign-key foreignTable="staff" name="enquiry_comment_ibfk_2" onDelete="CASCADE" onUpdate="CASCADE">
-      <reference local="staff_id" foreign="entity_id"/>
-    </foreign-key>
     <foreign-key foreignTable="enquiry" name="enquiry_comment_ibfk_1" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="enquiry_id" foreign="entity_id"/>
+    </foreign-key>
+    <foreign-key foreignTable="staff" name="enquiry_comment_ibfk_2" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="staff_id" foreign="entity_id"/>
     </foreign-key>
     <index name="enquiry_id">
       <index-column name="enquiry_id"/>
@@ -75,11 +75,11 @@
     <column name="noshow_at" phpName="NoshowAt" type="TIMESTAMP"/>
     <column name="created_at" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="updated_at" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <foreign-key foreignTable="staff" name="viewing_ibfk_2" onDelete="CASCADE" onUpdate="CASCADE">
-      <reference local="assigned_to" foreign="entity_id"/>
-    </foreign-key>
     <foreign-key foreignTable="enquiry" name="viewing_ibfk_1" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="enquiry_id" foreign="entity_id"/>
+    </foreign-key>
+    <foreign-key foreignTable="staff" name="viewing_ibfk_2" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="assigned_to" foreign="entity_id"/>
     </foreign-key>
     <index name="enquiry_id">
       <index-column name="enquiry_id"/>

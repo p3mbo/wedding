@@ -157,9 +157,9 @@ class EnquiryTableMap extends TableMap
     const COL_LOST_AT = 'enquiry.lost_at';
 
     /**
-     * the column name for the promted_at field
+     * the column name for the promoted_at field
      */
-    const COL_PROMTED_AT = 'enquiry.promted_at';
+    const COL_PROMOTED_AT = 'enquiry.promoted_at';
 
     /**
      * the column name for the contacted_at field
@@ -178,10 +178,10 @@ class EnquiryTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('EntityId', 'Title', 'Name', 'PartnerName', 'Email', 'Telephone', 'Mobile', 'Address', 'DayGuests', 'EveningGuests', 'Year', 'Budget', 'Heard', 'Comment', 'CreatedAt', 'UpdatedAt', 'LostAt', 'PromtedAt', 'ContactedAt', ),
-        self::TYPE_CAMELNAME     => array('entityId', 'title', 'name', 'partnerName', 'email', 'telephone', 'mobile', 'address', 'dayGuests', 'eveningGuests', 'year', 'budget', 'heard', 'comment', 'createdAt', 'updatedAt', 'lostAt', 'promtedAt', 'contactedAt', ),
-        self::TYPE_COLNAME       => array(EnquiryTableMap::COL_ENTITY_ID, EnquiryTableMap::COL_TITLE, EnquiryTableMap::COL_NAME, EnquiryTableMap::COL_PARTNER_NAME, EnquiryTableMap::COL_EMAIL, EnquiryTableMap::COL_TELEPHONE, EnquiryTableMap::COL_MOBILE, EnquiryTableMap::COL_ADDRESS, EnquiryTableMap::COL_DAY_GUESTS, EnquiryTableMap::COL_EVENING_GUESTS, EnquiryTableMap::COL_YEAR, EnquiryTableMap::COL_BUDGET, EnquiryTableMap::COL_HEARD, EnquiryTableMap::COL_COMMENT, EnquiryTableMap::COL_CREATED_AT, EnquiryTableMap::COL_UPDATED_AT, EnquiryTableMap::COL_LOST_AT, EnquiryTableMap::COL_PROMTED_AT, EnquiryTableMap::COL_CONTACTED_AT, ),
-        self::TYPE_FIELDNAME     => array('entity_id', 'title', 'name', 'partner_name', 'email', 'telephone', 'mobile', 'address', 'day_guests', 'evening_guests', 'year', 'budget', 'heard', 'comment', 'created_at', 'updated_at', 'lost_at', 'promted_at', 'contacted_at', ),
+        self::TYPE_PHPNAME       => array('EntityId', 'Title', 'Name', 'PartnerName', 'Email', 'Telephone', 'Mobile', 'Address', 'DayGuests', 'EveningGuests', 'Year', 'Budget', 'Heard', 'Comment', 'CreatedAt', 'UpdatedAt', 'LostAt', 'PromotedAt', 'ContactedAt', ),
+        self::TYPE_CAMELNAME     => array('entityId', 'title', 'name', 'partnerName', 'email', 'telephone', 'mobile', 'address', 'dayGuests', 'eveningGuests', 'year', 'budget', 'heard', 'comment', 'createdAt', 'updatedAt', 'lostAt', 'promotedAt', 'contactedAt', ),
+        self::TYPE_COLNAME       => array(EnquiryTableMap::COL_ENTITY_ID, EnquiryTableMap::COL_TITLE, EnquiryTableMap::COL_NAME, EnquiryTableMap::COL_PARTNER_NAME, EnquiryTableMap::COL_EMAIL, EnquiryTableMap::COL_TELEPHONE, EnquiryTableMap::COL_MOBILE, EnquiryTableMap::COL_ADDRESS, EnquiryTableMap::COL_DAY_GUESTS, EnquiryTableMap::COL_EVENING_GUESTS, EnquiryTableMap::COL_YEAR, EnquiryTableMap::COL_BUDGET, EnquiryTableMap::COL_HEARD, EnquiryTableMap::COL_COMMENT, EnquiryTableMap::COL_CREATED_AT, EnquiryTableMap::COL_UPDATED_AT, EnquiryTableMap::COL_LOST_AT, EnquiryTableMap::COL_PROMOTED_AT, EnquiryTableMap::COL_CONTACTED_AT, ),
+        self::TYPE_FIELDNAME     => array('entity_id', 'title', 'name', 'partner_name', 'email', 'telephone', 'mobile', 'address', 'day_guests', 'evening_guests', 'year', 'budget', 'heard', 'comment', 'created_at', 'updated_at', 'lost_at', 'promoted_at', 'contacted_at', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
@@ -192,10 +192,10 @@ class EnquiryTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('EntityId' => 0, 'Title' => 1, 'Name' => 2, 'PartnerName' => 3, 'Email' => 4, 'Telephone' => 5, 'Mobile' => 6, 'Address' => 7, 'DayGuests' => 8, 'EveningGuests' => 9, 'Year' => 10, 'Budget' => 11, 'Heard' => 12, 'Comment' => 13, 'CreatedAt' => 14, 'UpdatedAt' => 15, 'LostAt' => 16, 'PromtedAt' => 17, 'ContactedAt' => 18, ),
-        self::TYPE_CAMELNAME     => array('entityId' => 0, 'title' => 1, 'name' => 2, 'partnerName' => 3, 'email' => 4, 'telephone' => 5, 'mobile' => 6, 'address' => 7, 'dayGuests' => 8, 'eveningGuests' => 9, 'year' => 10, 'budget' => 11, 'heard' => 12, 'comment' => 13, 'createdAt' => 14, 'updatedAt' => 15, 'lostAt' => 16, 'promtedAt' => 17, 'contactedAt' => 18, ),
-        self::TYPE_COLNAME       => array(EnquiryTableMap::COL_ENTITY_ID => 0, EnquiryTableMap::COL_TITLE => 1, EnquiryTableMap::COL_NAME => 2, EnquiryTableMap::COL_PARTNER_NAME => 3, EnquiryTableMap::COL_EMAIL => 4, EnquiryTableMap::COL_TELEPHONE => 5, EnquiryTableMap::COL_MOBILE => 6, EnquiryTableMap::COL_ADDRESS => 7, EnquiryTableMap::COL_DAY_GUESTS => 8, EnquiryTableMap::COL_EVENING_GUESTS => 9, EnquiryTableMap::COL_YEAR => 10, EnquiryTableMap::COL_BUDGET => 11, EnquiryTableMap::COL_HEARD => 12, EnquiryTableMap::COL_COMMENT => 13, EnquiryTableMap::COL_CREATED_AT => 14, EnquiryTableMap::COL_UPDATED_AT => 15, EnquiryTableMap::COL_LOST_AT => 16, EnquiryTableMap::COL_PROMTED_AT => 17, EnquiryTableMap::COL_CONTACTED_AT => 18, ),
-        self::TYPE_FIELDNAME     => array('entity_id' => 0, 'title' => 1, 'name' => 2, 'partner_name' => 3, 'email' => 4, 'telephone' => 5, 'mobile' => 6, 'address' => 7, 'day_guests' => 8, 'evening_guests' => 9, 'year' => 10, 'budget' => 11, 'heard' => 12, 'comment' => 13, 'created_at' => 14, 'updated_at' => 15, 'lost_at' => 16, 'promted_at' => 17, 'contacted_at' => 18, ),
+        self::TYPE_PHPNAME       => array('EntityId' => 0, 'Title' => 1, 'Name' => 2, 'PartnerName' => 3, 'Email' => 4, 'Telephone' => 5, 'Mobile' => 6, 'Address' => 7, 'DayGuests' => 8, 'EveningGuests' => 9, 'Year' => 10, 'Budget' => 11, 'Heard' => 12, 'Comment' => 13, 'CreatedAt' => 14, 'UpdatedAt' => 15, 'LostAt' => 16, 'PromotedAt' => 17, 'ContactedAt' => 18, ),
+        self::TYPE_CAMELNAME     => array('entityId' => 0, 'title' => 1, 'name' => 2, 'partnerName' => 3, 'email' => 4, 'telephone' => 5, 'mobile' => 6, 'address' => 7, 'dayGuests' => 8, 'eveningGuests' => 9, 'year' => 10, 'budget' => 11, 'heard' => 12, 'comment' => 13, 'createdAt' => 14, 'updatedAt' => 15, 'lostAt' => 16, 'promotedAt' => 17, 'contactedAt' => 18, ),
+        self::TYPE_COLNAME       => array(EnquiryTableMap::COL_ENTITY_ID => 0, EnquiryTableMap::COL_TITLE => 1, EnquiryTableMap::COL_NAME => 2, EnquiryTableMap::COL_PARTNER_NAME => 3, EnquiryTableMap::COL_EMAIL => 4, EnquiryTableMap::COL_TELEPHONE => 5, EnquiryTableMap::COL_MOBILE => 6, EnquiryTableMap::COL_ADDRESS => 7, EnquiryTableMap::COL_DAY_GUESTS => 8, EnquiryTableMap::COL_EVENING_GUESTS => 9, EnquiryTableMap::COL_YEAR => 10, EnquiryTableMap::COL_BUDGET => 11, EnquiryTableMap::COL_HEARD => 12, EnquiryTableMap::COL_COMMENT => 13, EnquiryTableMap::COL_CREATED_AT => 14, EnquiryTableMap::COL_UPDATED_AT => 15, EnquiryTableMap::COL_LOST_AT => 16, EnquiryTableMap::COL_PROMOTED_AT => 17, EnquiryTableMap::COL_CONTACTED_AT => 18, ),
+        self::TYPE_FIELDNAME     => array('entity_id' => 0, 'title' => 1, 'name' => 2, 'partner_name' => 3, 'email' => 4, 'telephone' => 5, 'mobile' => 6, 'address' => 7, 'day_guests' => 8, 'evening_guests' => 9, 'year' => 10, 'budget' => 11, 'heard' => 12, 'comment' => 13, 'created_at' => 14, 'updated_at' => 15, 'lost_at' => 16, 'promoted_at' => 17, 'contacted_at' => 18, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
@@ -233,7 +233,7 @@ class EnquiryTableMap extends TableMap
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('lost_at', 'LostAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('promted_at', 'PromtedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('promoted_at', 'PromotedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('contacted_at', 'ContactedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
@@ -426,7 +426,7 @@ class EnquiryTableMap extends TableMap
             $criteria->addSelectColumn(EnquiryTableMap::COL_CREATED_AT);
             $criteria->addSelectColumn(EnquiryTableMap::COL_UPDATED_AT);
             $criteria->addSelectColumn(EnquiryTableMap::COL_LOST_AT);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_PROMTED_AT);
+            $criteria->addSelectColumn(EnquiryTableMap::COL_PROMOTED_AT);
             $criteria->addSelectColumn(EnquiryTableMap::COL_CONTACTED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.entity_id');
@@ -446,7 +446,7 @@ class EnquiryTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
             $criteria->addSelectColumn($alias . '.lost_at');
-            $criteria->addSelectColumn($alias . '.promted_at');
+            $criteria->addSelectColumn($alias . '.promoted_at');
             $criteria->addSelectColumn($alias . '.contacted_at');
         }
     }

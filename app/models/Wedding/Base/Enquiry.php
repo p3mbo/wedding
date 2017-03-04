@@ -191,11 +191,11 @@ abstract class Enquiry implements ActiveRecordInterface
     protected $lost_at;
 
     /**
-     * The value for the promted_at field.
+     * The value for the promoted_at field.
      * 
      * @var        DateTime
      */
-    protected $promted_at;
+    protected $promoted_at;
 
     /**
      * The value for the contacted_at field.
@@ -676,7 +676,7 @@ abstract class Enquiry implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [promted_at] column value.
+     * Get the [optionally formatted] temporal [promoted_at] column value.
      * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
@@ -686,12 +686,12 @@ abstract class Enquiry implements ActiveRecordInterface
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getPromtedAt($format = NULL)
+    public function getPromotedAt($format = NULL)
     {
         if ($format === null) {
-            return $this->promted_at;
+            return $this->promoted_at;
         } else {
-            return $this->promted_at instanceof \DateTimeInterface ? $this->promted_at->format($format) : null;
+            return $this->promoted_at instanceof \DateTimeInterface ? $this->promoted_at->format($format) : null;
         }
     }
 
@@ -1056,24 +1056,24 @@ abstract class Enquiry implements ActiveRecordInterface
     } // setLostAt()
 
     /**
-     * Sets the value of [promted_at] column to a normalized version of the date/time value specified.
+     * Sets the value of [promoted_at] column to a normalized version of the date/time value specified.
      * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\Wedding\Enquiry The current object (for fluent API support)
      */
-    public function setPromtedAt($v)
+    public function setPromotedAt($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->promted_at !== null || $dt !== null) {
-            if ($this->promted_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->promted_at->format("Y-m-d H:i:s.u")) {
-                $this->promted_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[EnquiryTableMap::COL_PROMTED_AT] = true;
+        if ($this->promoted_at !== null || $dt !== null) {
+            if ($this->promoted_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->promoted_at->format("Y-m-d H:i:s.u")) {
+                $this->promoted_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[EnquiryTableMap::COL_PROMOTED_AT] = true;
             }
         } // if either are not null
 
         return $this;
-    } // setPromtedAt()
+    } // setPromotedAt()
 
     /**
      * Sets the value of [contacted_at] column to a normalized version of the date/time value specified.
@@ -1199,11 +1199,11 @@ abstract class Enquiry implements ActiveRecordInterface
             }
             $this->lost_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : EnquiryTableMap::translateFieldName('PromtedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 17 + $startcol : EnquiryTableMap::translateFieldName('PromotedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->promted_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->promoted_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 18 + $startcol : EnquiryTableMap::translateFieldName('ContactedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
@@ -1508,8 +1508,8 @@ abstract class Enquiry implements ActiveRecordInterface
         if ($this->isColumnModified(EnquiryTableMap::COL_LOST_AT)) {
             $modifiedColumns[':p' . $index++]  = 'lost_at';
         }
-        if ($this->isColumnModified(EnquiryTableMap::COL_PROMTED_AT)) {
-            $modifiedColumns[':p' . $index++]  = 'promted_at';
+        if ($this->isColumnModified(EnquiryTableMap::COL_PROMOTED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'promoted_at';
         }
         if ($this->isColumnModified(EnquiryTableMap::COL_CONTACTED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'contacted_at';
@@ -1576,8 +1576,8 @@ abstract class Enquiry implements ActiveRecordInterface
                     case 'lost_at':                        
                         $stmt->bindValue($identifier, $this->lost_at ? $this->lost_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'promted_at':                        
-                        $stmt->bindValue($identifier, $this->promted_at ? $this->promted_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'promoted_at':                        
+                        $stmt->bindValue($identifier, $this->promoted_at ? $this->promoted_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case 'contacted_at':                        
                         $stmt->bindValue($identifier, $this->contacted_at ? $this->contacted_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
@@ -1696,7 +1696,7 @@ abstract class Enquiry implements ActiveRecordInterface
                 return $this->getLostAt();
                 break;
             case 17:
-                return $this->getPromtedAt();
+                return $this->getPromotedAt();
                 break;
             case 18:
                 return $this->getContactedAt();
@@ -1748,7 +1748,7 @@ abstract class Enquiry implements ActiveRecordInterface
             $keys[14] => $this->getCreatedAt(),
             $keys[15] => $this->getUpdatedAt(),
             $keys[16] => $this->getLostAt(),
-            $keys[17] => $this->getPromtedAt(),
+            $keys[17] => $this->getPromotedAt(),
             $keys[18] => $this->getContactedAt(),
         );
         if ($result[$keys[14]] instanceof \DateTime) {
@@ -1893,7 +1893,7 @@ abstract class Enquiry implements ActiveRecordInterface
                 $this->setLostAt($value);
                 break;
             case 17:
-                $this->setPromtedAt($value);
+                $this->setPromotedAt($value);
                 break;
             case 18:
                 $this->setContactedAt($value);
@@ -1976,7 +1976,7 @@ abstract class Enquiry implements ActiveRecordInterface
             $this->setLostAt($arr[$keys[16]]);
         }
         if (array_key_exists($keys[17], $arr)) {
-            $this->setPromtedAt($arr[$keys[17]]);
+            $this->setPromotedAt($arr[$keys[17]]);
         }
         if (array_key_exists($keys[18], $arr)) {
             $this->setContactedAt($arr[$keys[18]]);
@@ -2073,8 +2073,8 @@ abstract class Enquiry implements ActiveRecordInterface
         if ($this->isColumnModified(EnquiryTableMap::COL_LOST_AT)) {
             $criteria->add(EnquiryTableMap::COL_LOST_AT, $this->lost_at);
         }
-        if ($this->isColumnModified(EnquiryTableMap::COL_PROMTED_AT)) {
-            $criteria->add(EnquiryTableMap::COL_PROMTED_AT, $this->promted_at);
+        if ($this->isColumnModified(EnquiryTableMap::COL_PROMOTED_AT)) {
+            $criteria->add(EnquiryTableMap::COL_PROMOTED_AT, $this->promoted_at);
         }
         if ($this->isColumnModified(EnquiryTableMap::COL_CONTACTED_AT)) {
             $criteria->add(EnquiryTableMap::COL_CONTACTED_AT, $this->contacted_at);
@@ -2181,7 +2181,7 @@ abstract class Enquiry implements ActiveRecordInterface
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setLostAt($this->getLostAt());
-        $copyObj->setPromtedAt($this->getPromtedAt());
+        $copyObj->setPromotedAt($this->getPromotedAt());
         $copyObj->setContactedAt($this->getContactedAt());
 
         if ($deepCopy) {
@@ -2774,7 +2774,7 @@ abstract class Enquiry implements ActiveRecordInterface
         $this->created_at = null;
         $this->updated_at = null;
         $this->lost_at = null;
-        $this->promted_at = null;
+        $this->promoted_at = null;
         $this->contacted_at = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();

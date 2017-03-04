@@ -37,7 +37,7 @@ use Wedding\Map\EnquiryTableMap;
  * @method     ChildEnquiryQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildEnquiryQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  * @method     ChildEnquiryQuery orderByLostAt($order = Criteria::ASC) Order by the lost_at column
- * @method     ChildEnquiryQuery orderByPromtedAt($order = Criteria::ASC) Order by the promted_at column
+ * @method     ChildEnquiryQuery orderByPromotedAt($order = Criteria::ASC) Order by the promoted_at column
  * @method     ChildEnquiryQuery orderByContactedAt($order = Criteria::ASC) Order by the contacted_at column
  *
  * @method     ChildEnquiryQuery groupByEntityId() Group by the entity_id column
@@ -57,7 +57,7 @@ use Wedding\Map\EnquiryTableMap;
  * @method     ChildEnquiryQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildEnquiryQuery groupByUpdatedAt() Group by the updated_at column
  * @method     ChildEnquiryQuery groupByLostAt() Group by the lost_at column
- * @method     ChildEnquiryQuery groupByPromtedAt() Group by the promted_at column
+ * @method     ChildEnquiryQuery groupByPromotedAt() Group by the promoted_at column
  * @method     ChildEnquiryQuery groupByContactedAt() Group by the contacted_at column
  *
  * @method     ChildEnquiryQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -110,7 +110,7 @@ use Wedding\Map\EnquiryTableMap;
  * @method     ChildEnquiry findOneByCreatedAt(string $created_at) Return the first ChildEnquiry filtered by the created_at column
  * @method     ChildEnquiry findOneByUpdatedAt(string $updated_at) Return the first ChildEnquiry filtered by the updated_at column
  * @method     ChildEnquiry findOneByLostAt(string $lost_at) Return the first ChildEnquiry filtered by the lost_at column
- * @method     ChildEnquiry findOneByPromtedAt(string $promted_at) Return the first ChildEnquiry filtered by the promted_at column
+ * @method     ChildEnquiry findOneByPromotedAt(string $promoted_at) Return the first ChildEnquiry filtered by the promoted_at column
  * @method     ChildEnquiry findOneByContactedAt(string $contacted_at) Return the first ChildEnquiry filtered by the contacted_at column *
 
  * @method     ChildEnquiry requirePk($key, ConnectionInterface $con = null) Return the ChildEnquiry by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -133,7 +133,7 @@ use Wedding\Map\EnquiryTableMap;
  * @method     ChildEnquiry requireOneByCreatedAt(string $created_at) Return the first ChildEnquiry filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEnquiry requireOneByUpdatedAt(string $updated_at) Return the first ChildEnquiry filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEnquiry requireOneByLostAt(string $lost_at) Return the first ChildEnquiry filtered by the lost_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEnquiry requireOneByPromtedAt(string $promted_at) Return the first ChildEnquiry filtered by the promted_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildEnquiry requireOneByPromotedAt(string $promoted_at) Return the first ChildEnquiry filtered by the promoted_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEnquiry requireOneByContactedAt(string $contacted_at) Return the first ChildEnquiry filtered by the contacted_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildEnquiry[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEnquiry objects based on current ModelCriteria
@@ -154,7 +154,7 @@ use Wedding\Map\EnquiryTableMap;
  * @method     ChildEnquiry[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildEnquiry objects filtered by the created_at column
  * @method     ChildEnquiry[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildEnquiry objects filtered by the updated_at column
  * @method     ChildEnquiry[]|ObjectCollection findByLostAt(string $lost_at) Return ChildEnquiry objects filtered by the lost_at column
- * @method     ChildEnquiry[]|ObjectCollection findByPromtedAt(string $promted_at) Return ChildEnquiry objects filtered by the promted_at column
+ * @method     ChildEnquiry[]|ObjectCollection findByPromotedAt(string $promoted_at) Return ChildEnquiry objects filtered by the promoted_at column
  * @method     ChildEnquiry[]|ObjectCollection findByContactedAt(string $contacted_at) Return ChildEnquiry objects filtered by the contacted_at column
  * @method     ChildEnquiry[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -254,7 +254,7 @@ abstract class EnquiryQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT entity_id, title, name, partner_name, email, telephone, mobile, address, day_guests, evening_guests, year, budget, heard, comment, created_at, updated_at, lost_at, promted_at, contacted_at FROM enquiry WHERE entity_id = :p0';
+        $sql = 'SELECT entity_id, title, name, partner_name, email, telephone, mobile, address, day_guests, evening_guests, year, budget, heard, comment, created_at, updated_at, lost_at, promoted_at, contacted_at FROM enquiry WHERE entity_id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -888,16 +888,16 @@ abstract class EnquiryQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the promted_at column
+     * Filter the query on the promoted_at column
      *
      * Example usage:
      * <code>
-     * $query->filterByPromtedAt('2011-03-14'); // WHERE promted_at = '2011-03-14'
-     * $query->filterByPromtedAt('now'); // WHERE promted_at = '2011-03-14'
-     * $query->filterByPromtedAt(array('max' => 'yesterday')); // WHERE promted_at > '2011-03-13'
+     * $query->filterByPromotedAt('2011-03-14'); // WHERE promoted_at = '2011-03-14'
+     * $query->filterByPromotedAt('now'); // WHERE promoted_at = '2011-03-14'
+     * $query->filterByPromotedAt(array('max' => 'yesterday')); // WHERE promoted_at > '2011-03-13'
      * </code>
      *
-     * @param     mixed $promtedAt The value to use as filter.
+     * @param     mixed $promotedAt The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
@@ -907,16 +907,16 @@ abstract class EnquiryQuery extends ModelCriteria
      *
      * @return $this|ChildEnquiryQuery The current query, for fluid interface
      */
-    public function filterByPromtedAt($promtedAt = null, $comparison = null)
+    public function filterByPromotedAt($promotedAt = null, $comparison = null)
     {
-        if (is_array($promtedAt)) {
+        if (is_array($promotedAt)) {
             $useMinMax = false;
-            if (isset($promtedAt['min'])) {
-                $this->addUsingAlias(EnquiryTableMap::COL_PROMTED_AT, $promtedAt['min'], Criteria::GREATER_EQUAL);
+            if (isset($promotedAt['min'])) {
+                $this->addUsingAlias(EnquiryTableMap::COL_PROMOTED_AT, $promotedAt['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($promtedAt['max'])) {
-                $this->addUsingAlias(EnquiryTableMap::COL_PROMTED_AT, $promtedAt['max'], Criteria::LESS_EQUAL);
+            if (isset($promotedAt['max'])) {
+                $this->addUsingAlias(EnquiryTableMap::COL_PROMOTED_AT, $promotedAt['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -927,7 +927,7 @@ abstract class EnquiryQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EnquiryTableMap::COL_PROMTED_AT, $promtedAt, $comparison);
+        return $this->addUsingAlias(EnquiryTableMap::COL_PROMOTED_AT, $promotedAt, $comparison);
     }
 
     /**
