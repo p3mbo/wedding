@@ -51,6 +51,56 @@
     <column name="enquiry_id" phpName="EnquiryId" type="INTEGER" sqlType="int(11) unsigned"/>
     <column name="created_at" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="updated_at" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <foreign-key foreignTable="enquiry" name="quote_ibfk_1" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="enquiry_id" foreign="entity_id"/>
+    </foreign-key>
+    <index name="enquiry_id">
+      <index-column name="enquiry_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="quote_item" idMethod="native" phpName="QuoteItem" namespace="\Wedding">
+    <column name="entity_id" phpName="EntityId" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="quote_item_group_item_id" phpName="QuoteItemGroupItemId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="qty" phpName="Qty" type="INTEGER"/>
+    <column name="notes" phpName="Notes" type="LONGVARCHAR"/>
+    <column name="price" phpName="Price" type="DECIMAL" size="10" scale="2"/>
+    <foreign-key foreignTable="quote_item_group_item" name="quote_item_ibfk_1" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="quote_item_group_item_id" foreign="entity_id"/>
+    </foreign-key>
+    <index name="quote_item_group_item_id">
+      <index-column name="quote_item_group_item_id"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="quote_item_group" idMethod="native" phpName="QuoteItemGroup" namespace="\Wedding">
+    <column name="entity_id" phpName="EntityId" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="255"/>
+    <column name="created_at" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="updated_at" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="archived_at" phpName="ArchivedAt" type="TIMESTAMP"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="quote_item_group_item" idMethod="native" phpName="QuoteItemGroupItem" namespace="\Wedding">
+    <column name="entity_id" phpName="EntityId" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="quote_item_group_id" phpName="QuoteItemGroupId" type="INTEGER" sqlType="int(11) unsigned"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="255"/>
+    <column name="suggested_price" phpName="SuggestedPrice" type="DECIMAL" size="10" scale="2"/>
+    <column name="created_at" phpName="CreatedAt" type="TIMESTAMP"/>
+    <column name="updated_at" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="archived_at" phpName="ArchivedAt" type="TIMESTAMP"/>
+    <foreign-key foreignTable="quote_item_group" name="quote_item_group_item_ibfk_1" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="quote_item_group_id" foreign="entity_id"/>
+    </foreign-key>
+    <index name="quote_item_group_id">
+      <index-column name="quote_item_group_id"/>
+    </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>

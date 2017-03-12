@@ -1,0 +1,67 @@
+<?php
+$groups = $this->itemGroups;
+
+?>
+<div class="col-md-12">
+    <form method="post" action="<?php echo \Wedding::getUrl('quote/editPost');?>">
+        <div class="no-display">
+
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input id="name" type="text" name="enq[name]" class="form-control" required="required" />
+            </div>
+        </div>
+
+        <?php
+        /** @var \Wedding\QuoteItemGroup $group */
+        foreach($groups as $group) :
+            ?>
+            <div class="row">
+                <h3><?php echo $group->getName();?></h3>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <select class="form-control">
+                            <option>Please select...</option>
+                            <?php foreach($group->getQuoteItemGroupItems() as $item) : ?>
+                                <option value="<?php echo $item->getEntityId();?>"><?php echo $item->getOptionString();?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-1">
+                        <input class="form-control" type="number" placeholder="qty" />
+                    </div>
+
+                    <div class="col-md-5">
+                        <input class="form-control" type="text" placeholder="Enter any notes regarding this item" />
+                    </div>
+
+                    <div class="col-md-1">
+                        <input class="form-control" type="text" placeholder="Price" />
+                    </div>
+
+                    <div class="col-md-2">
+                        btns
+                    </div>
+                </div>
+
+
+            </div>
+        <?php endforeach; ?>
+
+        <div class="row">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+
+
+
+
+
+    </form>
+
+
+</div>

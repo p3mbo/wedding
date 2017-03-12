@@ -10,6 +10,7 @@ use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -17,24 +18,28 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
 use Propel\Runtime\Util\PropelDateTime;
-use Wedding\Enquiry as ChildEnquiry;
-use Wedding\EnquiryQuery as ChildEnquiryQuery;
-use Wedding\QuoteQuery as ChildQuoteQuery;
-use Wedding\Map\QuoteTableMap;
+use Wedding\QuoteItem as ChildQuoteItem;
+use Wedding\QuoteItemGroup as ChildQuoteItemGroup;
+use Wedding\QuoteItemGroupItem as ChildQuoteItemGroupItem;
+use Wedding\QuoteItemGroupItemQuery as ChildQuoteItemGroupItemQuery;
+use Wedding\QuoteItemGroupQuery as ChildQuoteItemGroupQuery;
+use Wedding\QuoteItemQuery as ChildQuoteItemQuery;
+use Wedding\Map\QuoteItemGroupItemTableMap;
+use Wedding\Map\QuoteItemTableMap;
 
 /**
- * Base class that represents a row from the 'quote' table.
+ * Base class that represents a row from the 'quote_item_group_item' table.
  *
  * 
  *
  * @package    propel.generator.Wedding.Base
  */
-abstract class Quote implements ActiveRecordInterface 
+abstract class QuoteItemGroupItem implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\Wedding\\Map\\QuoteTableMap';
+    const TABLE_MAP = '\\Wedding\\Map\\QuoteItemGroupItemTableMap';
 
 
     /**
@@ -71,11 +76,25 @@ abstract class Quote implements ActiveRecordInterface
     protected $entity_id;
 
     /**
-     * The value for the enquiry_id field.
+     * The value for the quote_item_group_id field.
      * 
      * @var        int
      */
-    protected $enquiry_id;
+    protected $quote_item_group_id;
+
+    /**
+     * The value for the name field.
+     * 
+     * @var        string
+     */
+    protected $name;
+
+    /**
+     * The value for the suggested_price field.
+     * 
+     * @var        string
+     */
+    protected $suggested_price;
 
     /**
      * The value for the created_at field.
@@ -92,9 +111,22 @@ abstract class Quote implements ActiveRecordInterface
     protected $updated_at;
 
     /**
-     * @var        ChildEnquiry
+     * The value for the archived_at field.
+     * 
+     * @var        DateTime
      */
-    protected $aEnquiry;
+    protected $archived_at;
+
+    /**
+     * @var        ChildQuoteItemGroup
+     */
+    protected $aQuoteItemGroup;
+
+    /**
+     * @var        ObjectCollection|ChildQuoteItem[] Collection to store aggregation of ChildQuoteItem objects.
+     */
+    protected $collQuoteItems;
+    protected $collQuoteItemsPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -105,7 +137,13 @@ abstract class Quote implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Initializes internal state of Wedding\Base\Quote object.
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildQuoteItem[]
+     */
+    protected $quoteItemsScheduledForDeletion = null;
+
+    /**
+     * Initializes internal state of Wedding\Base\QuoteItemGroupItem object.
      */
     public function __construct()
     {
@@ -200,9 +238,9 @@ abstract class Quote implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Quote</code> instance.  If
-     * <code>obj</code> is an instance of <code>Quote</code>, delegates to
-     * <code>equals(Quote)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>QuoteItemGroupItem</code> instance.  If
+     * <code>obj</code> is an instance of <code>QuoteItemGroupItem</code>, delegates to
+     * <code>equals(QuoteItemGroupItem)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -268,7 +306,7 @@ abstract class Quote implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|Quote The current object, for fluid interface
+     * @return $this|QuoteItemGroupItem The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -340,13 +378,33 @@ abstract class Quote implements ActiveRecordInterface
     }
 
     /**
-     * Get the [enquiry_id] column value.
+     * Get the [quote_item_group_id] column value.
      * 
      * @return int
      */
-    public function getEnquiryId()
+    public function getQuoteItemGroupId()
     {
-        return $this->enquiry_id;
+        return $this->quote_item_group_id;
+    }
+
+    /**
+     * Get the [name] column value.
+     * 
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Get the [suggested_price] column value.
+     * 
+     * @return string
+     */
+    public function getSuggestedPrice()
+    {
+        return $this->suggested_price;
     }
 
     /**
@@ -390,10 +448,30 @@ abstract class Quote implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [archived_at] column value.
+     * 
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getArchivedAt($format = NULL)
+    {
+        if ($format === null) {
+            return $this->archived_at;
+        } else {
+            return $this->archived_at instanceof \DateTimeInterface ? $this->archived_at->format($format) : null;
+        }
+    }
+
+    /**
      * Set the value of [entity_id] column.
      * 
      * @param int $v new value
-     * @return $this|\Wedding\Quote The current object (for fluent API support)
+     * @return $this|\Wedding\QuoteItemGroupItem The current object (for fluent API support)
      */
     public function setEntityId($v)
     {
@@ -403,42 +481,82 @@ abstract class Quote implements ActiveRecordInterface
 
         if ($this->entity_id !== $v) {
             $this->entity_id = $v;
-            $this->modifiedColumns[QuoteTableMap::COL_ENTITY_ID] = true;
+            $this->modifiedColumns[QuoteItemGroupItemTableMap::COL_ENTITY_ID] = true;
         }
 
         return $this;
     } // setEntityId()
 
     /**
-     * Set the value of [enquiry_id] column.
+     * Set the value of [quote_item_group_id] column.
      * 
      * @param int $v new value
-     * @return $this|\Wedding\Quote The current object (for fluent API support)
+     * @return $this|\Wedding\QuoteItemGroupItem The current object (for fluent API support)
      */
-    public function setEnquiryId($v)
+    public function setQuoteItemGroupId($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->enquiry_id !== $v) {
-            $this->enquiry_id = $v;
-            $this->modifiedColumns[QuoteTableMap::COL_ENQUIRY_ID] = true;
+        if ($this->quote_item_group_id !== $v) {
+            $this->quote_item_group_id = $v;
+            $this->modifiedColumns[QuoteItemGroupItemTableMap::COL_QUOTE_ITEM_GROUP_ID] = true;
         }
 
-        if ($this->aEnquiry !== null && $this->aEnquiry->getEntityId() !== $v) {
-            $this->aEnquiry = null;
+        if ($this->aQuoteItemGroup !== null && $this->aQuoteItemGroup->getEntityId() !== $v) {
+            $this->aQuoteItemGroup = null;
         }
 
         return $this;
-    } // setEnquiryId()
+    } // setQuoteItemGroupId()
+
+    /**
+     * Set the value of [name] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Wedding\QuoteItemGroupItem The current object (for fluent API support)
+     */
+    public function setName($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->name !== $v) {
+            $this->name = $v;
+            $this->modifiedColumns[QuoteItemGroupItemTableMap::COL_NAME] = true;
+        }
+
+        return $this;
+    } // setName()
+
+    /**
+     * Set the value of [suggested_price] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Wedding\QuoteItemGroupItem The current object (for fluent API support)
+     */
+    public function setSuggestedPrice($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->suggested_price !== $v) {
+            $this->suggested_price = $v;
+            $this->modifiedColumns[QuoteItemGroupItemTableMap::COL_SUGGESTED_PRICE] = true;
+        }
+
+        return $this;
+    } // setSuggestedPrice()
 
     /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\Wedding\Quote The current object (for fluent API support)
+     * @return $this|\Wedding\QuoteItemGroupItem The current object (for fluent API support)
      */
     public function setCreatedAt($v)
     {
@@ -446,7 +564,7 @@ abstract class Quote implements ActiveRecordInterface
         if ($this->created_at !== null || $dt !== null) {
             if ($this->created_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->created_at->format("Y-m-d H:i:s.u")) {
                 $this->created_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[QuoteTableMap::COL_CREATED_AT] = true;
+                $this->modifiedColumns[QuoteItemGroupItemTableMap::COL_CREATED_AT] = true;
             }
         } // if either are not null
 
@@ -458,7 +576,7 @@ abstract class Quote implements ActiveRecordInterface
      * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\Wedding\Quote The current object (for fluent API support)
+     * @return $this|\Wedding\QuoteItemGroupItem The current object (for fluent API support)
      */
     public function setUpdatedAt($v)
     {
@@ -466,12 +584,32 @@ abstract class Quote implements ActiveRecordInterface
         if ($this->updated_at !== null || $dt !== null) {
             if ($this->updated_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->updated_at->format("Y-m-d H:i:s.u")) {
                 $this->updated_at = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[QuoteTableMap::COL_UPDATED_AT] = true;
+                $this->modifiedColumns[QuoteItemGroupItemTableMap::COL_UPDATED_AT] = true;
             }
         } // if either are not null
 
         return $this;
     } // setUpdatedAt()
+
+    /**
+     * Sets the value of [archived_at] column to a normalized version of the date/time value specified.
+     * 
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\Wedding\QuoteItemGroupItem The current object (for fluent API support)
+     */
+    public function setArchivedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->archived_at !== null || $dt !== null) {
+            if ($this->archived_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->archived_at->format("Y-m-d H:i:s.u")) {
+                $this->archived_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[QuoteItemGroupItemTableMap::COL_ARCHIVED_AT] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setArchivedAt()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -509,23 +647,35 @@ abstract class Quote implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : QuoteTableMap::translateFieldName('EntityId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : QuoteItemGroupItemTableMap::translateFieldName('EntityId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->entity_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : QuoteTableMap::translateFieldName('EnquiryId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->enquiry_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : QuoteItemGroupItemTableMap::translateFieldName('QuoteItemGroupId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->quote_item_group_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : QuoteTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : QuoteItemGroupItemTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->name = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : QuoteItemGroupItemTableMap::translateFieldName('SuggestedPrice', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->suggested_price = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : QuoteItemGroupItemTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : QuoteTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : QuoteItemGroupItemTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->updated_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : QuoteItemGroupItemTableMap::translateFieldName('ArchivedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->archived_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -534,10 +684,10 @@ abstract class Quote implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 4; // 4 = QuoteTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = QuoteItemGroupItemTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\Wedding\\Quote'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\Wedding\\QuoteItemGroupItem'), 0, $e);
         }
     }
 
@@ -556,8 +706,8 @@ abstract class Quote implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aEnquiry !== null && $this->enquiry_id !== $this->aEnquiry->getEntityId()) {
-            $this->aEnquiry = null;
+        if ($this->aQuoteItemGroup !== null && $this->quote_item_group_id !== $this->aQuoteItemGroup->getEntityId()) {
+            $this->aQuoteItemGroup = null;
         }
     } // ensureConsistency
 
@@ -582,13 +732,13 @@ abstract class Quote implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(QuoteTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(QuoteItemGroupItemTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildQuoteQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildQuoteItemGroupItemQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -598,7 +748,9 @@ abstract class Quote implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aEnquiry = null;
+            $this->aQuoteItemGroup = null;
+            $this->collQuoteItems = null;
+
         } // if (deep)
     }
 
@@ -608,8 +760,8 @@ abstract class Quote implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Quote::setDeleted()
-     * @see Quote::isDeleted()
+     * @see QuoteItemGroupItem::setDeleted()
+     * @see QuoteItemGroupItem::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -618,11 +770,11 @@ abstract class Quote implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(QuoteTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(QuoteItemGroupItemTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildQuoteQuery::create()
+            $deleteQuery = ChildQuoteItemGroupItemQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -657,7 +809,7 @@ abstract class Quote implements ActiveRecordInterface
         }
  
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(QuoteTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(QuoteItemGroupItemTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -676,7 +828,7 @@ abstract class Quote implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                QuoteTableMap::addInstanceToPool($this);
+                QuoteItemGroupItemTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -707,11 +859,11 @@ abstract class Quote implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aEnquiry !== null) {
-                if ($this->aEnquiry->isModified() || $this->aEnquiry->isNew()) {
-                    $affectedRows += $this->aEnquiry->save($con);
+            if ($this->aQuoteItemGroup !== null) {
+                if ($this->aQuoteItemGroup->isModified() || $this->aQuoteItemGroup->isNew()) {
+                    $affectedRows += $this->aQuoteItemGroup->save($con);
                 }
-                $this->setEnquiry($this->aEnquiry);
+                $this->setQuoteItemGroup($this->aQuoteItemGroup);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -723,6 +875,23 @@ abstract class Quote implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->quoteItemsScheduledForDeletion !== null) {
+                if (!$this->quoteItemsScheduledForDeletion->isEmpty()) {
+                    \Wedding\QuoteItemQuery::create()
+                        ->filterByPrimaryKeys($this->quoteItemsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->quoteItemsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collQuoteItems !== null) {
+                foreach ($this->collQuoteItems as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -745,27 +914,36 @@ abstract class Quote implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[QuoteTableMap::COL_ENTITY_ID] = true;
+        $this->modifiedColumns[QuoteItemGroupItemTableMap::COL_ENTITY_ID] = true;
         if (null !== $this->entity_id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . QuoteTableMap::COL_ENTITY_ID . ')');
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . QuoteItemGroupItemTableMap::COL_ENTITY_ID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(QuoteTableMap::COL_ENTITY_ID)) {
+        if ($this->isColumnModified(QuoteItemGroupItemTableMap::COL_ENTITY_ID)) {
             $modifiedColumns[':p' . $index++]  = 'entity_id';
         }
-        if ($this->isColumnModified(QuoteTableMap::COL_ENQUIRY_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'enquiry_id';
+        if ($this->isColumnModified(QuoteItemGroupItemTableMap::COL_QUOTE_ITEM_GROUP_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'quote_item_group_id';
         }
-        if ($this->isColumnModified(QuoteTableMap::COL_CREATED_AT)) {
+        if ($this->isColumnModified(QuoteItemGroupItemTableMap::COL_NAME)) {
+            $modifiedColumns[':p' . $index++]  = 'name';
+        }
+        if ($this->isColumnModified(QuoteItemGroupItemTableMap::COL_SUGGESTED_PRICE)) {
+            $modifiedColumns[':p' . $index++]  = 'suggested_price';
+        }
+        if ($this->isColumnModified(QuoteItemGroupItemTableMap::COL_CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'created_at';
         }
-        if ($this->isColumnModified(QuoteTableMap::COL_UPDATED_AT)) {
+        if ($this->isColumnModified(QuoteItemGroupItemTableMap::COL_UPDATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'updated_at';
+        }
+        if ($this->isColumnModified(QuoteItemGroupItemTableMap::COL_ARCHIVED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'archived_at';
         }
 
         $sql = sprintf(
-            'INSERT INTO quote (%s) VALUES (%s)',
+            'INSERT INTO quote_item_group_item (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -777,14 +955,23 @@ abstract class Quote implements ActiveRecordInterface
                     case 'entity_id':                        
                         $stmt->bindValue($identifier, $this->entity_id, PDO::PARAM_INT);
                         break;
-                    case 'enquiry_id':                        
-                        $stmt->bindValue($identifier, $this->enquiry_id, PDO::PARAM_INT);
+                    case 'quote_item_group_id':                        
+                        $stmt->bindValue($identifier, $this->quote_item_group_id, PDO::PARAM_INT);
+                        break;
+                    case 'name':                        
+                        $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                        break;
+                    case 'suggested_price':                        
+                        $stmt->bindValue($identifier, $this->suggested_price, PDO::PARAM_STR);
                         break;
                     case 'created_at':                        
                         $stmt->bindValue($identifier, $this->created_at ? $this->created_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case 'updated_at':                        
                         $stmt->bindValue($identifier, $this->updated_at ? $this->updated_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case 'archived_at':                        
+                        $stmt->bindValue($identifier, $this->archived_at ? $this->archived_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -832,7 +1019,7 @@ abstract class Quote implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = QuoteTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = QuoteItemGroupItemTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -852,13 +1039,22 @@ abstract class Quote implements ActiveRecordInterface
                 return $this->getEntityId();
                 break;
             case 1:
-                return $this->getEnquiryId();
+                return $this->getQuoteItemGroupId();
                 break;
             case 2:
-                return $this->getCreatedAt();
+                return $this->getName();
                 break;
             case 3:
+                return $this->getSuggestedPrice();
+                break;
+            case 4:
+                return $this->getCreatedAt();
+                break;
+            case 5:
                 return $this->getUpdatedAt();
+                break;
+            case 6:
+                return $this->getArchivedAt();
                 break;
             default:
                 return null;
@@ -884,23 +1080,30 @@ abstract class Quote implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['Quote'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['QuoteItemGroupItem'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Quote'][$this->hashCode()] = true;
-        $keys = QuoteTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['QuoteItemGroupItem'][$this->hashCode()] = true;
+        $keys = QuoteItemGroupItemTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getEntityId(),
-            $keys[1] => $this->getEnquiryId(),
-            $keys[2] => $this->getCreatedAt(),
-            $keys[3] => $this->getUpdatedAt(),
+            $keys[1] => $this->getQuoteItemGroupId(),
+            $keys[2] => $this->getName(),
+            $keys[3] => $this->getSuggestedPrice(),
+            $keys[4] => $this->getCreatedAt(),
+            $keys[5] => $this->getUpdatedAt(),
+            $keys[6] => $this->getArchivedAt(),
         );
-        if ($result[$keys[2]] instanceof \DateTime) {
-            $result[$keys[2]] = $result[$keys[2]]->format('c');
+        if ($result[$keys[4]] instanceof \DateTime) {
+            $result[$keys[4]] = $result[$keys[4]]->format('c');
         }
         
-        if ($result[$keys[3]] instanceof \DateTime) {
-            $result[$keys[3]] = $result[$keys[3]]->format('c');
+        if ($result[$keys[5]] instanceof \DateTime) {
+            $result[$keys[5]] = $result[$keys[5]]->format('c');
+        }
+        
+        if ($result[$keys[6]] instanceof \DateTime) {
+            $result[$keys[6]] = $result[$keys[6]]->format('c');
         }
         
         $virtualColumns = $this->virtualColumns;
@@ -909,20 +1112,35 @@ abstract class Quote implements ActiveRecordInterface
         }
         
         if ($includeForeignObjects) {
-            if (null !== $this->aEnquiry) {
+            if (null !== $this->aQuoteItemGroup) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'enquiry';
+                        $key = 'quoteItemGroup';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'enquiry';
+                        $key = 'quote_item_group';
                         break;
                     default:
-                        $key = 'Enquiry';
+                        $key = 'QuoteItemGroup';
                 }
         
-                $result[$key] = $this->aEnquiry->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aQuoteItemGroup->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collQuoteItems) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'quoteItems';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'quote_items';
+                        break;
+                    default:
+                        $key = 'QuoteItems';
+                }
+        
+                $result[$key] = $this->collQuoteItems->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -938,11 +1156,11 @@ abstract class Quote implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\Wedding\Quote
+     * @return $this|\Wedding\QuoteItemGroupItem
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = QuoteTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = QuoteItemGroupItemTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -953,7 +1171,7 @@ abstract class Quote implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\Wedding\Quote
+     * @return $this|\Wedding\QuoteItemGroupItem
      */
     public function setByPosition($pos, $value)
     {
@@ -962,13 +1180,22 @@ abstract class Quote implements ActiveRecordInterface
                 $this->setEntityId($value);
                 break;
             case 1:
-                $this->setEnquiryId($value);
+                $this->setQuoteItemGroupId($value);
                 break;
             case 2:
-                $this->setCreatedAt($value);
+                $this->setName($value);
                 break;
             case 3:
+                $this->setSuggestedPrice($value);
+                break;
+            case 4:
+                $this->setCreatedAt($value);
+                break;
+            case 5:
                 $this->setUpdatedAt($value);
+                break;
+            case 6:
+                $this->setArchivedAt($value);
                 break;
         } // switch()
 
@@ -994,19 +1221,28 @@ abstract class Quote implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = QuoteTableMap::getFieldNames($keyType);
+        $keys = QuoteItemGroupItemTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
             $this->setEntityId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setEnquiryId($arr[$keys[1]]);
+            $this->setQuoteItemGroupId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setCreatedAt($arr[$keys[2]]);
+            $this->setName($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setUpdatedAt($arr[$keys[3]]);
+            $this->setSuggestedPrice($arr[$keys[3]]);
+        }
+        if (array_key_exists($keys[4], $arr)) {
+            $this->setCreatedAt($arr[$keys[4]]);
+        }
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setUpdatedAt($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setArchivedAt($arr[$keys[6]]);
         }
     }
 
@@ -1027,7 +1263,7 @@ abstract class Quote implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\Wedding\Quote The current object, for fluid interface
+     * @return $this|\Wedding\QuoteItemGroupItem The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1047,19 +1283,28 @@ abstract class Quote implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(QuoteTableMap::DATABASE_NAME);
+        $criteria = new Criteria(QuoteItemGroupItemTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(QuoteTableMap::COL_ENTITY_ID)) {
-            $criteria->add(QuoteTableMap::COL_ENTITY_ID, $this->entity_id);
+        if ($this->isColumnModified(QuoteItemGroupItemTableMap::COL_ENTITY_ID)) {
+            $criteria->add(QuoteItemGroupItemTableMap::COL_ENTITY_ID, $this->entity_id);
         }
-        if ($this->isColumnModified(QuoteTableMap::COL_ENQUIRY_ID)) {
-            $criteria->add(QuoteTableMap::COL_ENQUIRY_ID, $this->enquiry_id);
+        if ($this->isColumnModified(QuoteItemGroupItemTableMap::COL_QUOTE_ITEM_GROUP_ID)) {
+            $criteria->add(QuoteItemGroupItemTableMap::COL_QUOTE_ITEM_GROUP_ID, $this->quote_item_group_id);
         }
-        if ($this->isColumnModified(QuoteTableMap::COL_CREATED_AT)) {
-            $criteria->add(QuoteTableMap::COL_CREATED_AT, $this->created_at);
+        if ($this->isColumnModified(QuoteItemGroupItemTableMap::COL_NAME)) {
+            $criteria->add(QuoteItemGroupItemTableMap::COL_NAME, $this->name);
         }
-        if ($this->isColumnModified(QuoteTableMap::COL_UPDATED_AT)) {
-            $criteria->add(QuoteTableMap::COL_UPDATED_AT, $this->updated_at);
+        if ($this->isColumnModified(QuoteItemGroupItemTableMap::COL_SUGGESTED_PRICE)) {
+            $criteria->add(QuoteItemGroupItemTableMap::COL_SUGGESTED_PRICE, $this->suggested_price);
+        }
+        if ($this->isColumnModified(QuoteItemGroupItemTableMap::COL_CREATED_AT)) {
+            $criteria->add(QuoteItemGroupItemTableMap::COL_CREATED_AT, $this->created_at);
+        }
+        if ($this->isColumnModified(QuoteItemGroupItemTableMap::COL_UPDATED_AT)) {
+            $criteria->add(QuoteItemGroupItemTableMap::COL_UPDATED_AT, $this->updated_at);
+        }
+        if ($this->isColumnModified(QuoteItemGroupItemTableMap::COL_ARCHIVED_AT)) {
+            $criteria->add(QuoteItemGroupItemTableMap::COL_ARCHIVED_AT, $this->archived_at);
         }
 
         return $criteria;
@@ -1077,8 +1322,8 @@ abstract class Quote implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildQuoteQuery::create();
-        $criteria->add(QuoteTableMap::COL_ENTITY_ID, $this->entity_id);
+        $criteria = ChildQuoteItemGroupItemQuery::create();
+        $criteria->add(QuoteItemGroupItemTableMap::COL_ENTITY_ID, $this->entity_id);
 
         return $criteria;
     }
@@ -1140,16 +1385,33 @@ abstract class Quote implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \Wedding\Quote (or compatible) type.
+     * @param      object $copyObj An object of \Wedding\QuoteItemGroupItem (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setEnquiryId($this->getEnquiryId());
+        $copyObj->setQuoteItemGroupId($this->getQuoteItemGroupId());
+        $copyObj->setName($this->getName());
+        $copyObj->setSuggestedPrice($this->getSuggestedPrice());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
+        $copyObj->setArchivedAt($this->getArchivedAt());
+
+        if ($deepCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+
+            foreach ($this->getQuoteItems() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addQuoteItem($relObj->copy($deepCopy));
+                }
+            }
+
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setEntityId(NULL); // this is a auto-increment column, so set to default value
@@ -1165,7 +1427,7 @@ abstract class Quote implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \Wedding\Quote Clone of current object.
+     * @return \Wedding\QuoteItemGroupItem Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1179,26 +1441,26 @@ abstract class Quote implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildEnquiry object.
+     * Declares an association between this object and a ChildQuoteItemGroup object.
      *
-     * @param  ChildEnquiry $v
-     * @return $this|\Wedding\Quote The current object (for fluent API support)
+     * @param  ChildQuoteItemGroup $v
+     * @return $this|\Wedding\QuoteItemGroupItem The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setEnquiry(ChildEnquiry $v = null)
+    public function setQuoteItemGroup(ChildQuoteItemGroup $v = null)
     {
         if ($v === null) {
-            $this->setEnquiryId(NULL);
+            $this->setQuoteItemGroupId(NULL);
         } else {
-            $this->setEnquiryId($v->getEntityId());
+            $this->setQuoteItemGroupId($v->getEntityId());
         }
 
-        $this->aEnquiry = $v;
+        $this->aQuoteItemGroup = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildEnquiry object, it will not be re-added.
+        // If this object has already been added to the ChildQuoteItemGroup object, it will not be re-added.
         if ($v !== null) {
-            $v->addQuote($this);
+            $v->addQuoteItemGroupItem($this);
         }
 
 
@@ -1207,26 +1469,267 @@ abstract class Quote implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildEnquiry object
+     * Get the associated ChildQuoteItemGroup object
      *
      * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildEnquiry The associated ChildEnquiry object.
+     * @return ChildQuoteItemGroup The associated ChildQuoteItemGroup object.
      * @throws PropelException
      */
-    public function getEnquiry(ConnectionInterface $con = null)
+    public function getQuoteItemGroup(ConnectionInterface $con = null)
     {
-        if ($this->aEnquiry === null && ($this->enquiry_id !== null)) {
-            $this->aEnquiry = ChildEnquiryQuery::create()->findPk($this->enquiry_id, $con);
+        if ($this->aQuoteItemGroup === null && ($this->quote_item_group_id !== null)) {
+            $this->aQuoteItemGroup = ChildQuoteItemGroupQuery::create()->findPk($this->quote_item_group_id, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aEnquiry->addQuotes($this);
+                $this->aQuoteItemGroup->addQuoteItemGroupItems($this);
              */
         }
 
-        return $this->aEnquiry;
+        return $this->aQuoteItemGroup;
+    }
+
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param      string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('QuoteItem' == $relationName) {
+            return $this->initQuoteItems();
+        }
+    }
+
+    /**
+     * Clears out the collQuoteItems collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addQuoteItems()
+     */
+    public function clearQuoteItems()
+    {
+        $this->collQuoteItems = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collQuoteItems collection loaded partially.
+     */
+    public function resetPartialQuoteItems($v = true)
+    {
+        $this->collQuoteItemsPartial = $v;
+    }
+
+    /**
+     * Initializes the collQuoteItems collection.
+     *
+     * By default this just sets the collQuoteItems collection to an empty array (like clearcollQuoteItems());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initQuoteItems($overrideExisting = true)
+    {
+        if (null !== $this->collQuoteItems && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = QuoteItemTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collQuoteItems = new $collectionClassName;
+        $this->collQuoteItems->setModel('\Wedding\QuoteItem');
+    }
+
+    /**
+     * Gets an array of ChildQuoteItem objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildQuoteItemGroupItem is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildQuoteItem[] List of ChildQuoteItem objects
+     * @throws PropelException
+     */
+    public function getQuoteItems(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collQuoteItemsPartial && !$this->isNew();
+        if (null === $this->collQuoteItems || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collQuoteItems) {
+                // return empty collection
+                $this->initQuoteItems();
+            } else {
+                $collQuoteItems = ChildQuoteItemQuery::create(null, $criteria)
+                    ->filterByQuoteItemGroupItem($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collQuoteItemsPartial && count($collQuoteItems)) {
+                        $this->initQuoteItems(false);
+
+                        foreach ($collQuoteItems as $obj) {
+                            if (false == $this->collQuoteItems->contains($obj)) {
+                                $this->collQuoteItems->append($obj);
+                            }
+                        }
+
+                        $this->collQuoteItemsPartial = true;
+                    }
+
+                    return $collQuoteItems;
+                }
+
+                if ($partial && $this->collQuoteItems) {
+                    foreach ($this->collQuoteItems as $obj) {
+                        if ($obj->isNew()) {
+                            $collQuoteItems[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collQuoteItems = $collQuoteItems;
+                $this->collQuoteItemsPartial = false;
+            }
+        }
+
+        return $this->collQuoteItems;
+    }
+
+    /**
+     * Sets a collection of ChildQuoteItem objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $quoteItems A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildQuoteItemGroupItem The current object (for fluent API support)
+     */
+    public function setQuoteItems(Collection $quoteItems, ConnectionInterface $con = null)
+    {
+        /** @var ChildQuoteItem[] $quoteItemsToDelete */
+        $quoteItemsToDelete = $this->getQuoteItems(new Criteria(), $con)->diff($quoteItems);
+
+        
+        $this->quoteItemsScheduledForDeletion = $quoteItemsToDelete;
+
+        foreach ($quoteItemsToDelete as $quoteItemRemoved) {
+            $quoteItemRemoved->setQuoteItemGroupItem(null);
+        }
+
+        $this->collQuoteItems = null;
+        foreach ($quoteItems as $quoteItem) {
+            $this->addQuoteItem($quoteItem);
+        }
+
+        $this->collQuoteItems = $quoteItems;
+        $this->collQuoteItemsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related QuoteItem objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related QuoteItem objects.
+     * @throws PropelException
+     */
+    public function countQuoteItems(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collQuoteItemsPartial && !$this->isNew();
+        if (null === $this->collQuoteItems || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collQuoteItems) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getQuoteItems());
+            }
+
+            $query = ChildQuoteItemQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByQuoteItemGroupItem($this)
+                ->count($con);
+        }
+
+        return count($this->collQuoteItems);
+    }
+
+    /**
+     * Method called to associate a ChildQuoteItem object to this object
+     * through the ChildQuoteItem foreign key attribute.
+     *
+     * @param  ChildQuoteItem $l ChildQuoteItem
+     * @return $this|\Wedding\QuoteItemGroupItem The current object (for fluent API support)
+     */
+    public function addQuoteItem(ChildQuoteItem $l)
+    {
+        if ($this->collQuoteItems === null) {
+            $this->initQuoteItems();
+            $this->collQuoteItemsPartial = true;
+        }
+
+        if (!$this->collQuoteItems->contains($l)) {
+            $this->doAddQuoteItem($l);
+
+            if ($this->quoteItemsScheduledForDeletion and $this->quoteItemsScheduledForDeletion->contains($l)) {
+                $this->quoteItemsScheduledForDeletion->remove($this->quoteItemsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildQuoteItem $quoteItem The ChildQuoteItem object to add.
+     */
+    protected function doAddQuoteItem(ChildQuoteItem $quoteItem)
+    {
+        $this->collQuoteItems[]= $quoteItem;
+        $quoteItem->setQuoteItemGroupItem($this);
+    }
+
+    /**
+     * @param  ChildQuoteItem $quoteItem The ChildQuoteItem object to remove.
+     * @return $this|ChildQuoteItemGroupItem The current object (for fluent API support)
+     */
+    public function removeQuoteItem(ChildQuoteItem $quoteItem)
+    {
+        if ($this->getQuoteItems()->contains($quoteItem)) {
+            $pos = $this->collQuoteItems->search($quoteItem);
+            $this->collQuoteItems->remove($pos);
+            if (null === $this->quoteItemsScheduledForDeletion) {
+                $this->quoteItemsScheduledForDeletion = clone $this->collQuoteItems;
+                $this->quoteItemsScheduledForDeletion->clear();
+            }
+            $this->quoteItemsScheduledForDeletion[]= $quoteItem;
+            $quoteItem->setQuoteItemGroupItem(null);
+        }
+
+        return $this;
     }
 
     /**
@@ -1236,13 +1739,16 @@ abstract class Quote implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aEnquiry) {
-            $this->aEnquiry->removeQuote($this);
+        if (null !== $this->aQuoteItemGroup) {
+            $this->aQuoteItemGroup->removeQuoteItemGroupItem($this);
         }
         $this->entity_id = null;
-        $this->enquiry_id = null;
+        $this->quote_item_group_id = null;
+        $this->name = null;
+        $this->suggested_price = null;
         $this->created_at = null;
         $this->updated_at = null;
+        $this->archived_at = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1261,9 +1767,15 @@ abstract class Quote implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
+            if ($this->collQuoteItems) {
+                foreach ($this->collQuoteItems as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
-        $this->aEnquiry = null;
+        $this->collQuoteItems = null;
+        $this->aQuoteItemGroup = null;
     }
 
     /**
@@ -1273,7 +1785,7 @@ abstract class Quote implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(QuoteTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(QuoteItemGroupItemTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**

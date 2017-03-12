@@ -22,10 +22,13 @@ use Wedding\Enquiry as ChildEnquiry;
 use Wedding\EnquiryComment as ChildEnquiryComment;
 use Wedding\EnquiryCommentQuery as ChildEnquiryCommentQuery;
 use Wedding\EnquiryQuery as ChildEnquiryQuery;
+use Wedding\Quote as ChildQuote;
+use Wedding\QuoteQuery as ChildQuoteQuery;
 use Wedding\Viewing as ChildViewing;
 use Wedding\ViewingQuery as ChildViewingQuery;
 use Wedding\Map\EnquiryCommentTableMap;
 use Wedding\Map\EnquiryTableMap;
+use Wedding\Map\QuoteTableMap;
 use Wedding\Map\ViewingTableMap;
 
 /**
@@ -211,6 +214,12 @@ abstract class Enquiry implements ActiveRecordInterface
     protected $collEnquiryCommentsPartial;
 
     /**
+     * @var        ObjectCollection|ChildQuote[] Collection to store aggregation of ChildQuote objects.
+     */
+    protected $collQuotes;
+    protected $collQuotesPartial;
+
+    /**
      * @var        ObjectCollection|ChildViewing[] Collection to store aggregation of ChildViewing objects.
      */
     protected $collViewings;
@@ -229,6 +238,12 @@ abstract class Enquiry implements ActiveRecordInterface
      * @var ObjectCollection|ChildEnquiryComment[]
      */
     protected $enquiryCommentsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildQuote[]
+     */
+    protected $quotesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1281,6 +1296,8 @@ abstract class Enquiry implements ActiveRecordInterface
 
             $this->collEnquiryComments = null;
 
+            $this->collQuotes = null;
+
             $this->collViewings = null;
 
         } // if (deep)
@@ -1408,6 +1425,23 @@ abstract class Enquiry implements ActiveRecordInterface
 
             if ($this->collEnquiryComments !== null) {
                 foreach ($this->collEnquiryComments as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->quotesScheduledForDeletion !== null) {
+                if (!$this->quotesScheduledForDeletion->isEmpty()) {
+                    \Wedding\QuoteQuery::create()
+                        ->filterByPrimaryKeys($this->quotesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->quotesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collQuotes !== null) {
+                foreach ($this->collQuotes as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1791,6 +1825,21 @@ abstract class Enquiry implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->collEnquiryComments->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collQuotes) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'quotes';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'quotes';
+                        break;
+                    default:
+                        $key = 'Quotes';
+                }
+        
+                $result[$key] = $this->collQuotes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collViewings) {
                 
@@ -2195,6 +2244,12 @@ abstract class Enquiry implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getQuotes() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addQuote($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getViewings() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addViewing($relObj->copy($deepCopy));
@@ -2244,6 +2299,9 @@ abstract class Enquiry implements ActiveRecordInterface
     {
         if ('EnquiryComment' == $relationName) {
             return $this->initEnquiryComments();
+        }
+        if ('Quote' == $relationName) {
+            return $this->initQuotes();
         }
         if ('Viewing' == $relationName) {
             return $this->initViewings();
@@ -2498,6 +2556,231 @@ abstract class Enquiry implements ActiveRecordInterface
         $query->joinWith('Staff', $joinBehavior);
 
         return $this->getEnquiryComments($query, $con);
+    }
+
+    /**
+     * Clears out the collQuotes collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addQuotes()
+     */
+    public function clearQuotes()
+    {
+        $this->collQuotes = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collQuotes collection loaded partially.
+     */
+    public function resetPartialQuotes($v = true)
+    {
+        $this->collQuotesPartial = $v;
+    }
+
+    /**
+     * Initializes the collQuotes collection.
+     *
+     * By default this just sets the collQuotes collection to an empty array (like clearcollQuotes());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initQuotes($overrideExisting = true)
+    {
+        if (null !== $this->collQuotes && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = QuoteTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collQuotes = new $collectionClassName;
+        $this->collQuotes->setModel('\Wedding\Quote');
+    }
+
+    /**
+     * Gets an array of ChildQuote objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildEnquiry is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildQuote[] List of ChildQuote objects
+     * @throws PropelException
+     */
+    public function getQuotes(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collQuotesPartial && !$this->isNew();
+        if (null === $this->collQuotes || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collQuotes) {
+                // return empty collection
+                $this->initQuotes();
+            } else {
+                $collQuotes = ChildQuoteQuery::create(null, $criteria)
+                    ->filterByEnquiry($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collQuotesPartial && count($collQuotes)) {
+                        $this->initQuotes(false);
+
+                        foreach ($collQuotes as $obj) {
+                            if (false == $this->collQuotes->contains($obj)) {
+                                $this->collQuotes->append($obj);
+                            }
+                        }
+
+                        $this->collQuotesPartial = true;
+                    }
+
+                    return $collQuotes;
+                }
+
+                if ($partial && $this->collQuotes) {
+                    foreach ($this->collQuotes as $obj) {
+                        if ($obj->isNew()) {
+                            $collQuotes[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collQuotes = $collQuotes;
+                $this->collQuotesPartial = false;
+            }
+        }
+
+        return $this->collQuotes;
+    }
+
+    /**
+     * Sets a collection of ChildQuote objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $quotes A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildEnquiry The current object (for fluent API support)
+     */
+    public function setQuotes(Collection $quotes, ConnectionInterface $con = null)
+    {
+        /** @var ChildQuote[] $quotesToDelete */
+        $quotesToDelete = $this->getQuotes(new Criteria(), $con)->diff($quotes);
+
+        
+        $this->quotesScheduledForDeletion = $quotesToDelete;
+
+        foreach ($quotesToDelete as $quoteRemoved) {
+            $quoteRemoved->setEnquiry(null);
+        }
+
+        $this->collQuotes = null;
+        foreach ($quotes as $quote) {
+            $this->addQuote($quote);
+        }
+
+        $this->collQuotes = $quotes;
+        $this->collQuotesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Quote objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related Quote objects.
+     * @throws PropelException
+     */
+    public function countQuotes(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collQuotesPartial && !$this->isNew();
+        if (null === $this->collQuotes || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collQuotes) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getQuotes());
+            }
+
+            $query = ChildQuoteQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEnquiry($this)
+                ->count($con);
+        }
+
+        return count($this->collQuotes);
+    }
+
+    /**
+     * Method called to associate a ChildQuote object to this object
+     * through the ChildQuote foreign key attribute.
+     *
+     * @param  ChildQuote $l ChildQuote
+     * @return $this|\Wedding\Enquiry The current object (for fluent API support)
+     */
+    public function addQuote(ChildQuote $l)
+    {
+        if ($this->collQuotes === null) {
+            $this->initQuotes();
+            $this->collQuotesPartial = true;
+        }
+
+        if (!$this->collQuotes->contains($l)) {
+            $this->doAddQuote($l);
+
+            if ($this->quotesScheduledForDeletion and $this->quotesScheduledForDeletion->contains($l)) {
+                $this->quotesScheduledForDeletion->remove($this->quotesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildQuote $quote The ChildQuote object to add.
+     */
+    protected function doAddQuote(ChildQuote $quote)
+    {
+        $this->collQuotes[]= $quote;
+        $quote->setEnquiry($this);
+    }
+
+    /**
+     * @param  ChildQuote $quote The ChildQuote object to remove.
+     * @return $this|ChildEnquiry The current object (for fluent API support)
+     */
+    public function removeQuote(ChildQuote $quote)
+    {
+        if ($this->getQuotes()->contains($quote)) {
+            $pos = $this->collQuotes->search($quote);
+            $this->collQuotes->remove($pos);
+            if (null === $this->quotesScheduledForDeletion) {
+                $this->quotesScheduledForDeletion = clone $this->collQuotes;
+                $this->quotesScheduledForDeletion->clear();
+            }
+            $this->quotesScheduledForDeletion[]= $quote;
+            $quote->setEnquiry(null);
+        }
+
+        return $this;
     }
 
     /**
@@ -2800,6 +3083,11 @@ abstract class Enquiry implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collQuotes) {
+                foreach ($this->collQuotes as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collViewings) {
                 foreach ($this->collViewings as $o) {
                     $o->clearAllReferences($deep);
@@ -2808,6 +3096,7 @@ abstract class Enquiry implements ActiveRecordInterface
         } // if ($deep)
 
         $this->collEnquiryComments = null;
+        $this->collQuotes = null;
         $this->collViewings = null;
     }
 

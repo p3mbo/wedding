@@ -11,12 +11,12 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
-use Wedding\Enquiry;
-use Wedding\EnquiryQuery;
+use Wedding\QuoteItemGroup;
+use Wedding\QuoteItemGroupQuery;
 
 
 /**
- * This class defines the structure of the 'enquiry' table.
+ * This class defines the structure of the 'quote_item_group' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Wedding\EnquiryQuery;
  * (i.e. if it's a text column type).
  *
  */
-class EnquiryTableMap extends TableMap
+class QuoteItemGroupTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class EnquiryTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Wedding.Map.EnquiryTableMap';
+    const CLASS_NAME = 'Wedding.Map.QuoteItemGroupTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class EnquiryTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'enquiry';
+    const TABLE_NAME = 'quote_item_group';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Wedding\\Enquiry';
+    const OM_CLASS = '\\Wedding\\QuoteItemGroup';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Wedding.Enquiry';
+    const CLASS_DEFAULT = 'Wedding.QuoteItemGroup';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 19;
+    const NUM_COLUMNS = 5;
 
     /**
      * The number of lazy-loaded columns
@@ -69,102 +69,32 @@ class EnquiryTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 19;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /**
      * the column name for the entity_id field
      */
-    const COL_ENTITY_ID = 'enquiry.entity_id';
-
-    /**
-     * the column name for the title field
-     */
-    const COL_TITLE = 'enquiry.title';
+    const COL_ENTITY_ID = 'quote_item_group.entity_id';
 
     /**
      * the column name for the name field
      */
-    const COL_NAME = 'enquiry.name';
-
-    /**
-     * the column name for the partner_name field
-     */
-    const COL_PARTNER_NAME = 'enquiry.partner_name';
-
-    /**
-     * the column name for the email field
-     */
-    const COL_EMAIL = 'enquiry.email';
-
-    /**
-     * the column name for the telephone field
-     */
-    const COL_TELEPHONE = 'enquiry.telephone';
-
-    /**
-     * the column name for the mobile field
-     */
-    const COL_MOBILE = 'enquiry.mobile';
-
-    /**
-     * the column name for the address field
-     */
-    const COL_ADDRESS = 'enquiry.address';
-
-    /**
-     * the column name for the day_guests field
-     */
-    const COL_DAY_GUESTS = 'enquiry.day_guests';
-
-    /**
-     * the column name for the evening_guests field
-     */
-    const COL_EVENING_GUESTS = 'enquiry.evening_guests';
-
-    /**
-     * the column name for the year field
-     */
-    const COL_YEAR = 'enquiry.year';
-
-    /**
-     * the column name for the budget field
-     */
-    const COL_BUDGET = 'enquiry.budget';
-
-    /**
-     * the column name for the heard field
-     */
-    const COL_HEARD = 'enquiry.heard';
-
-    /**
-     * the column name for the comment field
-     */
-    const COL_COMMENT = 'enquiry.comment';
+    const COL_NAME = 'quote_item_group.name';
 
     /**
      * the column name for the created_at field
      */
-    const COL_CREATED_AT = 'enquiry.created_at';
+    const COL_CREATED_AT = 'quote_item_group.created_at';
 
     /**
      * the column name for the updated_at field
      */
-    const COL_UPDATED_AT = 'enquiry.updated_at';
+    const COL_UPDATED_AT = 'quote_item_group.updated_at';
 
     /**
-     * the column name for the lost_at field
+     * the column name for the archived_at field
      */
-    const COL_LOST_AT = 'enquiry.lost_at';
-
-    /**
-     * the column name for the promoted_at field
-     */
-    const COL_PROMOTED_AT = 'enquiry.promoted_at';
-
-    /**
-     * the column name for the contacted_at field
-     */
-    const COL_CONTACTED_AT = 'enquiry.contacted_at';
+    const COL_ARCHIVED_AT = 'quote_item_group.archived_at';
 
     /**
      * The default string format for model objects of the related table
@@ -178,11 +108,11 @@ class EnquiryTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('EntityId', 'Title', 'Name', 'PartnerName', 'Email', 'Telephone', 'Mobile', 'Address', 'DayGuests', 'EveningGuests', 'Year', 'Budget', 'Heard', 'Comment', 'CreatedAt', 'UpdatedAt', 'LostAt', 'PromotedAt', 'ContactedAt', ),
-        self::TYPE_CAMELNAME     => array('entityId', 'title', 'name', 'partnerName', 'email', 'telephone', 'mobile', 'address', 'dayGuests', 'eveningGuests', 'year', 'budget', 'heard', 'comment', 'createdAt', 'updatedAt', 'lostAt', 'promotedAt', 'contactedAt', ),
-        self::TYPE_COLNAME       => array(EnquiryTableMap::COL_ENTITY_ID, EnquiryTableMap::COL_TITLE, EnquiryTableMap::COL_NAME, EnquiryTableMap::COL_PARTNER_NAME, EnquiryTableMap::COL_EMAIL, EnquiryTableMap::COL_TELEPHONE, EnquiryTableMap::COL_MOBILE, EnquiryTableMap::COL_ADDRESS, EnquiryTableMap::COL_DAY_GUESTS, EnquiryTableMap::COL_EVENING_GUESTS, EnquiryTableMap::COL_YEAR, EnquiryTableMap::COL_BUDGET, EnquiryTableMap::COL_HEARD, EnquiryTableMap::COL_COMMENT, EnquiryTableMap::COL_CREATED_AT, EnquiryTableMap::COL_UPDATED_AT, EnquiryTableMap::COL_LOST_AT, EnquiryTableMap::COL_PROMOTED_AT, EnquiryTableMap::COL_CONTACTED_AT, ),
-        self::TYPE_FIELDNAME     => array('entity_id', 'title', 'name', 'partner_name', 'email', 'telephone', 'mobile', 'address', 'day_guests', 'evening_guests', 'year', 'budget', 'heard', 'comment', 'created_at', 'updated_at', 'lost_at', 'promoted_at', 'contacted_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
+        self::TYPE_PHPNAME       => array('EntityId', 'Name', 'CreatedAt', 'UpdatedAt', 'ArchivedAt', ),
+        self::TYPE_CAMELNAME     => array('entityId', 'name', 'createdAt', 'updatedAt', 'archivedAt', ),
+        self::TYPE_COLNAME       => array(QuoteItemGroupTableMap::COL_ENTITY_ID, QuoteItemGroupTableMap::COL_NAME, QuoteItemGroupTableMap::COL_CREATED_AT, QuoteItemGroupTableMap::COL_UPDATED_AT, QuoteItemGroupTableMap::COL_ARCHIVED_AT, ),
+        self::TYPE_FIELDNAME     => array('entity_id', 'name', 'created_at', 'updated_at', 'archived_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -192,11 +122,11 @@ class EnquiryTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('EntityId' => 0, 'Title' => 1, 'Name' => 2, 'PartnerName' => 3, 'Email' => 4, 'Telephone' => 5, 'Mobile' => 6, 'Address' => 7, 'DayGuests' => 8, 'EveningGuests' => 9, 'Year' => 10, 'Budget' => 11, 'Heard' => 12, 'Comment' => 13, 'CreatedAt' => 14, 'UpdatedAt' => 15, 'LostAt' => 16, 'PromotedAt' => 17, 'ContactedAt' => 18, ),
-        self::TYPE_CAMELNAME     => array('entityId' => 0, 'title' => 1, 'name' => 2, 'partnerName' => 3, 'email' => 4, 'telephone' => 5, 'mobile' => 6, 'address' => 7, 'dayGuests' => 8, 'eveningGuests' => 9, 'year' => 10, 'budget' => 11, 'heard' => 12, 'comment' => 13, 'createdAt' => 14, 'updatedAt' => 15, 'lostAt' => 16, 'promotedAt' => 17, 'contactedAt' => 18, ),
-        self::TYPE_COLNAME       => array(EnquiryTableMap::COL_ENTITY_ID => 0, EnquiryTableMap::COL_TITLE => 1, EnquiryTableMap::COL_NAME => 2, EnquiryTableMap::COL_PARTNER_NAME => 3, EnquiryTableMap::COL_EMAIL => 4, EnquiryTableMap::COL_TELEPHONE => 5, EnquiryTableMap::COL_MOBILE => 6, EnquiryTableMap::COL_ADDRESS => 7, EnquiryTableMap::COL_DAY_GUESTS => 8, EnquiryTableMap::COL_EVENING_GUESTS => 9, EnquiryTableMap::COL_YEAR => 10, EnquiryTableMap::COL_BUDGET => 11, EnquiryTableMap::COL_HEARD => 12, EnquiryTableMap::COL_COMMENT => 13, EnquiryTableMap::COL_CREATED_AT => 14, EnquiryTableMap::COL_UPDATED_AT => 15, EnquiryTableMap::COL_LOST_AT => 16, EnquiryTableMap::COL_PROMOTED_AT => 17, EnquiryTableMap::COL_CONTACTED_AT => 18, ),
-        self::TYPE_FIELDNAME     => array('entity_id' => 0, 'title' => 1, 'name' => 2, 'partner_name' => 3, 'email' => 4, 'telephone' => 5, 'mobile' => 6, 'address' => 7, 'day_guests' => 8, 'evening_guests' => 9, 'year' => 10, 'budget' => 11, 'heard' => 12, 'comment' => 13, 'created_at' => 14, 'updated_at' => 15, 'lost_at' => 16, 'promoted_at' => 17, 'contacted_at' => 18, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
+        self::TYPE_PHPNAME       => array('EntityId' => 0, 'Name' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, 'ArchivedAt' => 4, ),
+        self::TYPE_CAMELNAME     => array('entityId' => 0, 'name' => 1, 'createdAt' => 2, 'updatedAt' => 3, 'archivedAt' => 4, ),
+        self::TYPE_COLNAME       => array(QuoteItemGroupTableMap::COL_ENTITY_ID => 0, QuoteItemGroupTableMap::COL_NAME => 1, QuoteItemGroupTableMap::COL_CREATED_AT => 2, QuoteItemGroupTableMap::COL_UPDATED_AT => 3, QuoteItemGroupTableMap::COL_ARCHIVED_AT => 4, ),
+        self::TYPE_FIELDNAME     => array('entity_id' => 0, 'name' => 1, 'created_at' => 2, 'updated_at' => 3, 'archived_at' => 4, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -209,32 +139,18 @@ class EnquiryTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('enquiry');
-        $this->setPhpName('Enquiry');
+        $this->setName('quote_item_group');
+        $this->setPhpName('QuoteItemGroup');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\Wedding\\Enquiry');
+        $this->setClassName('\\Wedding\\QuoteItemGroup');
         $this->setPackage('Wedding');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('entity_id', 'EntityId', 'INTEGER', true, null, null);
-        $this->addColumn('title', 'Title', 'VARCHAR', false, 35, null);
         $this->addColumn('name', 'Name', 'VARCHAR', false, 255, null);
-        $this->addColumn('partner_name', 'PartnerName', 'VARCHAR', false, 255, null);
-        $this->addColumn('email', 'Email', 'VARCHAR', false, 255, null);
-        $this->addColumn('telephone', 'Telephone', 'VARCHAR', false, 255, null);
-        $this->addColumn('mobile', 'Mobile', 'VARCHAR', false, 255, null);
-        $this->addColumn('address', 'Address', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('day_guests', 'DayGuests', 'INTEGER', false, null, 0);
-        $this->addColumn('evening_guests', 'EveningGuests', 'INTEGER', false, null, 0);
-        $this->addColumn('year', 'Year', 'VARCHAR', false, 255, null);
-        $this->addColumn('budget', 'Budget', 'DECIMAL', false, 10, null);
-        $this->addColumn('heard', 'Heard', 'VARCHAR', false, 255, null);
-        $this->addColumn('comment', 'Comment', 'VARCHAR', false, 255, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('lost_at', 'LostAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('promoted_at', 'PromotedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('contacted_at', 'ContactedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('archived_at', 'ArchivedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -242,38 +158,22 @@ class EnquiryTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('EnquiryComment', '\\Wedding\\EnquiryComment', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('QuoteItemGroupItem', '\\Wedding\\QuoteItemGroupItem', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':enquiry_id',
+    0 => ':quote_item_group_id',
     1 => ':entity_id',
   ),
-), 'CASCADE', 'CASCADE', 'EnquiryComments', false);
-        $this->addRelation('Quote', '\\Wedding\\Quote', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':enquiry_id',
-    1 => ':entity_id',
-  ),
-), 'CASCADE', 'CASCADE', 'Quotes', false);
-        $this->addRelation('Viewing', '\\Wedding\\Viewing', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':enquiry_id',
-    1 => ':entity_id',
-  ),
-), 'CASCADE', 'CASCADE', 'Viewings', false);
+), 'CASCADE', 'CASCADE', 'QuoteItemGroupItems', false);
     } // buildRelations()
     /**
-     * Method to invalidate the instance pool of all tables related to enquiry     * by a foreign key with ON DELETE CASCADE
+     * Method to invalidate the instance pool of all tables related to quote_item_group     * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
     {
         // Invalidate objects in related instance pools,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        EnquiryCommentTableMap::clearInstancePool();
-        QuoteTableMap::clearInstancePool();
-        ViewingTableMap::clearInstancePool();
+        QuoteItemGroupItemTableMap::clearInstancePool();
     }
 
     /**
@@ -333,7 +233,7 @@ class EnquiryTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? EnquiryTableMap::CLASS_DEFAULT : EnquiryTableMap::OM_CLASS;
+        return $withPrefix ? QuoteItemGroupTableMap::CLASS_DEFAULT : QuoteItemGroupTableMap::OM_CLASS;
     }
 
     /**
@@ -347,22 +247,22 @@ class EnquiryTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Enquiry object, last column rank)
+     * @return array           (QuoteItemGroup object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = EnquiryTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = EnquiryTableMap::getInstanceFromPool($key))) {
+        $key = QuoteItemGroupTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = QuoteItemGroupTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + EnquiryTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + QuoteItemGroupTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = EnquiryTableMap::OM_CLASS;
-            /** @var Enquiry $obj */
+            $cls = QuoteItemGroupTableMap::OM_CLASS;
+            /** @var QuoteItemGroup $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            EnquiryTableMap::addInstanceToPool($obj, $key);
+            QuoteItemGroupTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -385,18 +285,18 @@ class EnquiryTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = EnquiryTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = EnquiryTableMap::getInstanceFromPool($key))) {
+            $key = QuoteItemGroupTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = QuoteItemGroupTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Enquiry $obj */
+                /** @var QuoteItemGroup $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                EnquiryTableMap::addInstanceToPool($obj, $key);
+                QuoteItemGroupTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -417,45 +317,17 @@ class EnquiryTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(EnquiryTableMap::COL_ENTITY_ID);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_TITLE);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_NAME);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_PARTNER_NAME);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_EMAIL);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_TELEPHONE);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_MOBILE);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_ADDRESS);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_DAY_GUESTS);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_EVENING_GUESTS);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_YEAR);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_BUDGET);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_HEARD);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_COMMENT);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_CREATED_AT);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_UPDATED_AT);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_LOST_AT);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_PROMOTED_AT);
-            $criteria->addSelectColumn(EnquiryTableMap::COL_CONTACTED_AT);
+            $criteria->addSelectColumn(QuoteItemGroupTableMap::COL_ENTITY_ID);
+            $criteria->addSelectColumn(QuoteItemGroupTableMap::COL_NAME);
+            $criteria->addSelectColumn(QuoteItemGroupTableMap::COL_CREATED_AT);
+            $criteria->addSelectColumn(QuoteItemGroupTableMap::COL_UPDATED_AT);
+            $criteria->addSelectColumn(QuoteItemGroupTableMap::COL_ARCHIVED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.entity_id');
-            $criteria->addSelectColumn($alias . '.title');
             $criteria->addSelectColumn($alias . '.name');
-            $criteria->addSelectColumn($alias . '.partner_name');
-            $criteria->addSelectColumn($alias . '.email');
-            $criteria->addSelectColumn($alias . '.telephone');
-            $criteria->addSelectColumn($alias . '.mobile');
-            $criteria->addSelectColumn($alias . '.address');
-            $criteria->addSelectColumn($alias . '.day_guests');
-            $criteria->addSelectColumn($alias . '.evening_guests');
-            $criteria->addSelectColumn($alias . '.year');
-            $criteria->addSelectColumn($alias . '.budget');
-            $criteria->addSelectColumn($alias . '.heard');
-            $criteria->addSelectColumn($alias . '.comment');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
-            $criteria->addSelectColumn($alias . '.lost_at');
-            $criteria->addSelectColumn($alias . '.promoted_at');
-            $criteria->addSelectColumn($alias . '.contacted_at');
+            $criteria->addSelectColumn($alias . '.archived_at');
         }
     }
 
@@ -468,7 +340,7 @@ class EnquiryTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(EnquiryTableMap::DATABASE_NAME)->getTable(EnquiryTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(QuoteItemGroupTableMap::DATABASE_NAME)->getTable(QuoteItemGroupTableMap::TABLE_NAME);
     }
 
     /**
@@ -476,16 +348,16 @@ class EnquiryTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(EnquiryTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(EnquiryTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new EnquiryTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(QuoteItemGroupTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(QuoteItemGroupTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new QuoteItemGroupTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a Enquiry or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a QuoteItemGroup or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Enquiry object or primary key or array of primary keys
+     * @param mixed               $values Criteria or QuoteItemGroup object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -496,27 +368,27 @@ class EnquiryTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(EnquiryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(QuoteItemGroupTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Wedding\Enquiry) { // it's a model object
+        } elseif ($values instanceof \Wedding\QuoteItemGroup) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(EnquiryTableMap::DATABASE_NAME);
-            $criteria->add(EnquiryTableMap::COL_ENTITY_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(QuoteItemGroupTableMap::DATABASE_NAME);
+            $criteria->add(QuoteItemGroupTableMap::COL_ENTITY_ID, (array) $values, Criteria::IN);
         }
 
-        $query = EnquiryQuery::create()->mergeWith($criteria);
+        $query = QuoteItemGroupQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            EnquiryTableMap::clearInstancePool();
+            QuoteItemGroupTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                EnquiryTableMap::removeInstanceFromPool($singleval);
+                QuoteItemGroupTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -524,20 +396,20 @@ class EnquiryTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the enquiry table.
+     * Deletes all rows from the quote_item_group table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return EnquiryQuery::create()->doDeleteAll($con);
+        return QuoteItemGroupQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Enquiry or Criteria object.
+     * Performs an INSERT on the database, given a QuoteItemGroup or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Enquiry object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or QuoteItemGroup object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -546,22 +418,22 @@ class EnquiryTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(EnquiryTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(QuoteItemGroupTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Enquiry object
+            $criteria = $criteria->buildCriteria(); // build Criteria from QuoteItemGroup object
         }
 
-        if ($criteria->containsKey(EnquiryTableMap::COL_ENTITY_ID) && $criteria->keyContainsValue(EnquiryTableMap::COL_ENTITY_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.EnquiryTableMap::COL_ENTITY_ID.')');
+        if ($criteria->containsKey(QuoteItemGroupTableMap::COL_ENTITY_ID) && $criteria->keyContainsValue(QuoteItemGroupTableMap::COL_ENTITY_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.QuoteItemGroupTableMap::COL_ENTITY_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = EnquiryQuery::create()->mergeWith($criteria);
+        $query = QuoteItemGroupQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -570,7 +442,7 @@ class EnquiryTableMap extends TableMap
         });
     }
 
-} // EnquiryTableMap
+} // QuoteItemGroupTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-EnquiryTableMap::buildTableMap();
+QuoteItemGroupTableMap::buildTableMap();

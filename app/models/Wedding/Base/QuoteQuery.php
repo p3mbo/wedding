@@ -7,6 +7,7 @@ use \PDO;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
+use Propel\Runtime\ActiveQuery\ModelJoin;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
@@ -36,6 +37,18 @@ use Wedding\Map\QuoteTableMap;
  * @method     ChildQuoteQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
  * @method     ChildQuoteQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildQuoteQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ *
+ * @method     ChildQuoteQuery leftJoinEnquiry($relationAlias = null) Adds a LEFT JOIN clause to the query using the Enquiry relation
+ * @method     ChildQuoteQuery rightJoinEnquiry($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Enquiry relation
+ * @method     ChildQuoteQuery innerJoinEnquiry($relationAlias = null) Adds a INNER JOIN clause to the query using the Enquiry relation
+ *
+ * @method     ChildQuoteQuery joinWithEnquiry($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Enquiry relation
+ *
+ * @method     ChildQuoteQuery leftJoinWithEnquiry() Adds a LEFT JOIN clause and with to the query using the Enquiry relation
+ * @method     ChildQuoteQuery rightJoinWithEnquiry() Adds a RIGHT JOIN clause and with to the query using the Enquiry relation
+ * @method     ChildQuoteQuery innerJoinWithEnquiry() Adds a INNER JOIN clause and with to the query using the Enquiry relation
+ *
+ * @method     \Wedding\EnquiryQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildQuote findOne(ConnectionInterface $con = null) Return the first ChildQuote matching the query
  * @method     ChildQuote findOneOrCreate(ConnectionInterface $con = null) Return the first ChildQuote matching the query, or a new ChildQuote object populated from the query conditions when no match is found
@@ -297,6 +310,8 @@ abstract class QuoteQuery extends ModelCriteria
      * $query->filterByEnquiryId(array('min' => 12)); // WHERE enquiry_id > 12
      * </code>
      *
+     * @see       filterByEnquiry()
+     *
      * @param     mixed $enquiryId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
@@ -412,6 +427,83 @@ abstract class QuoteQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(QuoteTableMap::COL_UPDATED_AT, $updatedAt, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \Wedding\Enquiry object
+     *
+     * @param \Wedding\Enquiry|ObjectCollection $enquiry The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildQuoteQuery The current query, for fluid interface
+     */
+    public function filterByEnquiry($enquiry, $comparison = null)
+    {
+        if ($enquiry instanceof \Wedding\Enquiry) {
+            return $this
+                ->addUsingAlias(QuoteTableMap::COL_ENQUIRY_ID, $enquiry->getEntityId(), $comparison);
+        } elseif ($enquiry instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(QuoteTableMap::COL_ENQUIRY_ID, $enquiry->toKeyValue('PrimaryKey', 'EntityId'), $comparison);
+        } else {
+            throw new PropelException('filterByEnquiry() only accepts arguments of type \Wedding\Enquiry or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Enquiry relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildQuoteQuery The current query, for fluid interface
+     */
+    public function joinEnquiry($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Enquiry');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Enquiry');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Enquiry relation Enquiry object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Wedding\EnquiryQuery A secondary query class using the current class as primary query
+     */
+    public function useEnquiryQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinEnquiry($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Enquiry', '\Wedding\EnquiryQuery');
     }
 
     /**

@@ -73,7 +73,75 @@ CREATE TABLE `quote`
     `enquiry_id` int(11) unsigned,
     `created_at` DATETIME,
     `updated_at` DATETIME,
+    PRIMARY KEY (`entity_id`),
+    INDEX `enquiry_id` (`enquiry_id`),
+    CONSTRAINT `quote_ibfk_1`
+        FOREIGN KEY (`enquiry_id`)
+        REFERENCES `enquiry` (`entity_id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- quote_item
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `quote_item`;
+
+CREATE TABLE `quote_item`
+(
+    `entity_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `quote_item_group_item_id` int(11) unsigned,
+    `qty` INTEGER,
+    `notes` TEXT,
+    `price` DECIMAL(10,2),
+    PRIMARY KEY (`entity_id`),
+    INDEX `quote_item_group_item_id` (`quote_item_group_item_id`),
+    CONSTRAINT `quote_item_ibfk_1`
+        FOREIGN KEY (`quote_item_group_item_id`)
+        REFERENCES `quote_item_group_item` (`entity_id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- quote_item_group
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `quote_item_group`;
+
+CREATE TABLE `quote_item_group`
+(
+    `entity_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255),
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    `archived_at` DATETIME,
     PRIMARY KEY (`entity_id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- quote_item_group_item
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `quote_item_group_item`;
+
+CREATE TABLE `quote_item_group_item`
+(
+    `entity_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `quote_item_group_id` int(11) unsigned,
+    `name` VARCHAR(255),
+    `suggested_price` DECIMAL(10,2),
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    `archived_at` DATETIME,
+    PRIMARY KEY (`entity_id`),
+    INDEX `quote_item_group_id` (`quote_item_group_id`),
+    CONSTRAINT `quote_item_group_item_ibfk_1`
+        FOREIGN KEY (`quote_item_group_id`)
+        REFERENCES `quote_item_group` (`entity_id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------

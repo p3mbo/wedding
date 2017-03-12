@@ -5,6 +5,8 @@ define('BP', dirname(dirname(__FILE__)));
 
 final class Wedding
 {
+    const DEFAULT_CURRENCY = '£';
+
     public static function getUrl($route = '', $params = [])
     {
         $str =  '/' . $route;
@@ -25,6 +27,11 @@ final class Wedding
     public static function __($str)
     {
         return htmlspecialchars($str);
+    }
+
+    public static function currency($value)
+    {
+        return sprintf('%s%0.2f', self::DEFAULT_CURRENCY, $value);
     }
 
     public static function sanitize($string, $force_lowercase = true, $anal = false) {

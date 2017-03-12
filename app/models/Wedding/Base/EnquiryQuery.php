@@ -78,6 +78,16 @@ use Wedding\Map\EnquiryTableMap;
  * @method     ChildEnquiryQuery rightJoinWithEnquiryComment() Adds a RIGHT JOIN clause and with to the query using the EnquiryComment relation
  * @method     ChildEnquiryQuery innerJoinWithEnquiryComment() Adds a INNER JOIN clause and with to the query using the EnquiryComment relation
  *
+ * @method     ChildEnquiryQuery leftJoinQuote($relationAlias = null) Adds a LEFT JOIN clause to the query using the Quote relation
+ * @method     ChildEnquiryQuery rightJoinQuote($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Quote relation
+ * @method     ChildEnquiryQuery innerJoinQuote($relationAlias = null) Adds a INNER JOIN clause to the query using the Quote relation
+ *
+ * @method     ChildEnquiryQuery joinWithQuote($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Quote relation
+ *
+ * @method     ChildEnquiryQuery leftJoinWithQuote() Adds a LEFT JOIN clause and with to the query using the Quote relation
+ * @method     ChildEnquiryQuery rightJoinWithQuote() Adds a RIGHT JOIN clause and with to the query using the Quote relation
+ * @method     ChildEnquiryQuery innerJoinWithQuote() Adds a INNER JOIN clause and with to the query using the Quote relation
+ *
  * @method     ChildEnquiryQuery leftJoinViewing($relationAlias = null) Adds a LEFT JOIN clause to the query using the Viewing relation
  * @method     ChildEnquiryQuery rightJoinViewing($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Viewing relation
  * @method     ChildEnquiryQuery innerJoinViewing($relationAlias = null) Adds a INNER JOIN clause to the query using the Viewing relation
@@ -88,7 +98,7 @@ use Wedding\Map\EnquiryTableMap;
  * @method     ChildEnquiryQuery rightJoinWithViewing() Adds a RIGHT JOIN clause and with to the query using the Viewing relation
  * @method     ChildEnquiryQuery innerJoinWithViewing() Adds a INNER JOIN clause and with to the query using the Viewing relation
  *
- * @method     \Wedding\EnquiryCommentQuery|\Wedding\ViewingQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Wedding\EnquiryCommentQuery|\Wedding\QuoteQuery|\Wedding\ViewingQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildEnquiry findOne(ConnectionInterface $con = null) Return the first ChildEnquiry matching the query
  * @method     ChildEnquiry findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEnquiry matching the query, or a new ChildEnquiry object populated from the query conditions when no match is found
@@ -1044,6 +1054,79 @@ abstract class EnquiryQuery extends ModelCriteria
         return $this
             ->joinEnquiryComment($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'EnquiryComment', '\Wedding\EnquiryCommentQuery');
+    }
+
+    /**
+     * Filter the query by a related \Wedding\Quote object
+     *
+     * @param \Wedding\Quote|ObjectCollection $quote the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildEnquiryQuery The current query, for fluid interface
+     */
+    public function filterByQuote($quote, $comparison = null)
+    {
+        if ($quote instanceof \Wedding\Quote) {
+            return $this
+                ->addUsingAlias(EnquiryTableMap::COL_ENTITY_ID, $quote->getEnquiryId(), $comparison);
+        } elseif ($quote instanceof ObjectCollection) {
+            return $this
+                ->useQuoteQuery()
+                ->filterByPrimaryKeys($quote->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByQuote() only accepts arguments of type \Wedding\Quote or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Quote relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildEnquiryQuery The current query, for fluid interface
+     */
+    public function joinQuote($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Quote');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Quote');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Quote relation Quote object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Wedding\QuoteQuery A secondary query class using the current class as primary query
+     */
+    public function useQuoteQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinQuote($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Quote', '\Wedding\QuoteQuery');
     }
 
     /**
