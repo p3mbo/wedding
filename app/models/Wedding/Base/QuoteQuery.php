@@ -604,37 +604,19 @@ abstract class QuoteQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterBySpecificDate('2011-03-14'); // WHERE specific_date = '2011-03-14'
-     * $query->filterBySpecificDate('now'); // WHERE specific_date = '2011-03-14'
-     * $query->filterBySpecificDate(array('max' => 'yesterday')); // WHERE specific_date > '2011-03-13'
+     * $query->filterBySpecificDate('fooValue');   // WHERE specific_date = 'fooValue'
+     * $query->filterBySpecificDate('%fooValue%', Criteria::LIKE); // WHERE specific_date LIKE '%fooValue%'
      * </code>
      *
-     * @param     mixed $specificDate The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $specificDate The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildQuoteQuery The current query, for fluid interface
      */
     public function filterBySpecificDate($specificDate = null, $comparison = null)
     {
-        if (is_array($specificDate)) {
-            $useMinMax = false;
-            if (isset($specificDate['min'])) {
-                $this->addUsingAlias(QuoteTableMap::COL_SPECIFIC_DATE, $specificDate['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($specificDate['max'])) {
-                $this->addUsingAlias(QuoteTableMap::COL_SPECIFIC_DATE, $specificDate['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
+        if (null === $comparison) {
+            if (is_array($specificDate)) {
                 $comparison = Criteria::IN;
             }
         }

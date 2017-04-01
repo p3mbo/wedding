@@ -56,7 +56,7 @@
     <column name="year" phpName="Year" type="VARCHAR" size="255"/>
     <column name="notes" phpName="Notes" type="LONGVARCHAR"/>
     <column name="exclusive" phpName="Exclusive" type="VARCHAR" size="255"/>
-    <column name="specific_date" phpName="SpecificDate" type="TIMESTAMP"/>
+    <column name="specific_date" phpName="SpecificDate" type="VARCHAR" size="255"/>
     <column name="day_guests" phpName="DayGuests" type="VARCHAR" size="255"/>
     <column name="eve_guests" phpName="EveGuests" type="VARCHAR" size="255"/>
     <column name="ceremony_type_id" phpName="CeremonyTypeId" type="INTEGER" sqlType="int(11) unsigned"/>

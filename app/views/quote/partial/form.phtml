@@ -12,7 +12,7 @@ $excs = \Wedding\Source\ExclusiveUse::getOptions();
     <form method="post" action="<?php echo \Wedding::getUrl('quote/editPost');?>" class="form-horizontal">
 
         <div class="no-display">
-
+            <input type="hidden" name="quote[enquiry_id]" value="<?php echo $enquiry->getEntityId();?>" />
         </div>
 
         <div class="panel panel-default">

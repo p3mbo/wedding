@@ -33,21 +33,56 @@ class QuoteController extends CoreController
 
         $quoteData = $params['quote'];
 
+        try {
+            // IF editing and not wanting to create a new quote
+            // load the existing quote psased in via param
+            // else
+            $quote = new \Wedding\Quote();
+            // end if
 
-        // IF editing and not wanting to create a new quote
-        // load the existing quote psased in via param
-        // else
-        $quote = new \Wedding\Quote();
-        // end if
 
-        echo '<pre>';
-        print_r($quoteData);
-        die('done');
-        $quote->fromArray($quoteData, \Propel\Runtime\Map\TableMap::TYPE_FIELDNAME);
+            if(isset($quoteData['day'])) {
+                $quote->setDay(implode(',', $quoteData['day']));
+            }
 
-        echo '<pre>';
-        print_r($quoteData);
+            if(isset($quoteData['month'])) {
+                $quote->setMonth(implode(',', $quoteData['month']));
+            }
+
+            if(isset($quoteData['year'])) {
+                $quote->setYear($quoteData['year']);
+            }
+
+            if(isset($quoteData['exc'])) {
+                $quote->setExclusive(implode(',', $quoteData['exc']));
+            }
+
+            $quote->setCeremonyTypeId($quoteData['ceremony']);
+            $quote->setSpecificDate($quoteData['date']);
+            $quote->setDayGuests($quoteData['dayg']);
+            $quote->setEveGuests($quoteData['eveg']);
+            $quote->setEnquiryId($quoteData['enquiry_id']);
+            $quote->setCreatedAt(time());
+            $quote->save();
+
+
+            $enquiry = $quote->getEnquiry();
+
+
+
+            $staffId = null;
+            $result = \Wedding\EnquiryComment::add($enquiry, $quoteData['notes'], $staffId);
+        } catch(Exception $e) {
+            \Wedding\Messages::addError($e->getMessage());
+            $this->redirectReferer();
+        }
+
+
+        $url = \Wedding::getUrl('quote/add', ['enquiry_id' => $enquiry->getEntityId(), 'quote_id' => $quote->getEntityId()]);
+        header('Location: '. $url);
         exit;
+
+
     }
 
     private function _getEnquiry()

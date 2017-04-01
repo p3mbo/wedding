@@ -129,7 +129,7 @@ abstract class Quote implements ActiveRecordInterface
     /**
      * The value for the specific_date field.
      * 
-     * @var        DateTime
+     * @var        string
      */
     protected $specific_date;
 
@@ -503,23 +503,13 @@ abstract class Quote implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [specific_date] column value.
+     * Get the [specific_date] column value.
      * 
-     *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
-     *                            If format is NULL, then the raw DateTime object will be returned.
-     *
-     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
-     *
-     * @throws PropelException - if unable to parse/validate the date/time value.
+     * @return string
      */
-    public function getSpecificDate($format = NULL)
+    public function getSpecificDate()
     {
-        if ($format === null) {
-            return $this->specific_date;
-        } else {
-            return $this->specific_date instanceof \DateTimeInterface ? $this->specific_date->format($format) : null;
-        }
+        return $this->specific_date;
     }
 
     /**
@@ -737,21 +727,21 @@ abstract class Quote implements ActiveRecordInterface
     } // setExclusive()
 
     /**
-     * Sets the value of [specific_date] column to a normalized version of the date/time value specified.
+     * Set the value of [specific_date] column.
      * 
-     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
-     *               Empty strings are treated as NULL.
+     * @param string $v new value
      * @return $this|\Wedding\Quote The current object (for fluent API support)
      */
     public function setSpecificDate($v)
     {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->specific_date !== null || $dt !== null) {
-            if ($this->specific_date === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->specific_date->format("Y-m-d H:i:s.u")) {
-                $this->specific_date = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[QuoteTableMap::COL_SPECIFIC_DATE] = true;
-            }
-        } // if either are not null
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->specific_date !== $v) {
+            $this->specific_date = $v;
+            $this->modifiedColumns[QuoteTableMap::COL_SPECIFIC_DATE] = true;
+        }
 
         return $this;
     } // setSpecificDate()
@@ -886,10 +876,7 @@ abstract class Quote implements ActiveRecordInterface
             $this->exclusive = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : QuoteTableMap::translateFieldName('SpecificDate', TableMap::TYPE_PHPNAME, $indexType)];
-            if ($col === '0000-00-00 00:00:00') {
-                $col = null;
-            }
-            $this->specific_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->specific_date = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : QuoteTableMap::translateFieldName('DayGuests', TableMap::TYPE_PHPNAME, $indexType)];
             $this->day_guests = (null !== $col) ? (string) $col : null;
@@ -1202,7 +1189,7 @@ abstract class Quote implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->exclusive, PDO::PARAM_STR);
                         break;
                     case 'specific_date':                        
-                        $stmt->bindValue($identifier, $this->specific_date ? $this->specific_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        $stmt->bindValue($identifier, $this->specific_date, PDO::PARAM_STR);
                         break;
                     case 'day_guests':                        
                         $stmt->bindValue($identifier, $this->day_guests, PDO::PARAM_STR);
@@ -1364,10 +1351,6 @@ abstract class Quote implements ActiveRecordInterface
         
         if ($result[$keys[3]] instanceof \DateTime) {
             $result[$keys[3]] = $result[$keys[3]]->format('c');
-        }
-        
-        if ($result[$keys[9]] instanceof \DateTime) {
-            $result[$keys[9]] = $result[$keys[9]]->format('c');
         }
         
         $virtualColumns = $this->virtualColumns;

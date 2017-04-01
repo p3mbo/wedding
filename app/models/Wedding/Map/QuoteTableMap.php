@@ -195,7 +195,7 @@ class QuoteTableMap extends TableMap
         $this->addColumn('year', 'Year', 'VARCHAR', false, 255, null);
         $this->addColumn('notes', 'Notes', 'LONGVARCHAR', false, null, null);
         $this->addColumn('exclusive', 'Exclusive', 'VARCHAR', false, 255, null);
-        $this->addColumn('specific_date', 'SpecificDate', 'TIMESTAMP', false, null, null);
+        $this->addColumn('specific_date', 'SpecificDate', 'VARCHAR', false, 255, null);
         $this->addColumn('day_guests', 'DayGuests', 'VARCHAR', false, 255, null);
         $this->addColumn('eve_guests', 'EveGuests', 'VARCHAR', false, 255, null);
         $this->addColumn('ceremony_type_id', 'CeremonyTypeId', 'INTEGER', false, null, null);

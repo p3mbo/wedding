@@ -78,7 +78,7 @@ CREATE TABLE `quote`
     `year` VARCHAR(255),
     `notes` TEXT,
     `exclusive` VARCHAR(255),
-    `specific_date` DATETIME,
+    `specific_date` VARCHAR(255),
     `day_guests` VARCHAR(255),
     `eve_guests` VARCHAR(255),
     `ceremony_type_id` int(11) unsigned,
