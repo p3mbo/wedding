@@ -102,6 +102,14 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
     protected $archived_at;
 
     /**
+     * The value for the sort_order field.
+     * 
+     * Note: this column has a database default value of: 0
+     * @var        int
+     */
+    protected $sort_order;
+
+    /**
      * @var        ObjectCollection|ChildQuoteItemGroupItem[] Collection to store aggregation of ChildQuoteItemGroupItem objects.
      */
     protected $collQuoteItemGroupItems;
@@ -122,10 +130,23 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
     protected $quoteItemGroupItemsScheduledForDeletion = null;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->sort_order = 0;
+    }
+
+    /**
      * Initializes internal state of Wedding\Base\QuoteItemGroup object.
+     * @see applyDefaults()
      */
     public function __construct()
     {
+        $this->applyDefaultValues();
     }
 
     /**
@@ -427,6 +448,16 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
     }
 
     /**
+     * Get the [sort_order] column value.
+     * 
+     * @return int
+     */
+    public function getSortOrder()
+    {
+        return $this->sort_order;
+    }
+
+    /**
      * Set the value of [entity_id] column.
      * 
      * @param int $v new value
@@ -527,6 +558,26 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
     } // setArchivedAt()
 
     /**
+     * Set the value of [sort_order] column.
+     * 
+     * @param int $v new value
+     * @return $this|\Wedding\QuoteItemGroup The current object (for fluent API support)
+     */
+    public function setSortOrder($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->sort_order !== $v) {
+            $this->sort_order = $v;
+            $this->modifiedColumns[QuoteItemGroupTableMap::COL_SORT_ORDER] = true;
+        }
+
+        return $this;
+    } // setSortOrder()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -536,6 +587,10 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->sort_order !== 0) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -585,6 +640,9 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
                 $col = null;
             }
             $this->archived_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : QuoteItemGroupTableMap::translateFieldName('SortOrder', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->sort_order = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -593,7 +651,7 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 5; // 5 = QuoteItemGroupTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = QuoteItemGroupTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Wedding\\QuoteItemGroup'), 0, $e);
@@ -828,6 +886,9 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
         if ($this->isColumnModified(QuoteItemGroupTableMap::COL_ARCHIVED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'archived_at';
         }
+        if ($this->isColumnModified(QuoteItemGroupTableMap::COL_SORT_ORDER)) {
+            $modifiedColumns[':p' . $index++]  = 'sort_order';
+        }
 
         $sql = sprintf(
             'INSERT INTO quote_item_group (%s) VALUES (%s)',
@@ -853,6 +914,9 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
                         break;
                     case 'archived_at':                        
                         $stmt->bindValue($identifier, $this->archived_at ? $this->archived_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case 'sort_order':                        
+                        $stmt->bindValue($identifier, $this->sort_order, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -931,6 +995,9 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
             case 4:
                 return $this->getArchivedAt();
                 break;
+            case 5:
+                return $this->getSortOrder();
+                break;
             default:
                 return null;
                 break;
@@ -966,6 +1033,7 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
             $keys[2] => $this->getCreatedAt(),
             $keys[3] => $this->getUpdatedAt(),
             $keys[4] => $this->getArchivedAt(),
+            $keys[5] => $this->getSortOrder(),
         );
         if ($result[$keys[2]] instanceof \DateTime) {
             $result[$keys[2]] = $result[$keys[2]]->format('c');
@@ -1049,6 +1117,9 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
             case 4:
                 $this->setArchivedAt($value);
                 break;
+            case 5:
+                $this->setSortOrder($value);
+                break;
         } // switch()
 
         return $this;
@@ -1089,6 +1160,9 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
         }
         if (array_key_exists($keys[4], $arr)) {
             $this->setArchivedAt($arr[$keys[4]]);
+        }
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setSortOrder($arr[$keys[5]]);
         }
     }
 
@@ -1145,6 +1219,9 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
         }
         if ($this->isColumnModified(QuoteItemGroupTableMap::COL_ARCHIVED_AT)) {
             $criteria->add(QuoteItemGroupTableMap::COL_ARCHIVED_AT, $this->archived_at);
+        }
+        if ($this->isColumnModified(QuoteItemGroupTableMap::COL_SORT_ORDER)) {
+            $criteria->add(QuoteItemGroupTableMap::COL_SORT_ORDER, $this->sort_order);
         }
 
         return $criteria;
@@ -1236,6 +1313,7 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setArchivedAt($this->getArchivedAt());
+        $copyObj->setSortOrder($this->getSortOrder());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1519,6 +1597,31 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
         return $this;
     }
 
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this QuoteItemGroup is new, it will return
+     * an empty collection; or if this QuoteItemGroup has previously
+     * been saved, it will retrieve related QuoteItemGroupItems from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in QuoteItemGroup.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildQuoteItemGroupItem[] List of ChildQuoteItemGroupItem objects
+     */
+    public function getQuoteItemGroupItemsJoinTaxClass(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildQuoteItemGroupItemQuery::create(null, $criteria);
+        $query->joinWith('TaxClass', $joinBehavior);
+
+        return $this->getQuoteItemGroupItems($query, $con);
+    }
+
     /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
@@ -1531,8 +1634,10 @@ abstract class QuoteItemGroup implements ActiveRecordInterface
         $this->created_at = null;
         $this->updated_at = null;
         $this->archived_at = null;
+        $this->sort_order = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

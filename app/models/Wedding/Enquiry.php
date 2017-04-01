@@ -14,6 +14,24 @@ class Enquiry extends BaseEnquiry
         return implode('', ['#', $this->getEntityId()]);
     }
 
+    public function getPhoneNumbers()
+    {
+        $arr = [];
+
+        foreach([$this->getTelephone(), $this->getMobile()] as $number) {
+            if(!empty($number) && strlen($number) > 3) {
+                $arr[] = $number;
+            }
+        }
+
+        if(!empty($arr)) {
+            return implode(' / ', $arr);
+        }
+
+        return '';
+
+    }
+
     public function getCouple($sep = ' & ')
     {
         echo implode($sep, [

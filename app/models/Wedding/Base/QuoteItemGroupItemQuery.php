@@ -22,6 +22,7 @@ use Wedding\Map\QuoteItemGroupItemTableMap;
  *
  * @method     ChildQuoteItemGroupItemQuery orderByEntityId($order = Criteria::ASC) Order by the entity_id column
  * @method     ChildQuoteItemGroupItemQuery orderByQuoteItemGroupId($order = Criteria::ASC) Order by the quote_item_group_id column
+ * @method     ChildQuoteItemGroupItemQuery orderByTaxClassId($order = Criteria::ASC) Order by the tax_class_id column
  * @method     ChildQuoteItemGroupItemQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method     ChildQuoteItemGroupItemQuery orderBySuggestedPrice($order = Criteria::ASC) Order by the suggested_price column
  * @method     ChildQuoteItemGroupItemQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
@@ -30,6 +31,7 @@ use Wedding\Map\QuoteItemGroupItemTableMap;
  *
  * @method     ChildQuoteItemGroupItemQuery groupByEntityId() Group by the entity_id column
  * @method     ChildQuoteItemGroupItemQuery groupByQuoteItemGroupId() Group by the quote_item_group_id column
+ * @method     ChildQuoteItemGroupItemQuery groupByTaxClassId() Group by the tax_class_id column
  * @method     ChildQuoteItemGroupItemQuery groupByName() Group by the name column
  * @method     ChildQuoteItemGroupItemQuery groupBySuggestedPrice() Group by the suggested_price column
  * @method     ChildQuoteItemGroupItemQuery groupByCreatedAt() Group by the created_at column
@@ -54,6 +56,16 @@ use Wedding\Map\QuoteItemGroupItemTableMap;
  * @method     ChildQuoteItemGroupItemQuery rightJoinWithQuoteItemGroup() Adds a RIGHT JOIN clause and with to the query using the QuoteItemGroup relation
  * @method     ChildQuoteItemGroupItemQuery innerJoinWithQuoteItemGroup() Adds a INNER JOIN clause and with to the query using the QuoteItemGroup relation
  *
+ * @method     ChildQuoteItemGroupItemQuery leftJoinTaxClass($relationAlias = null) Adds a LEFT JOIN clause to the query using the TaxClass relation
+ * @method     ChildQuoteItemGroupItemQuery rightJoinTaxClass($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TaxClass relation
+ * @method     ChildQuoteItemGroupItemQuery innerJoinTaxClass($relationAlias = null) Adds a INNER JOIN clause to the query using the TaxClass relation
+ *
+ * @method     ChildQuoteItemGroupItemQuery joinWithTaxClass($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the TaxClass relation
+ *
+ * @method     ChildQuoteItemGroupItemQuery leftJoinWithTaxClass() Adds a LEFT JOIN clause and with to the query using the TaxClass relation
+ * @method     ChildQuoteItemGroupItemQuery rightJoinWithTaxClass() Adds a RIGHT JOIN clause and with to the query using the TaxClass relation
+ * @method     ChildQuoteItemGroupItemQuery innerJoinWithTaxClass() Adds a INNER JOIN clause and with to the query using the TaxClass relation
+ *
  * @method     ChildQuoteItemGroupItemQuery leftJoinQuoteItem($relationAlias = null) Adds a LEFT JOIN clause to the query using the QuoteItem relation
  * @method     ChildQuoteItemGroupItemQuery rightJoinQuoteItem($relationAlias = null) Adds a RIGHT JOIN clause to the query using the QuoteItem relation
  * @method     ChildQuoteItemGroupItemQuery innerJoinQuoteItem($relationAlias = null) Adds a INNER JOIN clause to the query using the QuoteItem relation
@@ -64,13 +76,14 @@ use Wedding\Map\QuoteItemGroupItemTableMap;
  * @method     ChildQuoteItemGroupItemQuery rightJoinWithQuoteItem() Adds a RIGHT JOIN clause and with to the query using the QuoteItem relation
  * @method     ChildQuoteItemGroupItemQuery innerJoinWithQuoteItem() Adds a INNER JOIN clause and with to the query using the QuoteItem relation
  *
- * @method     \Wedding\QuoteItemGroupQuery|\Wedding\QuoteItemQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Wedding\QuoteItemGroupQuery|\Wedding\TaxClassQuery|\Wedding\QuoteItemQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildQuoteItemGroupItem findOne(ConnectionInterface $con = null) Return the first ChildQuoteItemGroupItem matching the query
  * @method     ChildQuoteItemGroupItem findOneOrCreate(ConnectionInterface $con = null) Return the first ChildQuoteItemGroupItem matching the query, or a new ChildQuoteItemGroupItem object populated from the query conditions when no match is found
  *
  * @method     ChildQuoteItemGroupItem findOneByEntityId(int $entity_id) Return the first ChildQuoteItemGroupItem filtered by the entity_id column
  * @method     ChildQuoteItemGroupItem findOneByQuoteItemGroupId(int $quote_item_group_id) Return the first ChildQuoteItemGroupItem filtered by the quote_item_group_id column
+ * @method     ChildQuoteItemGroupItem findOneByTaxClassId(int $tax_class_id) Return the first ChildQuoteItemGroupItem filtered by the tax_class_id column
  * @method     ChildQuoteItemGroupItem findOneByName(string $name) Return the first ChildQuoteItemGroupItem filtered by the name column
  * @method     ChildQuoteItemGroupItem findOneBySuggestedPrice(string $suggested_price) Return the first ChildQuoteItemGroupItem filtered by the suggested_price column
  * @method     ChildQuoteItemGroupItem findOneByCreatedAt(string $created_at) Return the first ChildQuoteItemGroupItem filtered by the created_at column
@@ -82,6 +95,7 @@ use Wedding\Map\QuoteItemGroupItemTableMap;
  *
  * @method     ChildQuoteItemGroupItem requireOneByEntityId(int $entity_id) Return the first ChildQuoteItemGroupItem filtered by the entity_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildQuoteItemGroupItem requireOneByQuoteItemGroupId(int $quote_item_group_id) Return the first ChildQuoteItemGroupItem filtered by the quote_item_group_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildQuoteItemGroupItem requireOneByTaxClassId(int $tax_class_id) Return the first ChildQuoteItemGroupItem filtered by the tax_class_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildQuoteItemGroupItem requireOneByName(string $name) Return the first ChildQuoteItemGroupItem filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildQuoteItemGroupItem requireOneBySuggestedPrice(string $suggested_price) Return the first ChildQuoteItemGroupItem filtered by the suggested_price column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildQuoteItemGroupItem requireOneByCreatedAt(string $created_at) Return the first ChildQuoteItemGroupItem filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -91,6 +105,7 @@ use Wedding\Map\QuoteItemGroupItemTableMap;
  * @method     ChildQuoteItemGroupItem[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildQuoteItemGroupItem objects based on current ModelCriteria
  * @method     ChildQuoteItemGroupItem[]|ObjectCollection findByEntityId(int $entity_id) Return ChildQuoteItemGroupItem objects filtered by the entity_id column
  * @method     ChildQuoteItemGroupItem[]|ObjectCollection findByQuoteItemGroupId(int $quote_item_group_id) Return ChildQuoteItemGroupItem objects filtered by the quote_item_group_id column
+ * @method     ChildQuoteItemGroupItem[]|ObjectCollection findByTaxClassId(int $tax_class_id) Return ChildQuoteItemGroupItem objects filtered by the tax_class_id column
  * @method     ChildQuoteItemGroupItem[]|ObjectCollection findByName(string $name) Return ChildQuoteItemGroupItem objects filtered by the name column
  * @method     ChildQuoteItemGroupItem[]|ObjectCollection findBySuggestedPrice(string $suggested_price) Return ChildQuoteItemGroupItem objects filtered by the suggested_price column
  * @method     ChildQuoteItemGroupItem[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildQuoteItemGroupItem objects filtered by the created_at column
@@ -194,7 +209,7 @@ abstract class QuoteItemGroupItemQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT entity_id, quote_item_group_id, name, suggested_price, created_at, updated_at, archived_at FROM quote_item_group_item WHERE entity_id = :p0';
+        $sql = 'SELECT entity_id, quote_item_group_id, tax_class_id, name, suggested_price, created_at, updated_at, archived_at FROM quote_item_group_item WHERE entity_id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -366,6 +381,49 @@ abstract class QuoteItemGroupItemQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(QuoteItemGroupItemTableMap::COL_QUOTE_ITEM_GROUP_ID, $quoteItemGroupId, $comparison);
+    }
+
+    /**
+     * Filter the query on the tax_class_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByTaxClassId(1234); // WHERE tax_class_id = 1234
+     * $query->filterByTaxClassId(array(12, 34)); // WHERE tax_class_id IN (12, 34)
+     * $query->filterByTaxClassId(array('min' => 12)); // WHERE tax_class_id > 12
+     * </code>
+     *
+     * @see       filterByTaxClass()
+     *
+     * @param     mixed $taxClassId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildQuoteItemGroupItemQuery The current query, for fluid interface
+     */
+    public function filterByTaxClassId($taxClassId = null, $comparison = null)
+    {
+        if (is_array($taxClassId)) {
+            $useMinMax = false;
+            if (isset($taxClassId['min'])) {
+                $this->addUsingAlias(QuoteItemGroupItemTableMap::COL_TAX_CLASS_ID, $taxClassId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($taxClassId['max'])) {
+                $this->addUsingAlias(QuoteItemGroupItemTableMap::COL_TAX_CLASS_ID, $taxClassId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(QuoteItemGroupItemTableMap::COL_TAX_CLASS_ID, $taxClassId, $comparison);
     }
 
     /**
@@ -638,6 +696,83 @@ abstract class QuoteItemGroupItemQuery extends ModelCriteria
         return $this
             ->joinQuoteItemGroup($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'QuoteItemGroup', '\Wedding\QuoteItemGroupQuery');
+    }
+
+    /**
+     * Filter the query by a related \Wedding\TaxClass object
+     *
+     * @param \Wedding\TaxClass|ObjectCollection $taxClass The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildQuoteItemGroupItemQuery The current query, for fluid interface
+     */
+    public function filterByTaxClass($taxClass, $comparison = null)
+    {
+        if ($taxClass instanceof \Wedding\TaxClass) {
+            return $this
+                ->addUsingAlias(QuoteItemGroupItemTableMap::COL_TAX_CLASS_ID, $taxClass->getEntityId(), $comparison);
+        } elseif ($taxClass instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(QuoteItemGroupItemTableMap::COL_TAX_CLASS_ID, $taxClass->toKeyValue('PrimaryKey', 'EntityId'), $comparison);
+        } else {
+            throw new PropelException('filterByTaxClass() only accepts arguments of type \Wedding\TaxClass or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the TaxClass relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildQuoteItemGroupItemQuery The current query, for fluid interface
+     */
+    public function joinTaxClass($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('TaxClass');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'TaxClass');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the TaxClass relation TaxClass object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Wedding\TaxClassQuery A secondary query class using the current class as primary query
+     */
+    public function useTaxClassQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinTaxClass($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'TaxClass', '\Wedding\TaxClassQuery');
     }
 
     /**

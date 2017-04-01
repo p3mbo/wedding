@@ -59,7 +59,7 @@ class QuoteTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 13;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class QuoteTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 4;
+    const NUM_HYDRATE_COLUMNS = 13;
 
     /**
      * the column name for the entity_id field
@@ -92,6 +92,51 @@ class QuoteTableMap extends TableMap
     const COL_UPDATED_AT = 'quote.updated_at';
 
     /**
+     * the column name for the day field
+     */
+    const COL_DAY = 'quote.day';
+
+    /**
+     * the column name for the month field
+     */
+    const COL_MONTH = 'quote.month';
+
+    /**
+     * the column name for the year field
+     */
+    const COL_YEAR = 'quote.year';
+
+    /**
+     * the column name for the notes field
+     */
+    const COL_NOTES = 'quote.notes';
+
+    /**
+     * the column name for the exclusive field
+     */
+    const COL_EXCLUSIVE = 'quote.exclusive';
+
+    /**
+     * the column name for the specific_date field
+     */
+    const COL_SPECIFIC_DATE = 'quote.specific_date';
+
+    /**
+     * the column name for the day_guests field
+     */
+    const COL_DAY_GUESTS = 'quote.day_guests';
+
+    /**
+     * the column name for the eve_guests field
+     */
+    const COL_EVE_GUESTS = 'quote.eve_guests';
+
+    /**
+     * the column name for the ceremony_type_id field
+     */
+    const COL_CEREMONY_TYPE_ID = 'quote.ceremony_type_id';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -103,11 +148,11 @@ class QuoteTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('EntityId', 'EnquiryId', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_CAMELNAME     => array('entityId', 'enquiryId', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(QuoteTableMap::COL_ENTITY_ID, QuoteTableMap::COL_ENQUIRY_ID, QuoteTableMap::COL_CREATED_AT, QuoteTableMap::COL_UPDATED_AT, ),
-        self::TYPE_FIELDNAME     => array('entity_id', 'enquiry_id', 'created_at', 'updated_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('EntityId', 'EnquiryId', 'CreatedAt', 'UpdatedAt', 'Day', 'Month', 'Year', 'Notes', 'Exclusive', 'SpecificDate', 'DayGuests', 'EveGuests', 'CeremonyTypeId', ),
+        self::TYPE_CAMELNAME     => array('entityId', 'enquiryId', 'createdAt', 'updatedAt', 'day', 'month', 'year', 'notes', 'exclusive', 'specificDate', 'dayGuests', 'eveGuests', 'ceremonyTypeId', ),
+        self::TYPE_COLNAME       => array(QuoteTableMap::COL_ENTITY_ID, QuoteTableMap::COL_ENQUIRY_ID, QuoteTableMap::COL_CREATED_AT, QuoteTableMap::COL_UPDATED_AT, QuoteTableMap::COL_DAY, QuoteTableMap::COL_MONTH, QuoteTableMap::COL_YEAR, QuoteTableMap::COL_NOTES, QuoteTableMap::COL_EXCLUSIVE, QuoteTableMap::COL_SPECIFIC_DATE, QuoteTableMap::COL_DAY_GUESTS, QuoteTableMap::COL_EVE_GUESTS, QuoteTableMap::COL_CEREMONY_TYPE_ID, ),
+        self::TYPE_FIELDNAME     => array('entity_id', 'enquiry_id', 'created_at', 'updated_at', 'day', 'month', 'year', 'notes', 'exclusive', 'specific_date', 'day_guests', 'eve_guests', 'ceremony_type_id', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -117,11 +162,11 @@ class QuoteTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('EntityId' => 0, 'EnquiryId' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, ),
-        self::TYPE_CAMELNAME     => array('entityId' => 0, 'enquiryId' => 1, 'createdAt' => 2, 'updatedAt' => 3, ),
-        self::TYPE_COLNAME       => array(QuoteTableMap::COL_ENTITY_ID => 0, QuoteTableMap::COL_ENQUIRY_ID => 1, QuoteTableMap::COL_CREATED_AT => 2, QuoteTableMap::COL_UPDATED_AT => 3, ),
-        self::TYPE_FIELDNAME     => array('entity_id' => 0, 'enquiry_id' => 1, 'created_at' => 2, 'updated_at' => 3, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('EntityId' => 0, 'EnquiryId' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, 'Day' => 4, 'Month' => 5, 'Year' => 6, 'Notes' => 7, 'Exclusive' => 8, 'SpecificDate' => 9, 'DayGuests' => 10, 'EveGuests' => 11, 'CeremonyTypeId' => 12, ),
+        self::TYPE_CAMELNAME     => array('entityId' => 0, 'enquiryId' => 1, 'createdAt' => 2, 'updatedAt' => 3, 'day' => 4, 'month' => 5, 'year' => 6, 'notes' => 7, 'exclusive' => 8, 'specificDate' => 9, 'dayGuests' => 10, 'eveGuests' => 11, 'ceremonyTypeId' => 12, ),
+        self::TYPE_COLNAME       => array(QuoteTableMap::COL_ENTITY_ID => 0, QuoteTableMap::COL_ENQUIRY_ID => 1, QuoteTableMap::COL_CREATED_AT => 2, QuoteTableMap::COL_UPDATED_AT => 3, QuoteTableMap::COL_DAY => 4, QuoteTableMap::COL_MONTH => 5, QuoteTableMap::COL_YEAR => 6, QuoteTableMap::COL_NOTES => 7, QuoteTableMap::COL_EXCLUSIVE => 8, QuoteTableMap::COL_SPECIFIC_DATE => 9, QuoteTableMap::COL_DAY_GUESTS => 10, QuoteTableMap::COL_EVE_GUESTS => 11, QuoteTableMap::COL_CEREMONY_TYPE_ID => 12, ),
+        self::TYPE_FIELDNAME     => array('entity_id' => 0, 'enquiry_id' => 1, 'created_at' => 2, 'updated_at' => 3, 'day' => 4, 'month' => 5, 'year' => 6, 'notes' => 7, 'exclusive' => 8, 'specific_date' => 9, 'day_guests' => 10, 'eve_guests' => 11, 'ceremony_type_id' => 12, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -145,6 +190,15 @@ class QuoteTableMap extends TableMap
         $this->addForeignKey('enquiry_id', 'EnquiryId', 'INTEGER', 'enquiry', 'entity_id', false, null, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('day', 'Day', 'VARCHAR', false, 255, null);
+        $this->addColumn('month', 'Month', 'VARCHAR', false, 255, null);
+        $this->addColumn('year', 'Year', 'VARCHAR', false, 255, null);
+        $this->addColumn('notes', 'Notes', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('exclusive', 'Exclusive', 'VARCHAR', false, 255, null);
+        $this->addColumn('specific_date', 'SpecificDate', 'TIMESTAMP', false, null, null);
+        $this->addColumn('day_guests', 'DayGuests', 'VARCHAR', false, 255, null);
+        $this->addColumn('eve_guests', 'EveGuests', 'VARCHAR', false, 255, null);
+        $this->addColumn('ceremony_type_id', 'CeremonyTypeId', 'INTEGER', false, null, null);
     } // initialize()
 
     /**
@@ -306,11 +360,29 @@ class QuoteTableMap extends TableMap
             $criteria->addSelectColumn(QuoteTableMap::COL_ENQUIRY_ID);
             $criteria->addSelectColumn(QuoteTableMap::COL_CREATED_AT);
             $criteria->addSelectColumn(QuoteTableMap::COL_UPDATED_AT);
+            $criteria->addSelectColumn(QuoteTableMap::COL_DAY);
+            $criteria->addSelectColumn(QuoteTableMap::COL_MONTH);
+            $criteria->addSelectColumn(QuoteTableMap::COL_YEAR);
+            $criteria->addSelectColumn(QuoteTableMap::COL_NOTES);
+            $criteria->addSelectColumn(QuoteTableMap::COL_EXCLUSIVE);
+            $criteria->addSelectColumn(QuoteTableMap::COL_SPECIFIC_DATE);
+            $criteria->addSelectColumn(QuoteTableMap::COL_DAY_GUESTS);
+            $criteria->addSelectColumn(QuoteTableMap::COL_EVE_GUESTS);
+            $criteria->addSelectColumn(QuoteTableMap::COL_CEREMONY_TYPE_ID);
         } else {
             $criteria->addSelectColumn($alias . '.entity_id');
             $criteria->addSelectColumn($alias . '.enquiry_id');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
+            $criteria->addSelectColumn($alias . '.day');
+            $criteria->addSelectColumn($alias . '.month');
+            $criteria->addSelectColumn($alias . '.year');
+            $criteria->addSelectColumn($alias . '.notes');
+            $criteria->addSelectColumn($alias . '.exclusive');
+            $criteria->addSelectColumn($alias . '.specific_date');
+            $criteria->addSelectColumn($alias . '.day_guests');
+            $criteria->addSelectColumn($alias . '.eve_guests');
+            $criteria->addSelectColumn($alias . '.ceremony_type_id');
         }
     }
 

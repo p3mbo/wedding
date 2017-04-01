@@ -11,12 +11,12 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
-use Wedding\QuoteItemGroup;
-use Wedding\QuoteItemGroupQuery;
+use Wedding\TaxClass;
+use Wedding\TaxClassQuery;
 
 
 /**
- * This class defines the structure of the 'quote_item_group' table.
+ * This class defines the structure of the 'tax_class' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Wedding\QuoteItemGroupQuery;
  * (i.e. if it's a text column type).
  *
  */
-class QuoteItemGroupTableMap extends TableMap
+class TaxClassTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class QuoteItemGroupTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'Wedding.Map.QuoteItemGroupTableMap';
+    const CLASS_NAME = 'Wedding.Map.TaxClassTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class QuoteItemGroupTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'quote_item_group';
+    const TABLE_NAME = 'tax_class';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\Wedding\\QuoteItemGroup';
+    const OM_CLASS = '\\Wedding\\TaxClass';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'Wedding.QuoteItemGroup';
+    const CLASS_DEFAULT = 'Wedding.TaxClass';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 3;
 
     /**
      * The number of lazy-loaded columns
@@ -69,37 +69,22 @@ class QuoteItemGroupTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 3;
 
     /**
      * the column name for the entity_id field
      */
-    const COL_ENTITY_ID = 'quote_item_group.entity_id';
+    const COL_ENTITY_ID = 'tax_class.entity_id';
 
     /**
      * the column name for the name field
      */
-    const COL_NAME = 'quote_item_group.name';
+    const COL_NAME = 'tax_class.name';
 
     /**
-     * the column name for the created_at field
+     * the column name for the value field
      */
-    const COL_CREATED_AT = 'quote_item_group.created_at';
-
-    /**
-     * the column name for the updated_at field
-     */
-    const COL_UPDATED_AT = 'quote_item_group.updated_at';
-
-    /**
-     * the column name for the archived_at field
-     */
-    const COL_ARCHIVED_AT = 'quote_item_group.archived_at';
-
-    /**
-     * the column name for the sort_order field
-     */
-    const COL_SORT_ORDER = 'quote_item_group.sort_order';
+    const COL_VALUE = 'tax_class.value';
 
     /**
      * The default string format for model objects of the related table
@@ -113,11 +98,11 @@ class QuoteItemGroupTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('EntityId', 'Name', 'CreatedAt', 'UpdatedAt', 'ArchivedAt', 'SortOrder', ),
-        self::TYPE_CAMELNAME     => array('entityId', 'name', 'createdAt', 'updatedAt', 'archivedAt', 'sortOrder', ),
-        self::TYPE_COLNAME       => array(QuoteItemGroupTableMap::COL_ENTITY_ID, QuoteItemGroupTableMap::COL_NAME, QuoteItemGroupTableMap::COL_CREATED_AT, QuoteItemGroupTableMap::COL_UPDATED_AT, QuoteItemGroupTableMap::COL_ARCHIVED_AT, QuoteItemGroupTableMap::COL_SORT_ORDER, ),
-        self::TYPE_FIELDNAME     => array('entity_id', 'name', 'created_at', 'updated_at', 'archived_at', 'sort_order', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('EntityId', 'Name', 'Value', ),
+        self::TYPE_CAMELNAME     => array('entityId', 'name', 'value', ),
+        self::TYPE_COLNAME       => array(TaxClassTableMap::COL_ENTITY_ID, TaxClassTableMap::COL_NAME, TaxClassTableMap::COL_VALUE, ),
+        self::TYPE_FIELDNAME     => array('entity_id', 'name', 'value', ),
+        self::TYPE_NUM           => array(0, 1, 2, )
     );
 
     /**
@@ -127,11 +112,11 @@ class QuoteItemGroupTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('EntityId' => 0, 'Name' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, 'ArchivedAt' => 4, 'SortOrder' => 5, ),
-        self::TYPE_CAMELNAME     => array('entityId' => 0, 'name' => 1, 'createdAt' => 2, 'updatedAt' => 3, 'archivedAt' => 4, 'sortOrder' => 5, ),
-        self::TYPE_COLNAME       => array(QuoteItemGroupTableMap::COL_ENTITY_ID => 0, QuoteItemGroupTableMap::COL_NAME => 1, QuoteItemGroupTableMap::COL_CREATED_AT => 2, QuoteItemGroupTableMap::COL_UPDATED_AT => 3, QuoteItemGroupTableMap::COL_ARCHIVED_AT => 4, QuoteItemGroupTableMap::COL_SORT_ORDER => 5, ),
-        self::TYPE_FIELDNAME     => array('entity_id' => 0, 'name' => 1, 'created_at' => 2, 'updated_at' => 3, 'archived_at' => 4, 'sort_order' => 5, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('EntityId' => 0, 'Name' => 1, 'Value' => 2, ),
+        self::TYPE_CAMELNAME     => array('entityId' => 0, 'name' => 1, 'value' => 2, ),
+        self::TYPE_COLNAME       => array(TaxClassTableMap::COL_ENTITY_ID => 0, TaxClassTableMap::COL_NAME => 1, TaxClassTableMap::COL_VALUE => 2, ),
+        self::TYPE_FIELDNAME     => array('entity_id' => 0, 'name' => 1, 'value' => 2, ),
+        self::TYPE_NUM           => array(0, 1, 2, )
     );
 
     /**
@@ -144,19 +129,16 @@ class QuoteItemGroupTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('quote_item_group');
-        $this->setPhpName('QuoteItemGroup');
+        $this->setName('tax_class');
+        $this->setPhpName('TaxClass');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\Wedding\\QuoteItemGroup');
+        $this->setClassName('\\Wedding\\TaxClass');
         $this->setPackage('Wedding');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('entity_id', 'EntityId', 'INTEGER', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', false, 255, null);
-        $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('archived_at', 'ArchivedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('sort_order', 'SortOrder', 'INTEGER', false, 10, 0);
+        $this->addColumn('value', 'Value', 'INTEGER', false, null, null);
     } // initialize()
 
     /**
@@ -167,13 +149,13 @@ class QuoteItemGroupTableMap extends TableMap
         $this->addRelation('QuoteItemGroupItem', '\\Wedding\\QuoteItemGroupItem', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':quote_item_group_id',
+    0 => ':tax_class_id',
     1 => ':entity_id',
   ),
 ), 'CASCADE', 'CASCADE', 'QuoteItemGroupItems', false);
     } // buildRelations()
     /**
-     * Method to invalidate the instance pool of all tables related to quote_item_group     * by a foreign key with ON DELETE CASCADE
+     * Method to invalidate the instance pool of all tables related to tax_class     * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
     {
@@ -239,7 +221,7 @@ class QuoteItemGroupTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? QuoteItemGroupTableMap::CLASS_DEFAULT : QuoteItemGroupTableMap::OM_CLASS;
+        return $withPrefix ? TaxClassTableMap::CLASS_DEFAULT : TaxClassTableMap::OM_CLASS;
     }
 
     /**
@@ -253,22 +235,22 @@ class QuoteItemGroupTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (QuoteItemGroup object, last column rank)
+     * @return array           (TaxClass object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = QuoteItemGroupTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = QuoteItemGroupTableMap::getInstanceFromPool($key))) {
+        $key = TaxClassTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = TaxClassTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + QuoteItemGroupTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + TaxClassTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = QuoteItemGroupTableMap::OM_CLASS;
-            /** @var QuoteItemGroup $obj */
+            $cls = TaxClassTableMap::OM_CLASS;
+            /** @var TaxClass $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            QuoteItemGroupTableMap::addInstanceToPool($obj, $key);
+            TaxClassTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -291,18 +273,18 @@ class QuoteItemGroupTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = QuoteItemGroupTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = QuoteItemGroupTableMap::getInstanceFromPool($key))) {
+            $key = TaxClassTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = TaxClassTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var QuoteItemGroup $obj */
+                /** @var TaxClass $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                QuoteItemGroupTableMap::addInstanceToPool($obj, $key);
+                TaxClassTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -323,19 +305,13 @@ class QuoteItemGroupTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(QuoteItemGroupTableMap::COL_ENTITY_ID);
-            $criteria->addSelectColumn(QuoteItemGroupTableMap::COL_NAME);
-            $criteria->addSelectColumn(QuoteItemGroupTableMap::COL_CREATED_AT);
-            $criteria->addSelectColumn(QuoteItemGroupTableMap::COL_UPDATED_AT);
-            $criteria->addSelectColumn(QuoteItemGroupTableMap::COL_ARCHIVED_AT);
-            $criteria->addSelectColumn(QuoteItemGroupTableMap::COL_SORT_ORDER);
+            $criteria->addSelectColumn(TaxClassTableMap::COL_ENTITY_ID);
+            $criteria->addSelectColumn(TaxClassTableMap::COL_NAME);
+            $criteria->addSelectColumn(TaxClassTableMap::COL_VALUE);
         } else {
             $criteria->addSelectColumn($alias . '.entity_id');
             $criteria->addSelectColumn($alias . '.name');
-            $criteria->addSelectColumn($alias . '.created_at');
-            $criteria->addSelectColumn($alias . '.updated_at');
-            $criteria->addSelectColumn($alias . '.archived_at');
-            $criteria->addSelectColumn($alias . '.sort_order');
+            $criteria->addSelectColumn($alias . '.value');
         }
     }
 
@@ -348,7 +324,7 @@ class QuoteItemGroupTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(QuoteItemGroupTableMap::DATABASE_NAME)->getTable(QuoteItemGroupTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(TaxClassTableMap::DATABASE_NAME)->getTable(TaxClassTableMap::TABLE_NAME);
     }
 
     /**
@@ -356,16 +332,16 @@ class QuoteItemGroupTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(QuoteItemGroupTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(QuoteItemGroupTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new QuoteItemGroupTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(TaxClassTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(TaxClassTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new TaxClassTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a QuoteItemGroup or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a TaxClass or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or QuoteItemGroup object or primary key or array of primary keys
+     * @param mixed               $values Criteria or TaxClass object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -376,27 +352,27 @@ class QuoteItemGroupTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(QuoteItemGroupTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TaxClassTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \Wedding\QuoteItemGroup) { // it's a model object
+        } elseif ($values instanceof \Wedding\TaxClass) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(QuoteItemGroupTableMap::DATABASE_NAME);
-            $criteria->add(QuoteItemGroupTableMap::COL_ENTITY_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(TaxClassTableMap::DATABASE_NAME);
+            $criteria->add(TaxClassTableMap::COL_ENTITY_ID, (array) $values, Criteria::IN);
         }
 
-        $query = QuoteItemGroupQuery::create()->mergeWith($criteria);
+        $query = TaxClassQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            QuoteItemGroupTableMap::clearInstancePool();
+            TaxClassTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                QuoteItemGroupTableMap::removeInstanceFromPool($singleval);
+                TaxClassTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -404,20 +380,20 @@ class QuoteItemGroupTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the quote_item_group table.
+     * Deletes all rows from the tax_class table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return QuoteItemGroupQuery::create()->doDeleteAll($con);
+        return TaxClassQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a QuoteItemGroup or Criteria object.
+     * Performs an INSERT on the database, given a TaxClass or Criteria object.
      *
-     * @param mixed               $criteria Criteria or QuoteItemGroup object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or TaxClass object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -426,22 +402,22 @@ class QuoteItemGroupTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(QuoteItemGroupTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TaxClassTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from QuoteItemGroup object
+            $criteria = $criteria->buildCriteria(); // build Criteria from TaxClass object
         }
 
-        if ($criteria->containsKey(QuoteItemGroupTableMap::COL_ENTITY_ID) && $criteria->keyContainsValue(QuoteItemGroupTableMap::COL_ENTITY_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.QuoteItemGroupTableMap::COL_ENTITY_ID.')');
+        if ($criteria->containsKey(TaxClassTableMap::COL_ENTITY_ID) && $criteria->keyContainsValue(TaxClassTableMap::COL_ENTITY_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.TaxClassTableMap::COL_ENTITY_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = QuoteItemGroupQuery::create()->mergeWith($criteria);
+        $query = TaxClassQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -450,7 +426,7 @@ class QuoteItemGroupTableMap extends TableMap
         });
     }
 
-} // QuoteItemGroupTableMap
+} // TaxClassTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-QuoteItemGroupTableMap::buildTableMap();
+TaxClassTableMap::buildTableMap();

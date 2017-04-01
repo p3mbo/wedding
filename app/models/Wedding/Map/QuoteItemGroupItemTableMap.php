@@ -59,7 +59,7 @@ class QuoteItemGroupItemTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class QuoteItemGroupItemTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the entity_id field
@@ -80,6 +80,11 @@ class QuoteItemGroupItemTableMap extends TableMap
      * the column name for the quote_item_group_id field
      */
     const COL_QUOTE_ITEM_GROUP_ID = 'quote_item_group_item.quote_item_group_id';
+
+    /**
+     * the column name for the tax_class_id field
+     */
+    const COL_TAX_CLASS_ID = 'quote_item_group_item.tax_class_id';
 
     /**
      * the column name for the name field
@@ -118,11 +123,11 @@ class QuoteItemGroupItemTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('EntityId', 'QuoteItemGroupId', 'Name', 'SuggestedPrice', 'CreatedAt', 'UpdatedAt', 'ArchivedAt', ),
-        self::TYPE_CAMELNAME     => array('entityId', 'quoteItemGroupId', 'name', 'suggestedPrice', 'createdAt', 'updatedAt', 'archivedAt', ),
-        self::TYPE_COLNAME       => array(QuoteItemGroupItemTableMap::COL_ENTITY_ID, QuoteItemGroupItemTableMap::COL_QUOTE_ITEM_GROUP_ID, QuoteItemGroupItemTableMap::COL_NAME, QuoteItemGroupItemTableMap::COL_SUGGESTED_PRICE, QuoteItemGroupItemTableMap::COL_CREATED_AT, QuoteItemGroupItemTableMap::COL_UPDATED_AT, QuoteItemGroupItemTableMap::COL_ARCHIVED_AT, ),
-        self::TYPE_FIELDNAME     => array('entity_id', 'quote_item_group_id', 'name', 'suggested_price', 'created_at', 'updated_at', 'archived_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('EntityId', 'QuoteItemGroupId', 'TaxClassId', 'Name', 'SuggestedPrice', 'CreatedAt', 'UpdatedAt', 'ArchivedAt', ),
+        self::TYPE_CAMELNAME     => array('entityId', 'quoteItemGroupId', 'taxClassId', 'name', 'suggestedPrice', 'createdAt', 'updatedAt', 'archivedAt', ),
+        self::TYPE_COLNAME       => array(QuoteItemGroupItemTableMap::COL_ENTITY_ID, QuoteItemGroupItemTableMap::COL_QUOTE_ITEM_GROUP_ID, QuoteItemGroupItemTableMap::COL_TAX_CLASS_ID, QuoteItemGroupItemTableMap::COL_NAME, QuoteItemGroupItemTableMap::COL_SUGGESTED_PRICE, QuoteItemGroupItemTableMap::COL_CREATED_AT, QuoteItemGroupItemTableMap::COL_UPDATED_AT, QuoteItemGroupItemTableMap::COL_ARCHIVED_AT, ),
+        self::TYPE_FIELDNAME     => array('entity_id', 'quote_item_group_id', 'tax_class_id', 'name', 'suggested_price', 'created_at', 'updated_at', 'archived_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -132,11 +137,11 @@ class QuoteItemGroupItemTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('EntityId' => 0, 'QuoteItemGroupId' => 1, 'Name' => 2, 'SuggestedPrice' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, 'ArchivedAt' => 6, ),
-        self::TYPE_CAMELNAME     => array('entityId' => 0, 'quoteItemGroupId' => 1, 'name' => 2, 'suggestedPrice' => 3, 'createdAt' => 4, 'updatedAt' => 5, 'archivedAt' => 6, ),
-        self::TYPE_COLNAME       => array(QuoteItemGroupItemTableMap::COL_ENTITY_ID => 0, QuoteItemGroupItemTableMap::COL_QUOTE_ITEM_GROUP_ID => 1, QuoteItemGroupItemTableMap::COL_NAME => 2, QuoteItemGroupItemTableMap::COL_SUGGESTED_PRICE => 3, QuoteItemGroupItemTableMap::COL_CREATED_AT => 4, QuoteItemGroupItemTableMap::COL_UPDATED_AT => 5, QuoteItemGroupItemTableMap::COL_ARCHIVED_AT => 6, ),
-        self::TYPE_FIELDNAME     => array('entity_id' => 0, 'quote_item_group_id' => 1, 'name' => 2, 'suggested_price' => 3, 'created_at' => 4, 'updated_at' => 5, 'archived_at' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('EntityId' => 0, 'QuoteItemGroupId' => 1, 'TaxClassId' => 2, 'Name' => 3, 'SuggestedPrice' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, 'ArchivedAt' => 7, ),
+        self::TYPE_CAMELNAME     => array('entityId' => 0, 'quoteItemGroupId' => 1, 'taxClassId' => 2, 'name' => 3, 'suggestedPrice' => 4, 'createdAt' => 5, 'updatedAt' => 6, 'archivedAt' => 7, ),
+        self::TYPE_COLNAME       => array(QuoteItemGroupItemTableMap::COL_ENTITY_ID => 0, QuoteItemGroupItemTableMap::COL_QUOTE_ITEM_GROUP_ID => 1, QuoteItemGroupItemTableMap::COL_TAX_CLASS_ID => 2, QuoteItemGroupItemTableMap::COL_NAME => 3, QuoteItemGroupItemTableMap::COL_SUGGESTED_PRICE => 4, QuoteItemGroupItemTableMap::COL_CREATED_AT => 5, QuoteItemGroupItemTableMap::COL_UPDATED_AT => 6, QuoteItemGroupItemTableMap::COL_ARCHIVED_AT => 7, ),
+        self::TYPE_FIELDNAME     => array('entity_id' => 0, 'quote_item_group_id' => 1, 'tax_class_id' => 2, 'name' => 3, 'suggested_price' => 4, 'created_at' => 5, 'updated_at' => 6, 'archived_at' => 7, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -158,6 +163,7 @@ class QuoteItemGroupItemTableMap extends TableMap
         // columns
         $this->addPrimaryKey('entity_id', 'EntityId', 'INTEGER', true, null, null);
         $this->addForeignKey('quote_item_group_id', 'QuoteItemGroupId', 'INTEGER', 'quote_item_group', 'entity_id', false, null, null);
+        $this->addForeignKey('tax_class_id', 'TaxClassId', 'INTEGER', 'tax_class', 'entity_id', false, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', false, 255, null);
         $this->addColumn('suggested_price', 'SuggestedPrice', 'DECIMAL', false, 10, null);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
@@ -174,6 +180,13 @@ class QuoteItemGroupItemTableMap extends TableMap
   0 =>
   array (
     0 => ':quote_item_group_id',
+    1 => ':entity_id',
+  ),
+), 'CASCADE', 'CASCADE', null, false);
+        $this->addRelation('TaxClass', '\\Wedding\\TaxClass', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':tax_class_id',
     1 => ':entity_id',
   ),
 ), 'CASCADE', 'CASCADE', null, false);
@@ -338,6 +351,7 @@ class QuoteItemGroupItemTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(QuoteItemGroupItemTableMap::COL_ENTITY_ID);
             $criteria->addSelectColumn(QuoteItemGroupItemTableMap::COL_QUOTE_ITEM_GROUP_ID);
+            $criteria->addSelectColumn(QuoteItemGroupItemTableMap::COL_TAX_CLASS_ID);
             $criteria->addSelectColumn(QuoteItemGroupItemTableMap::COL_NAME);
             $criteria->addSelectColumn(QuoteItemGroupItemTableMap::COL_SUGGESTED_PRICE);
             $criteria->addSelectColumn(QuoteItemGroupItemTableMap::COL_CREATED_AT);
@@ -346,6 +360,7 @@ class QuoteItemGroupItemTableMap extends TableMap
         } else {
             $criteria->addSelectColumn($alias . '.entity_id');
             $criteria->addSelectColumn($alias . '.quote_item_group_id');
+            $criteria->addSelectColumn($alias . '.tax_class_id');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.suggested_price');
             $criteria->addSelectColumn($alias . '.created_at');

@@ -25,12 +25,14 @@ use Wedding\Map\QuoteItemGroupTableMap;
  * @method     ChildQuoteItemGroupQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     ChildQuoteItemGroupQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  * @method     ChildQuoteItemGroupQuery orderByArchivedAt($order = Criteria::ASC) Order by the archived_at column
+ * @method     ChildQuoteItemGroupQuery orderBySortOrder($order = Criteria::ASC) Order by the sort_order column
  *
  * @method     ChildQuoteItemGroupQuery groupByEntityId() Group by the entity_id column
  * @method     ChildQuoteItemGroupQuery groupByName() Group by the name column
  * @method     ChildQuoteItemGroupQuery groupByCreatedAt() Group by the created_at column
  * @method     ChildQuoteItemGroupQuery groupByUpdatedAt() Group by the updated_at column
  * @method     ChildQuoteItemGroupQuery groupByArchivedAt() Group by the archived_at column
+ * @method     ChildQuoteItemGroupQuery groupBySortOrder() Group by the sort_order column
  *
  * @method     ChildQuoteItemGroupQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildQuoteItemGroupQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -59,7 +61,8 @@ use Wedding\Map\QuoteItemGroupTableMap;
  * @method     ChildQuoteItemGroup findOneByName(string $name) Return the first ChildQuoteItemGroup filtered by the name column
  * @method     ChildQuoteItemGroup findOneByCreatedAt(string $created_at) Return the first ChildQuoteItemGroup filtered by the created_at column
  * @method     ChildQuoteItemGroup findOneByUpdatedAt(string $updated_at) Return the first ChildQuoteItemGroup filtered by the updated_at column
- * @method     ChildQuoteItemGroup findOneByArchivedAt(string $archived_at) Return the first ChildQuoteItemGroup filtered by the archived_at column *
+ * @method     ChildQuoteItemGroup findOneByArchivedAt(string $archived_at) Return the first ChildQuoteItemGroup filtered by the archived_at column
+ * @method     ChildQuoteItemGroup findOneBySortOrder(int $sort_order) Return the first ChildQuoteItemGroup filtered by the sort_order column *
 
  * @method     ChildQuoteItemGroup requirePk($key, ConnectionInterface $con = null) Return the ChildQuoteItemGroup by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildQuoteItemGroup requireOne(ConnectionInterface $con = null) Return the first ChildQuoteItemGroup matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -69,6 +72,7 @@ use Wedding\Map\QuoteItemGroupTableMap;
  * @method     ChildQuoteItemGroup requireOneByCreatedAt(string $created_at) Return the first ChildQuoteItemGroup filtered by the created_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildQuoteItemGroup requireOneByUpdatedAt(string $updated_at) Return the first ChildQuoteItemGroup filtered by the updated_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildQuoteItemGroup requireOneByArchivedAt(string $archived_at) Return the first ChildQuoteItemGroup filtered by the archived_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildQuoteItemGroup requireOneBySortOrder(int $sort_order) Return the first ChildQuoteItemGroup filtered by the sort_order column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildQuoteItemGroup[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildQuoteItemGroup objects based on current ModelCriteria
  * @method     ChildQuoteItemGroup[]|ObjectCollection findByEntityId(int $entity_id) Return ChildQuoteItemGroup objects filtered by the entity_id column
@@ -76,6 +80,7 @@ use Wedding\Map\QuoteItemGroupTableMap;
  * @method     ChildQuoteItemGroup[]|ObjectCollection findByCreatedAt(string $created_at) Return ChildQuoteItemGroup objects filtered by the created_at column
  * @method     ChildQuoteItemGroup[]|ObjectCollection findByUpdatedAt(string $updated_at) Return ChildQuoteItemGroup objects filtered by the updated_at column
  * @method     ChildQuoteItemGroup[]|ObjectCollection findByArchivedAt(string $archived_at) Return ChildQuoteItemGroup objects filtered by the archived_at column
+ * @method     ChildQuoteItemGroup[]|ObjectCollection findBySortOrder(int $sort_order) Return ChildQuoteItemGroup objects filtered by the sort_order column
  * @method     ChildQuoteItemGroup[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -174,7 +179,7 @@ abstract class QuoteItemGroupQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT entity_id, name, created_at, updated_at, archived_at FROM quote_item_group WHERE entity_id = :p0';
+        $sql = 'SELECT entity_id, name, created_at, updated_at, archived_at, sort_order FROM quote_item_group WHERE entity_id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -457,6 +462,47 @@ abstract class QuoteItemGroupQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(QuoteItemGroupTableMap::COL_ARCHIVED_AT, $archivedAt, $comparison);
+    }
+
+    /**
+     * Filter the query on the sort_order column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterBySortOrder(1234); // WHERE sort_order = 1234
+     * $query->filterBySortOrder(array(12, 34)); // WHERE sort_order IN (12, 34)
+     * $query->filterBySortOrder(array('min' => 12)); // WHERE sort_order > 12
+     * </code>
+     *
+     * @param     mixed $sortOrder The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildQuoteItemGroupQuery The current query, for fluid interface
+     */
+    public function filterBySortOrder($sortOrder = null, $comparison = null)
+    {
+        if (is_array($sortOrder)) {
+            $useMinMax = false;
+            if (isset($sortOrder['min'])) {
+                $this->addUsingAlias(QuoteItemGroupTableMap::COL_SORT_ORDER, $sortOrder['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($sortOrder['max'])) {
+                $this->addUsingAlias(QuoteItemGroupTableMap::COL_SORT_ORDER, $sortOrder['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(QuoteItemGroupTableMap::COL_SORT_ORDER, $sortOrder, $comparison);
     }
 
     /**

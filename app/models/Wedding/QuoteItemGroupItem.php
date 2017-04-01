@@ -19,7 +19,7 @@ class QuoteItemGroupItem extends BaseQuoteItemGroupItem
     public function getOptionString()
     {
         return implode(' ', [
-            $this->getName(),
+            \Wedding::__($this->getName()),
             \Wedding::currency($this->getSuggestedPrice())
         ]);
     }

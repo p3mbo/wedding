@@ -2,16 +2,16 @@
 
 namespace Wedding\Source;
 
-class Ceremony
+class Ceremony extends \Wedding\Source
 {
     public static function getOptions()
     {
         return [
-            'Outdoor',
-            'Indoor',
-            'Church',
-            'Outdoor Marquee',
-            'Indoor Conservatory'
+            1 => 'Outdoor',
+            2 => 'Indoor',
+            3 => 'Church',
+            4 => 'Outdoor Marquee',
+            5 => 'Indoor Conservatory'
         ];
     }
 

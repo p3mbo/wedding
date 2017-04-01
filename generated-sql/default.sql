@@ -73,6 +73,15 @@ CREATE TABLE `quote`
     `enquiry_id` int(11) unsigned,
     `created_at` DATETIME,
     `updated_at` DATETIME,
+    `day` VARCHAR(255),
+    `month` VARCHAR(255),
+    `year` VARCHAR(255),
+    `notes` TEXT,
+    `exclusive` VARCHAR(255),
+    `specific_date` DATETIME,
+    `day_guests` VARCHAR(255),
+    `eve_guests` VARCHAR(255),
+    `ceremony_type_id` int(11) unsigned,
     PRIMARY KEY (`entity_id`),
     INDEX `enquiry_id` (`enquiry_id`),
     CONSTRAINT `quote_ibfk_1`
@@ -117,6 +126,7 @@ CREATE TABLE `quote_item_group`
     `created_at` DATETIME,
     `updated_at` DATETIME,
     `archived_at` DATETIME,
+    `sort_order` int(10) unsigned DEFAULT 0,
     PRIMARY KEY (`entity_id`)
 ) ENGINE=InnoDB;
 
@@ -130,6 +140,7 @@ CREATE TABLE `quote_item_group_item`
 (
     `entity_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `quote_item_group_id` int(11) unsigned,
+    `tax_class_id` int(11) unsigned,
     `name` VARCHAR(255),
     `suggested_price` DECIMAL(10,2),
     `created_at` DATETIME,
@@ -137,9 +148,15 @@ CREATE TABLE `quote_item_group_item`
     `archived_at` DATETIME,
     PRIMARY KEY (`entity_id`),
     INDEX `quote_item_group_id` (`quote_item_group_id`),
+    INDEX `tax_class_id` (`tax_class_id`),
     CONSTRAINT `quote_item_group_item_ibfk_1`
         FOREIGN KEY (`quote_item_group_id`)
         REFERENCES `quote_item_group` (`entity_id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `quote_item_group_item_ibfk_2`
+        FOREIGN KEY (`tax_class_id`)
+        REFERENCES `tax_class` (`entity_id`)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
@@ -159,6 +176,20 @@ CREATE TABLE `staff`
     `created_at` DATETIME,
     `updated_at` DATETIME,
     `archived_at` DATETIME,
+    PRIMARY KEY (`entity_id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- tax_class
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tax_class`;
+
+CREATE TABLE `tax_class`
+(
+    `entity_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255),
+    `value` INTEGER,
     PRIMARY KEY (`entity_id`)
 ) ENGINE=InnoDB;
 

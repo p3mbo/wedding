@@ -2,7 +2,7 @@
 
 namespace Wedding\Source;
 
-class Year
+class Year extends \Wedding\Source
 {
     public static function getOptions()
     {

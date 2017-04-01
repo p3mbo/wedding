@@ -1,5 +1,9 @@
 <div class="col-md-12 main">
     <h1 class="page-header">Add New Quote</h1>
 
-    <?php echo $this->partial('quote/partial/form.phtml', ['new' => true, 'itemGroups' => $this->itemGroups]); ?>
+    <?php echo $this->partial('quote/partial/form.phtml', [
+        'new' => true,
+        'itemGroups' => $this->itemGroups,
+        'enquiry' => $this->enquiry
+    ]); ?>
 </div>

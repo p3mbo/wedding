@@ -92,6 +92,69 @@ abstract class Quote implements ActiveRecordInterface
     protected $updated_at;
 
     /**
+     * The value for the day field.
+     * 
+     * @var        string
+     */
+    protected $day;
+
+    /**
+     * The value for the month field.
+     * 
+     * @var        string
+     */
+    protected $month;
+
+    /**
+     * The value for the year field.
+     * 
+     * @var        string
+     */
+    protected $year;
+
+    /**
+     * The value for the notes field.
+     * 
+     * @var        string
+     */
+    protected $notes;
+
+    /**
+     * The value for the exclusive field.
+     * 
+     * @var        string
+     */
+    protected $exclusive;
+
+    /**
+     * The value for the specific_date field.
+     * 
+     * @var        DateTime
+     */
+    protected $specific_date;
+
+    /**
+     * The value for the day_guests field.
+     * 
+     * @var        string
+     */
+    protected $day_guests;
+
+    /**
+     * The value for the eve_guests field.
+     * 
+     * @var        string
+     */
+    protected $eve_guests;
+
+    /**
+     * The value for the ceremony_type_id field.
+     * 
+     * @var        int
+     */
+    protected $ceremony_type_id;
+
+    /**
      * @var        ChildEnquiry
      */
     protected $aEnquiry;
@@ -390,6 +453,106 @@ abstract class Quote implements ActiveRecordInterface
     }
 
     /**
+     * Get the [day] column value.
+     * 
+     * @return string
+     */
+    public function getDay()
+    {
+        return $this->day;
+    }
+
+    /**
+     * Get the [month] column value.
+     * 
+     * @return string
+     */
+    public function getMonth()
+    {
+        return $this->month;
+    }
+
+    /**
+     * Get the [year] column value.
+     * 
+     * @return string
+     */
+    public function getYear()
+    {
+        return $this->year;
+    }
+
+    /**
+     * Get the [notes] column value.
+     * 
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * Get the [exclusive] column value.
+     * 
+     * @return string
+     */
+    public function getExclusive()
+    {
+        return $this->exclusive;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [specific_date] column value.
+     * 
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getSpecificDate($format = NULL)
+    {
+        if ($format === null) {
+            return $this->specific_date;
+        } else {
+            return $this->specific_date instanceof \DateTimeInterface ? $this->specific_date->format($format) : null;
+        }
+    }
+
+    /**
+     * Get the [day_guests] column value.
+     * 
+     * @return string
+     */
+    public function getDayGuests()
+    {
+        return $this->day_guests;
+    }
+
+    /**
+     * Get the [eve_guests] column value.
+     * 
+     * @return string
+     */
+    public function getEveGuests()
+    {
+        return $this->eve_guests;
+    }
+
+    /**
+     * Get the [ceremony_type_id] column value.
+     * 
+     * @return int
+     */
+    public function getCeremonyTypeId()
+    {
+        return $this->ceremony_type_id;
+    }
+
+    /**
      * Set the value of [entity_id] column.
      * 
      * @param int $v new value
@@ -474,6 +637,186 @@ abstract class Quote implements ActiveRecordInterface
     } // setUpdatedAt()
 
     /**
+     * Set the value of [day] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Wedding\Quote The current object (for fluent API support)
+     */
+    public function setDay($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->day !== $v) {
+            $this->day = $v;
+            $this->modifiedColumns[QuoteTableMap::COL_DAY] = true;
+        }
+
+        return $this;
+    } // setDay()
+
+    /**
+     * Set the value of [month] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Wedding\Quote The current object (for fluent API support)
+     */
+    public function setMonth($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->month !== $v) {
+            $this->month = $v;
+            $this->modifiedColumns[QuoteTableMap::COL_MONTH] = true;
+        }
+
+        return $this;
+    } // setMonth()
+
+    /**
+     * Set the value of [year] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Wedding\Quote The current object (for fluent API support)
+     */
+    public function setYear($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->year !== $v) {
+            $this->year = $v;
+            $this->modifiedColumns[QuoteTableMap::COL_YEAR] = true;
+        }
+
+        return $this;
+    } // setYear()
+
+    /**
+     * Set the value of [notes] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Wedding\Quote The current object (for fluent API support)
+     */
+    public function setNotes($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->notes !== $v) {
+            $this->notes = $v;
+            $this->modifiedColumns[QuoteTableMap::COL_NOTES] = true;
+        }
+
+        return $this;
+    } // setNotes()
+
+    /**
+     * Set the value of [exclusive] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Wedding\Quote The current object (for fluent API support)
+     */
+    public function setExclusive($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->exclusive !== $v) {
+            $this->exclusive = $v;
+            $this->modifiedColumns[QuoteTableMap::COL_EXCLUSIVE] = true;
+        }
+
+        return $this;
+    } // setExclusive()
+
+    /**
+     * Sets the value of [specific_date] column to a normalized version of the date/time value specified.
+     * 
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\Wedding\Quote The current object (for fluent API support)
+     */
+    public function setSpecificDate($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->specific_date !== null || $dt !== null) {
+            if ($this->specific_date === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->specific_date->format("Y-m-d H:i:s.u")) {
+                $this->specific_date = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[QuoteTableMap::COL_SPECIFIC_DATE] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setSpecificDate()
+
+    /**
+     * Set the value of [day_guests] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Wedding\Quote The current object (for fluent API support)
+     */
+    public function setDayGuests($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->day_guests !== $v) {
+            $this->day_guests = $v;
+            $this->modifiedColumns[QuoteTableMap::COL_DAY_GUESTS] = true;
+        }
+
+        return $this;
+    } // setDayGuests()
+
+    /**
+     * Set the value of [eve_guests] column.
+     * 
+     * @param string $v new value
+     * @return $this|\Wedding\Quote The current object (for fluent API support)
+     */
+    public function setEveGuests($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->eve_guests !== $v) {
+            $this->eve_guests = $v;
+            $this->modifiedColumns[QuoteTableMap::COL_EVE_GUESTS] = true;
+        }
+
+        return $this;
+    } // setEveGuests()
+
+    /**
+     * Set the value of [ceremony_type_id] column.
+     * 
+     * @param int $v new value
+     * @return $this|\Wedding\Quote The current object (for fluent API support)
+     */
+    public function setCeremonyTypeId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->ceremony_type_id !== $v) {
+            $this->ceremony_type_id = $v;
+            $this->modifiedColumns[QuoteTableMap::COL_CEREMONY_TYPE_ID] = true;
+        }
+
+        return $this;
+    } // setCeremonyTypeId()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -526,6 +869,36 @@ abstract class Quote implements ActiveRecordInterface
                 $col = null;
             }
             $this->updated_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : QuoteTableMap::translateFieldName('Day', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->day = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : QuoteTableMap::translateFieldName('Month', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->month = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : QuoteTableMap::translateFieldName('Year', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->year = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : QuoteTableMap::translateFieldName('Notes', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->notes = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : QuoteTableMap::translateFieldName('Exclusive', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->exclusive = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : QuoteTableMap::translateFieldName('SpecificDate', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->specific_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : QuoteTableMap::translateFieldName('DayGuests', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->day_guests = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : QuoteTableMap::translateFieldName('EveGuests', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->eve_guests = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : QuoteTableMap::translateFieldName('CeremonyTypeId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->ceremony_type_id = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -534,7 +907,7 @@ abstract class Quote implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 4; // 4 = QuoteTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = QuoteTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Wedding\\Quote'), 0, $e);
@@ -763,6 +1136,33 @@ abstract class Quote implements ActiveRecordInterface
         if ($this->isColumnModified(QuoteTableMap::COL_UPDATED_AT)) {
             $modifiedColumns[':p' . $index++]  = 'updated_at';
         }
+        if ($this->isColumnModified(QuoteTableMap::COL_DAY)) {
+            $modifiedColumns[':p' . $index++]  = 'day';
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_MONTH)) {
+            $modifiedColumns[':p' . $index++]  = 'month';
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_YEAR)) {
+            $modifiedColumns[':p' . $index++]  = 'year';
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_NOTES)) {
+            $modifiedColumns[':p' . $index++]  = 'notes';
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_EXCLUSIVE)) {
+            $modifiedColumns[':p' . $index++]  = 'exclusive';
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_SPECIFIC_DATE)) {
+            $modifiedColumns[':p' . $index++]  = 'specific_date';
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_DAY_GUESTS)) {
+            $modifiedColumns[':p' . $index++]  = 'day_guests';
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_EVE_GUESTS)) {
+            $modifiedColumns[':p' . $index++]  = 'eve_guests';
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_CEREMONY_TYPE_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'ceremony_type_id';
+        }
 
         $sql = sprintf(
             'INSERT INTO quote (%s) VALUES (%s)',
@@ -785,6 +1185,33 @@ abstract class Quote implements ActiveRecordInterface
                         break;
                     case 'updated_at':                        
                         $stmt->bindValue($identifier, $this->updated_at ? $this->updated_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case 'day':                        
+                        $stmt->bindValue($identifier, $this->day, PDO::PARAM_STR);
+                        break;
+                    case 'month':                        
+                        $stmt->bindValue($identifier, $this->month, PDO::PARAM_STR);
+                        break;
+                    case 'year':                        
+                        $stmt->bindValue($identifier, $this->year, PDO::PARAM_STR);
+                        break;
+                    case 'notes':                        
+                        $stmt->bindValue($identifier, $this->notes, PDO::PARAM_STR);
+                        break;
+                    case 'exclusive':                        
+                        $stmt->bindValue($identifier, $this->exclusive, PDO::PARAM_STR);
+                        break;
+                    case 'specific_date':                        
+                        $stmt->bindValue($identifier, $this->specific_date ? $this->specific_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case 'day_guests':                        
+                        $stmt->bindValue($identifier, $this->day_guests, PDO::PARAM_STR);
+                        break;
+                    case 'eve_guests':                        
+                        $stmt->bindValue($identifier, $this->eve_guests, PDO::PARAM_STR);
+                        break;
+                    case 'ceremony_type_id':                        
+                        $stmt->bindValue($identifier, $this->ceremony_type_id, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -860,6 +1287,33 @@ abstract class Quote implements ActiveRecordInterface
             case 3:
                 return $this->getUpdatedAt();
                 break;
+            case 4:
+                return $this->getDay();
+                break;
+            case 5:
+                return $this->getMonth();
+                break;
+            case 6:
+                return $this->getYear();
+                break;
+            case 7:
+                return $this->getNotes();
+                break;
+            case 8:
+                return $this->getExclusive();
+                break;
+            case 9:
+                return $this->getSpecificDate();
+                break;
+            case 10:
+                return $this->getDayGuests();
+                break;
+            case 11:
+                return $this->getEveGuests();
+                break;
+            case 12:
+                return $this->getCeremonyTypeId();
+                break;
             default:
                 return null;
                 break;
@@ -894,6 +1348,15 @@ abstract class Quote implements ActiveRecordInterface
             $keys[1] => $this->getEnquiryId(),
             $keys[2] => $this->getCreatedAt(),
             $keys[3] => $this->getUpdatedAt(),
+            $keys[4] => $this->getDay(),
+            $keys[5] => $this->getMonth(),
+            $keys[6] => $this->getYear(),
+            $keys[7] => $this->getNotes(),
+            $keys[8] => $this->getExclusive(),
+            $keys[9] => $this->getSpecificDate(),
+            $keys[10] => $this->getDayGuests(),
+            $keys[11] => $this->getEveGuests(),
+            $keys[12] => $this->getCeremonyTypeId(),
         );
         if ($result[$keys[2]] instanceof \DateTime) {
             $result[$keys[2]] = $result[$keys[2]]->format('c');
@@ -901,6 +1364,10 @@ abstract class Quote implements ActiveRecordInterface
         
         if ($result[$keys[3]] instanceof \DateTime) {
             $result[$keys[3]] = $result[$keys[3]]->format('c');
+        }
+        
+        if ($result[$keys[9]] instanceof \DateTime) {
+            $result[$keys[9]] = $result[$keys[9]]->format('c');
         }
         
         $virtualColumns = $this->virtualColumns;
@@ -970,6 +1437,33 @@ abstract class Quote implements ActiveRecordInterface
             case 3:
                 $this->setUpdatedAt($value);
                 break;
+            case 4:
+                $this->setDay($value);
+                break;
+            case 5:
+                $this->setMonth($value);
+                break;
+            case 6:
+                $this->setYear($value);
+                break;
+            case 7:
+                $this->setNotes($value);
+                break;
+            case 8:
+                $this->setExclusive($value);
+                break;
+            case 9:
+                $this->setSpecificDate($value);
+                break;
+            case 10:
+                $this->setDayGuests($value);
+                break;
+            case 11:
+                $this->setEveGuests($value);
+                break;
+            case 12:
+                $this->setCeremonyTypeId($value);
+                break;
         } // switch()
 
         return $this;
@@ -1007,6 +1501,33 @@ abstract class Quote implements ActiveRecordInterface
         }
         if (array_key_exists($keys[3], $arr)) {
             $this->setUpdatedAt($arr[$keys[3]]);
+        }
+        if (array_key_exists($keys[4], $arr)) {
+            $this->setDay($arr[$keys[4]]);
+        }
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setMonth($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setYear($arr[$keys[6]]);
+        }
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setNotes($arr[$keys[7]]);
+        }
+        if (array_key_exists($keys[8], $arr)) {
+            $this->setExclusive($arr[$keys[8]]);
+        }
+        if (array_key_exists($keys[9], $arr)) {
+            $this->setSpecificDate($arr[$keys[9]]);
+        }
+        if (array_key_exists($keys[10], $arr)) {
+            $this->setDayGuests($arr[$keys[10]]);
+        }
+        if (array_key_exists($keys[11], $arr)) {
+            $this->setEveGuests($arr[$keys[11]]);
+        }
+        if (array_key_exists($keys[12], $arr)) {
+            $this->setCeremonyTypeId($arr[$keys[12]]);
         }
     }
 
@@ -1060,6 +1581,33 @@ abstract class Quote implements ActiveRecordInterface
         }
         if ($this->isColumnModified(QuoteTableMap::COL_UPDATED_AT)) {
             $criteria->add(QuoteTableMap::COL_UPDATED_AT, $this->updated_at);
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_DAY)) {
+            $criteria->add(QuoteTableMap::COL_DAY, $this->day);
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_MONTH)) {
+            $criteria->add(QuoteTableMap::COL_MONTH, $this->month);
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_YEAR)) {
+            $criteria->add(QuoteTableMap::COL_YEAR, $this->year);
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_NOTES)) {
+            $criteria->add(QuoteTableMap::COL_NOTES, $this->notes);
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_EXCLUSIVE)) {
+            $criteria->add(QuoteTableMap::COL_EXCLUSIVE, $this->exclusive);
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_SPECIFIC_DATE)) {
+            $criteria->add(QuoteTableMap::COL_SPECIFIC_DATE, $this->specific_date);
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_DAY_GUESTS)) {
+            $criteria->add(QuoteTableMap::COL_DAY_GUESTS, $this->day_guests);
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_EVE_GUESTS)) {
+            $criteria->add(QuoteTableMap::COL_EVE_GUESTS, $this->eve_guests);
+        }
+        if ($this->isColumnModified(QuoteTableMap::COL_CEREMONY_TYPE_ID)) {
+            $criteria->add(QuoteTableMap::COL_CEREMONY_TYPE_ID, $this->ceremony_type_id);
         }
 
         return $criteria;
@@ -1150,6 +1698,15 @@ abstract class Quote implements ActiveRecordInterface
         $copyObj->setEnquiryId($this->getEnquiryId());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
+        $copyObj->setDay($this->getDay());
+        $copyObj->setMonth($this->getMonth());
+        $copyObj->setYear($this->getYear());
+        $copyObj->setNotes($this->getNotes());
+        $copyObj->setExclusive($this->getExclusive());
+        $copyObj->setSpecificDate($this->getSpecificDate());
+        $copyObj->setDayGuests($this->getDayGuests());
+        $copyObj->setEveGuests($this->getEveGuests());
+        $copyObj->setCeremonyTypeId($this->getCeremonyTypeId());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setEntityId(NULL); // this is a auto-increment column, so set to default value
@@ -1243,6 +1800,15 @@ abstract class Quote implements ActiveRecordInterface
         $this->enquiry_id = null;
         $this->created_at = null;
         $this->updated_at = null;
+        $this->day = null;
+        $this->month = null;
+        $this->year = null;
+        $this->notes = null;
+        $this->exclusive = null;
+        $this->specific_date = null;
+        $this->day_guests = null;
+        $this->eve_guests = null;
+        $this->ceremony_type_id = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
