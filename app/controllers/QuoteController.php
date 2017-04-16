@@ -66,7 +66,7 @@ class QuoteController extends CoreController
             $quote->setEveGuests($quoteData['eveg']);
             $quote->setEnquiryId($quoteData['enquiry_id']);
             $quote->setCreatedAt(time());
-            $quote->save();
+            //$quote->save();
 
 
             $enquiry = $quote->getEnquiry();
@@ -81,9 +81,6 @@ class QuoteController extends CoreController
 
                 foreach ($itemGroups as $itemGroupId => $itemGroupArr) {
                     foreach ($itemGroupArr as $itemGroup) {
-                        echo '<pre>';
-                        print_r($itemGroup);
-
 
                         if ($itemGroup['item'] != 0 && $itemGroup['item'] != 'Please select...') {
                             $quoteItem = new \Wedding\QuoteItem();
@@ -91,26 +88,23 @@ class QuoteController extends CoreController
                             $quoteItem->setQty(isset($itemGroup['qty']) ? $itemGroup['qty'] : 1);
                             $quoteItem->setNotes(isset($itemGroup['notes']) ? $itemGroup['notes'] : '');
 
+                            $quoteItem->setQuote($quote);
+
                             // @todo: Implement if
                             // if we have permission to change the price
                             $quoteItem->setPrice(isset($itemGroup['price']) && $itemGroup['price'] > 0 ? $itemGroup['price'] : '0');
                             // end if
-                            $quoteItem->save();
+
+                            $quote->addQuoteItem($quoteItem);
                         }
                     }
                 }
             }
+            
+            $quote->save();
 
 
-            exit;
-
-
-        } catch(Propel\Runtime\Exception\PropelException $pe) {
-            echo $pe->getMessage();
-            die('arse');
         } catch(Exception $e) {
-
-            die('farse');
 
             \Wedding\Messages::addError($e->getMessage());
             $this->redirectReferer();
