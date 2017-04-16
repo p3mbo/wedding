@@ -104,11 +104,18 @@ CREATE TABLE `quote_item`
     `qty` INTEGER,
     `notes` TEXT,
     `price` DECIMAL(10,2),
+    `quote_id` int(11) unsigned,
     PRIMARY KEY (`entity_id`),
     INDEX `quote_item_group_item_id` (`quote_item_group_item_id`),
+    INDEX `quote_id` (`quote_id`),
     CONSTRAINT `quote_item_ibfk_1`
         FOREIGN KEY (`quote_item_group_item_id`)
         REFERENCES `quote_item_group_item` (`entity_id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `quote_item_ibfk_2`
+        FOREIGN KEY (`quote_id`)
+        REFERENCES `quote` (`entity_id`)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 ) ENGINE=InnoDB;

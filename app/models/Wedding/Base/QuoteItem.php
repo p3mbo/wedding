@@ -15,9 +15,11 @@ use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
+use Wedding\Quote as ChildQuote;
 use Wedding\QuoteItemGroupItem as ChildQuoteItemGroupItem;
 use Wedding\QuoteItemGroupItemQuery as ChildQuoteItemGroupItemQuery;
 use Wedding\QuoteItemQuery as ChildQuoteItemQuery;
+use Wedding\QuoteQuery as ChildQuoteQuery;
 use Wedding\Map\QuoteItemTableMap;
 
 /**
@@ -97,9 +99,21 @@ abstract class QuoteItem implements ActiveRecordInterface
     protected $price;
 
     /**
+     * The value for the quote_id field.
+     * 
+     * @var        int
+     */
+    protected $quote_id;
+
+    /**
      * @var        ChildQuoteItemGroupItem
      */
     protected $aQuoteItemGroupItem;
+
+    /**
+     * @var        ChildQuote
+     */
+    protected $aQuote;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -385,6 +399,16 @@ abstract class QuoteItem implements ActiveRecordInterface
     }
 
     /**
+     * Get the [quote_id] column value.
+     * 
+     * @return int
+     */
+    public function getQuoteId()
+    {
+        return $this->quote_id;
+    }
+
+    /**
      * Set the value of [entity_id] column.
      * 
      * @param int $v new value
@@ -489,6 +513,30 @@ abstract class QuoteItem implements ActiveRecordInterface
     } // setPrice()
 
     /**
+     * Set the value of [quote_id] column.
+     * 
+     * @param int $v new value
+     * @return $this|\Wedding\QuoteItem The current object (for fluent API support)
+     */
+    public function setQuoteId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->quote_id !== $v) {
+            $this->quote_id = $v;
+            $this->modifiedColumns[QuoteItemTableMap::COL_QUOTE_ID] = true;
+        }
+
+        if ($this->aQuote !== null && $this->aQuote->getEntityId() !== $v) {
+            $this->aQuote = null;
+        }
+
+        return $this;
+    } // setQuoteId()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -538,6 +586,9 @@ abstract class QuoteItem implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : QuoteItemTableMap::translateFieldName('Price', TableMap::TYPE_PHPNAME, $indexType)];
             $this->price = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : QuoteItemTableMap::translateFieldName('QuoteId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->quote_id = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -546,7 +597,7 @@ abstract class QuoteItem implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 5; // 5 = QuoteItemTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = QuoteItemTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Wedding\\QuoteItem'), 0, $e);
@@ -570,6 +621,9 @@ abstract class QuoteItem implements ActiveRecordInterface
     {
         if ($this->aQuoteItemGroupItem !== null && $this->quote_item_group_item_id !== $this->aQuoteItemGroupItem->getEntityId()) {
             $this->aQuoteItemGroupItem = null;
+        }
+        if ($this->aQuote !== null && $this->quote_id !== $this->aQuote->getEntityId()) {
+            $this->aQuote = null;
         }
     } // ensureConsistency
 
@@ -611,6 +665,7 @@ abstract class QuoteItem implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aQuoteItemGroupItem = null;
+            $this->aQuote = null;
         } // if (deep)
     }
 
@@ -726,6 +781,13 @@ abstract class QuoteItem implements ActiveRecordInterface
                 $this->setQuoteItemGroupItem($this->aQuoteItemGroupItem);
             }
 
+            if ($this->aQuote !== null) {
+                if ($this->aQuote->isModified() || $this->aQuote->isNew()) {
+                    $affectedRows += $this->aQuote->save($con);
+                }
+                $this->setQuote($this->aQuote);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -778,6 +840,9 @@ abstract class QuoteItem implements ActiveRecordInterface
         if ($this->isColumnModified(QuoteItemTableMap::COL_PRICE)) {
             $modifiedColumns[':p' . $index++]  = 'price';
         }
+        if ($this->isColumnModified(QuoteItemTableMap::COL_QUOTE_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'quote_id';
+        }
 
         $sql = sprintf(
             'INSERT INTO quote_item (%s) VALUES (%s)',
@@ -803,6 +868,9 @@ abstract class QuoteItem implements ActiveRecordInterface
                         break;
                     case 'price':                        
                         $stmt->bindValue($identifier, $this->price, PDO::PARAM_STR);
+                        break;
+                    case 'quote_id':                        
+                        $stmt->bindValue($identifier, $this->quote_id, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -881,6 +949,9 @@ abstract class QuoteItem implements ActiveRecordInterface
             case 4:
                 return $this->getPrice();
                 break;
+            case 5:
+                return $this->getQuoteId();
+                break;
             default:
                 return null;
                 break;
@@ -916,6 +987,7 @@ abstract class QuoteItem implements ActiveRecordInterface
             $keys[2] => $this->getQty(),
             $keys[3] => $this->getNotes(),
             $keys[4] => $this->getPrice(),
+            $keys[5] => $this->getQuoteId(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -937,6 +1009,21 @@ abstract class QuoteItem implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->aQuoteItemGroupItem->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aQuote) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'quote';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'quote';
+                        break;
+                    default:
+                        $key = 'Quote';
+                }
+        
+                $result[$key] = $this->aQuote->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -987,6 +1074,9 @@ abstract class QuoteItem implements ActiveRecordInterface
             case 4:
                 $this->setPrice($value);
                 break;
+            case 5:
+                $this->setQuoteId($value);
+                break;
         } // switch()
 
         return $this;
@@ -1027,6 +1117,9 @@ abstract class QuoteItem implements ActiveRecordInterface
         }
         if (array_key_exists($keys[4], $arr)) {
             $this->setPrice($arr[$keys[4]]);
+        }
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setQuoteId($arr[$keys[5]]);
         }
     }
 
@@ -1083,6 +1176,9 @@ abstract class QuoteItem implements ActiveRecordInterface
         }
         if ($this->isColumnModified(QuoteItemTableMap::COL_PRICE)) {
             $criteria->add(QuoteItemTableMap::COL_PRICE, $this->price);
+        }
+        if ($this->isColumnModified(QuoteItemTableMap::COL_QUOTE_ID)) {
+            $criteria->add(QuoteItemTableMap::COL_QUOTE_ID, $this->quote_id);
         }
 
         return $criteria;
@@ -1174,6 +1270,7 @@ abstract class QuoteItem implements ActiveRecordInterface
         $copyObj->setQty($this->getQty());
         $copyObj->setNotes($this->getNotes());
         $copyObj->setPrice($this->getPrice());
+        $copyObj->setQuoteId($this->getQuoteId());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setEntityId(NULL); // this is a auto-increment column, so set to default value
@@ -1254,6 +1351,57 @@ abstract class QuoteItem implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildQuote object.
+     *
+     * @param  ChildQuote $v
+     * @return $this|\Wedding\QuoteItem The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setQuote(ChildQuote $v = null)
+    {
+        if ($v === null) {
+            $this->setQuoteId(NULL);
+        } else {
+            $this->setQuoteId($v->getEntityId());
+        }
+
+        $this->aQuote = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildQuote object, it will not be re-added.
+        if ($v !== null) {
+            $v->addQuoteItem($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildQuote object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildQuote The associated ChildQuote object.
+     * @throws PropelException
+     */
+    public function getQuote(ConnectionInterface $con = null)
+    {
+        if ($this->aQuote === null && ($this->quote_id !== null)) {
+            $this->aQuote = ChildQuoteQuery::create()->findPk($this->quote_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aQuote->addQuoteItems($this);
+             */
+        }
+
+        return $this->aQuote;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -1263,11 +1411,15 @@ abstract class QuoteItem implements ActiveRecordInterface
         if (null !== $this->aQuoteItemGroupItem) {
             $this->aQuoteItemGroupItem->removeQuoteItem($this);
         }
+        if (null !== $this->aQuote) {
+            $this->aQuote->removeQuoteItem($this);
+        }
         $this->entity_id = null;
         $this->quote_item_group_item_id = null;
         $this->qty = null;
         $this->notes = null;
         $this->price = null;
+        $this->quote_id = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1289,6 +1441,7 @@ abstract class QuoteItem implements ActiveRecordInterface
         } // if ($deep)
 
         $this->aQuoteItemGroupItem = null;
+        $this->aQuote = null;
     }
 
     /**

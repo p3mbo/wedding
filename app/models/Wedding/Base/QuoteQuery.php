@@ -66,7 +66,17 @@ use Wedding\Map\QuoteTableMap;
  * @method     ChildQuoteQuery rightJoinWithEnquiry() Adds a RIGHT JOIN clause and with to the query using the Enquiry relation
  * @method     ChildQuoteQuery innerJoinWithEnquiry() Adds a INNER JOIN clause and with to the query using the Enquiry relation
  *
- * @method     \Wedding\EnquiryQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildQuoteQuery leftJoinQuoteItem($relationAlias = null) Adds a LEFT JOIN clause to the query using the QuoteItem relation
+ * @method     ChildQuoteQuery rightJoinQuoteItem($relationAlias = null) Adds a RIGHT JOIN clause to the query using the QuoteItem relation
+ * @method     ChildQuoteQuery innerJoinQuoteItem($relationAlias = null) Adds a INNER JOIN clause to the query using the QuoteItem relation
+ *
+ * @method     ChildQuoteQuery joinWithQuoteItem($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the QuoteItem relation
+ *
+ * @method     ChildQuoteQuery leftJoinWithQuoteItem() Adds a LEFT JOIN clause and with to the query using the QuoteItem relation
+ * @method     ChildQuoteQuery rightJoinWithQuoteItem() Adds a RIGHT JOIN clause and with to the query using the QuoteItem relation
+ * @method     ChildQuoteQuery innerJoinWithQuoteItem() Adds a INNER JOIN clause and with to the query using the QuoteItem relation
+ *
+ * @method     \Wedding\EnquiryQuery|\Wedding\QuoteItemQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildQuote findOne(ConnectionInterface $con = null) Return the first ChildQuote matching the query
  * @method     ChildQuote findOneOrCreate(ConnectionInterface $con = null) Return the first ChildQuote matching the query, or a new ChildQuote object populated from the query conditions when no match is found
@@ -790,6 +800,79 @@ abstract class QuoteQuery extends ModelCriteria
         return $this
             ->joinEnquiry($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Enquiry', '\Wedding\EnquiryQuery');
+    }
+
+    /**
+     * Filter the query by a related \Wedding\QuoteItem object
+     *
+     * @param \Wedding\QuoteItem|ObjectCollection $quoteItem the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildQuoteQuery The current query, for fluid interface
+     */
+    public function filterByQuoteItem($quoteItem, $comparison = null)
+    {
+        if ($quoteItem instanceof \Wedding\QuoteItem) {
+            return $this
+                ->addUsingAlias(QuoteTableMap::COL_ENTITY_ID, $quoteItem->getQuoteId(), $comparison);
+        } elseif ($quoteItem instanceof ObjectCollection) {
+            return $this
+                ->useQuoteItemQuery()
+                ->filterByPrimaryKeys($quoteItem->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByQuoteItem() only accepts arguments of type \Wedding\QuoteItem or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the QuoteItem relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildQuoteQuery The current query, for fluid interface
+     */
+    public function joinQuoteItem($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('QuoteItem');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'QuoteItem');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the QuoteItem relation QuoteItem object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Wedding\QuoteItemQuery A secondary query class using the current class as primary query
+     */
+    public function useQuoteItemQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinQuoteItem($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'QuoteItem', '\Wedding\QuoteItemQuery');
     }
 
     /**

@@ -76,11 +76,18 @@
     <column name="qty" phpName="Qty" type="INTEGER"/>
     <column name="notes" phpName="Notes" type="LONGVARCHAR"/>
     <column name="price" phpName="Price" type="DECIMAL" size="10" scale="2"/>
+    <column name="quote_id" phpName="QuoteId" type="INTEGER" sqlType="int(11) unsigned"/>
     <foreign-key foreignTable="quote_item_group_item" name="quote_item_ibfk_1" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="quote_item_group_item_id" foreign="entity_id"/>
     </foreign-key>
+    <foreign-key foreignTable="quote" name="quote_item_ibfk_2" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="quote_id" foreign="entity_id"/>
+    </foreign-key>
     <index name="quote_item_group_item_id">
       <index-column name="quote_item_group_item_id"/>
+    </index>
+    <index name="quote_id">
+      <index-column name="quote_id"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>

@@ -59,7 +59,7 @@ class QuoteItemTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 6;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class QuoteItemTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /**
      * the column name for the entity_id field
@@ -97,6 +97,11 @@ class QuoteItemTableMap extends TableMap
     const COL_PRICE = 'quote_item.price';
 
     /**
+     * the column name for the quote_id field
+     */
+    const COL_QUOTE_ID = 'quote_item.quote_id';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -108,11 +113,11 @@ class QuoteItemTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('EntityId', 'QuoteItemGroupItemId', 'Qty', 'Notes', 'Price', ),
-        self::TYPE_CAMELNAME     => array('entityId', 'quoteItemGroupItemId', 'qty', 'notes', 'price', ),
-        self::TYPE_COLNAME       => array(QuoteItemTableMap::COL_ENTITY_ID, QuoteItemTableMap::COL_QUOTE_ITEM_GROUP_ITEM_ID, QuoteItemTableMap::COL_QTY, QuoteItemTableMap::COL_NOTES, QuoteItemTableMap::COL_PRICE, ),
-        self::TYPE_FIELDNAME     => array('entity_id', 'quote_item_group_item_id', 'qty', 'notes', 'price', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('EntityId', 'QuoteItemGroupItemId', 'Qty', 'Notes', 'Price', 'QuoteId', ),
+        self::TYPE_CAMELNAME     => array('entityId', 'quoteItemGroupItemId', 'qty', 'notes', 'price', 'quoteId', ),
+        self::TYPE_COLNAME       => array(QuoteItemTableMap::COL_ENTITY_ID, QuoteItemTableMap::COL_QUOTE_ITEM_GROUP_ITEM_ID, QuoteItemTableMap::COL_QTY, QuoteItemTableMap::COL_NOTES, QuoteItemTableMap::COL_PRICE, QuoteItemTableMap::COL_QUOTE_ID, ),
+        self::TYPE_FIELDNAME     => array('entity_id', 'quote_item_group_item_id', 'qty', 'notes', 'price', 'quote_id', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -122,11 +127,11 @@ class QuoteItemTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('EntityId' => 0, 'QuoteItemGroupItemId' => 1, 'Qty' => 2, 'Notes' => 3, 'Price' => 4, ),
-        self::TYPE_CAMELNAME     => array('entityId' => 0, 'quoteItemGroupItemId' => 1, 'qty' => 2, 'notes' => 3, 'price' => 4, ),
-        self::TYPE_COLNAME       => array(QuoteItemTableMap::COL_ENTITY_ID => 0, QuoteItemTableMap::COL_QUOTE_ITEM_GROUP_ITEM_ID => 1, QuoteItemTableMap::COL_QTY => 2, QuoteItemTableMap::COL_NOTES => 3, QuoteItemTableMap::COL_PRICE => 4, ),
-        self::TYPE_FIELDNAME     => array('entity_id' => 0, 'quote_item_group_item_id' => 1, 'qty' => 2, 'notes' => 3, 'price' => 4, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('EntityId' => 0, 'QuoteItemGroupItemId' => 1, 'Qty' => 2, 'Notes' => 3, 'Price' => 4, 'QuoteId' => 5, ),
+        self::TYPE_CAMELNAME     => array('entityId' => 0, 'quoteItemGroupItemId' => 1, 'qty' => 2, 'notes' => 3, 'price' => 4, 'quoteId' => 5, ),
+        self::TYPE_COLNAME       => array(QuoteItemTableMap::COL_ENTITY_ID => 0, QuoteItemTableMap::COL_QUOTE_ITEM_GROUP_ITEM_ID => 1, QuoteItemTableMap::COL_QTY => 2, QuoteItemTableMap::COL_NOTES => 3, QuoteItemTableMap::COL_PRICE => 4, QuoteItemTableMap::COL_QUOTE_ID => 5, ),
+        self::TYPE_FIELDNAME     => array('entity_id' => 0, 'quote_item_group_item_id' => 1, 'qty' => 2, 'notes' => 3, 'price' => 4, 'quote_id' => 5, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -151,6 +156,7 @@ class QuoteItemTableMap extends TableMap
         $this->addColumn('qty', 'Qty', 'INTEGER', false, null, null);
         $this->addColumn('notes', 'Notes', 'LONGVARCHAR', false, null, null);
         $this->addColumn('price', 'Price', 'DECIMAL', false, 10, null);
+        $this->addForeignKey('quote_id', 'QuoteId', 'INTEGER', 'quote', 'entity_id', false, null, null);
     } // initialize()
 
     /**
@@ -162,6 +168,13 @@ class QuoteItemTableMap extends TableMap
   0 =>
   array (
     0 => ':quote_item_group_item_id',
+    1 => ':entity_id',
+  ),
+), 'CASCADE', 'CASCADE', null, false);
+        $this->addRelation('Quote', '\\Wedding\\Quote', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':quote_id',
     1 => ':entity_id',
   ),
 ), 'CASCADE', 'CASCADE', null, false);
@@ -313,12 +326,14 @@ class QuoteItemTableMap extends TableMap
             $criteria->addSelectColumn(QuoteItemTableMap::COL_QTY);
             $criteria->addSelectColumn(QuoteItemTableMap::COL_NOTES);
             $criteria->addSelectColumn(QuoteItemTableMap::COL_PRICE);
+            $criteria->addSelectColumn(QuoteItemTableMap::COL_QUOTE_ID);
         } else {
             $criteria->addSelectColumn($alias . '.entity_id');
             $criteria->addSelectColumn($alias . '.quote_item_group_item_id');
             $criteria->addSelectColumn($alias . '.qty');
             $criteria->addSelectColumn($alias . '.notes');
             $criteria->addSelectColumn($alias . '.price');
+            $criteria->addSelectColumn($alias . '.quote_id');
         }
     }
 

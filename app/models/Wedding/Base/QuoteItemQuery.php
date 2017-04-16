@@ -25,12 +25,14 @@ use Wedding\Map\QuoteItemTableMap;
  * @method     ChildQuoteItemQuery orderByQty($order = Criteria::ASC) Order by the qty column
  * @method     ChildQuoteItemQuery orderByNotes($order = Criteria::ASC) Order by the notes column
  * @method     ChildQuoteItemQuery orderByPrice($order = Criteria::ASC) Order by the price column
+ * @method     ChildQuoteItemQuery orderByQuoteId($order = Criteria::ASC) Order by the quote_id column
  *
  * @method     ChildQuoteItemQuery groupByEntityId() Group by the entity_id column
  * @method     ChildQuoteItemQuery groupByQuoteItemGroupItemId() Group by the quote_item_group_item_id column
  * @method     ChildQuoteItemQuery groupByQty() Group by the qty column
  * @method     ChildQuoteItemQuery groupByNotes() Group by the notes column
  * @method     ChildQuoteItemQuery groupByPrice() Group by the price column
+ * @method     ChildQuoteItemQuery groupByQuoteId() Group by the quote_id column
  *
  * @method     ChildQuoteItemQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildQuoteItemQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -50,7 +52,17 @@ use Wedding\Map\QuoteItemTableMap;
  * @method     ChildQuoteItemQuery rightJoinWithQuoteItemGroupItem() Adds a RIGHT JOIN clause and with to the query using the QuoteItemGroupItem relation
  * @method     ChildQuoteItemQuery innerJoinWithQuoteItemGroupItem() Adds a INNER JOIN clause and with to the query using the QuoteItemGroupItem relation
  *
- * @method     \Wedding\QuoteItemGroupItemQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildQuoteItemQuery leftJoinQuote($relationAlias = null) Adds a LEFT JOIN clause to the query using the Quote relation
+ * @method     ChildQuoteItemQuery rightJoinQuote($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Quote relation
+ * @method     ChildQuoteItemQuery innerJoinQuote($relationAlias = null) Adds a INNER JOIN clause to the query using the Quote relation
+ *
+ * @method     ChildQuoteItemQuery joinWithQuote($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Quote relation
+ *
+ * @method     ChildQuoteItemQuery leftJoinWithQuote() Adds a LEFT JOIN clause and with to the query using the Quote relation
+ * @method     ChildQuoteItemQuery rightJoinWithQuote() Adds a RIGHT JOIN clause and with to the query using the Quote relation
+ * @method     ChildQuoteItemQuery innerJoinWithQuote() Adds a INNER JOIN clause and with to the query using the Quote relation
+ *
+ * @method     \Wedding\QuoteItemGroupItemQuery|\Wedding\QuoteQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildQuoteItem findOne(ConnectionInterface $con = null) Return the first ChildQuoteItem matching the query
  * @method     ChildQuoteItem findOneOrCreate(ConnectionInterface $con = null) Return the first ChildQuoteItem matching the query, or a new ChildQuoteItem object populated from the query conditions when no match is found
@@ -59,7 +71,8 @@ use Wedding\Map\QuoteItemTableMap;
  * @method     ChildQuoteItem findOneByQuoteItemGroupItemId(int $quote_item_group_item_id) Return the first ChildQuoteItem filtered by the quote_item_group_item_id column
  * @method     ChildQuoteItem findOneByQty(int $qty) Return the first ChildQuoteItem filtered by the qty column
  * @method     ChildQuoteItem findOneByNotes(string $notes) Return the first ChildQuoteItem filtered by the notes column
- * @method     ChildQuoteItem findOneByPrice(string $price) Return the first ChildQuoteItem filtered by the price column *
+ * @method     ChildQuoteItem findOneByPrice(string $price) Return the first ChildQuoteItem filtered by the price column
+ * @method     ChildQuoteItem findOneByQuoteId(int $quote_id) Return the first ChildQuoteItem filtered by the quote_id column *
 
  * @method     ChildQuoteItem requirePk($key, ConnectionInterface $con = null) Return the ChildQuoteItem by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildQuoteItem requireOne(ConnectionInterface $con = null) Return the first ChildQuoteItem matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -69,6 +82,7 @@ use Wedding\Map\QuoteItemTableMap;
  * @method     ChildQuoteItem requireOneByQty(int $qty) Return the first ChildQuoteItem filtered by the qty column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildQuoteItem requireOneByNotes(string $notes) Return the first ChildQuoteItem filtered by the notes column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildQuoteItem requireOneByPrice(string $price) Return the first ChildQuoteItem filtered by the price column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildQuoteItem requireOneByQuoteId(int $quote_id) Return the first ChildQuoteItem filtered by the quote_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildQuoteItem[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildQuoteItem objects based on current ModelCriteria
  * @method     ChildQuoteItem[]|ObjectCollection findByEntityId(int $entity_id) Return ChildQuoteItem objects filtered by the entity_id column
@@ -76,6 +90,7 @@ use Wedding\Map\QuoteItemTableMap;
  * @method     ChildQuoteItem[]|ObjectCollection findByQty(int $qty) Return ChildQuoteItem objects filtered by the qty column
  * @method     ChildQuoteItem[]|ObjectCollection findByNotes(string $notes) Return ChildQuoteItem objects filtered by the notes column
  * @method     ChildQuoteItem[]|ObjectCollection findByPrice(string $price) Return ChildQuoteItem objects filtered by the price column
+ * @method     ChildQuoteItem[]|ObjectCollection findByQuoteId(int $quote_id) Return ChildQuoteItem objects filtered by the quote_id column
  * @method     ChildQuoteItem[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -174,7 +189,7 @@ abstract class QuoteItemQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT entity_id, quote_item_group_item_id, qty, notes, price FROM quote_item WHERE entity_id = :p0';
+        $sql = 'SELECT entity_id, quote_item_group_item_id, qty, notes, price, quote_id FROM quote_item WHERE entity_id = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -456,6 +471,49 @@ abstract class QuoteItemQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the quote_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByQuoteId(1234); // WHERE quote_id = 1234
+     * $query->filterByQuoteId(array(12, 34)); // WHERE quote_id IN (12, 34)
+     * $query->filterByQuoteId(array('min' => 12)); // WHERE quote_id > 12
+     * </code>
+     *
+     * @see       filterByQuote()
+     *
+     * @param     mixed $quoteId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildQuoteItemQuery The current query, for fluid interface
+     */
+    public function filterByQuoteId($quoteId = null, $comparison = null)
+    {
+        if (is_array($quoteId)) {
+            $useMinMax = false;
+            if (isset($quoteId['min'])) {
+                $this->addUsingAlias(QuoteItemTableMap::COL_QUOTE_ID, $quoteId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($quoteId['max'])) {
+                $this->addUsingAlias(QuoteItemTableMap::COL_QUOTE_ID, $quoteId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(QuoteItemTableMap::COL_QUOTE_ID, $quoteId, $comparison);
+    }
+
+    /**
      * Filter the query by a related \Wedding\QuoteItemGroupItem object
      *
      * @param \Wedding\QuoteItemGroupItem|ObjectCollection $quoteItemGroupItem The related object(s) to use as filter
@@ -530,6 +588,83 @@ abstract class QuoteItemQuery extends ModelCriteria
         return $this
             ->joinQuoteItemGroupItem($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'QuoteItemGroupItem', '\Wedding\QuoteItemGroupItemQuery');
+    }
+
+    /**
+     * Filter the query by a related \Wedding\Quote object
+     *
+     * @param \Wedding\Quote|ObjectCollection $quote The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildQuoteItemQuery The current query, for fluid interface
+     */
+    public function filterByQuote($quote, $comparison = null)
+    {
+        if ($quote instanceof \Wedding\Quote) {
+            return $this
+                ->addUsingAlias(QuoteItemTableMap::COL_QUOTE_ID, $quote->getEntityId(), $comparison);
+        } elseif ($quote instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(QuoteItemTableMap::COL_QUOTE_ID, $quote->toKeyValue('PrimaryKey', 'EntityId'), $comparison);
+        } else {
+            throw new PropelException('filterByQuote() only accepts arguments of type \Wedding\Quote or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Quote relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildQuoteItemQuery The current query, for fluid interface
+     */
+    public function joinQuote($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Quote');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Quote');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Quote relation Quote object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \Wedding\QuoteQuery A secondary query class using the current class as primary query
+     */
+    public function useQuoteQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinQuote($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Quote', '\Wedding\QuoteQuery');
     }
 
     /**
