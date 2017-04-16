@@ -177,36 +177,39 @@ $excs = \Wedding\Source\ExclusiveUse::getOptions();
             <div class="panel-body">
                     <?php
                 /** @var \Wedding\QuoteItemGroup $group */
-                foreach($groups as $group) :
+                foreach($groups as $i => $group) :
                     ?>
                     <div class="row">
                         <div class="col-md-12">
                             <h3><?php echo $group->getName();?></h3>
 
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <select class="form-control">
-                                        <option>Please select...</option>
-                                        <?php foreach($group->getQuoteItemGroupItems() as $item) : ?>
-                                            <option value="<?php echo $item->getEntityId();?>"><?php echo $item->getOptionString();?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
+                            <div class="js-items-wrap">
+                                <div class="row js-item">
+                                    <div class="col-md-3">
+                                        <select name="quote[item_group][<?php echo $group->getEntityId();?>][0][item]" class="form-control js-cloneable">
+                                            <option value="0">Please select...</option>
+                                            <?php foreach($group->getQuoteItemGroupItems() as $item) : ?>
+                                                <option data-price="<?php echo $item->getSuggestedPrice();?>" value="<?php echo $item->getEntityId();?>"><?php echo $item->getOptionString();?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
 
-                                <div class="col-md-1">
-                                    <input class="form-control" type="number" placeholder="qty" />
-                                </div>
+                                    <div class="col-md-1">
+                                        <input name="quote[item_group][<?php echo $group->getEntityId();?>][0][qty]" class="form-control js-cloneable" type="number" placeholder="qty" />
+                                    </div>
 
-                                <div class="col-md-5">
-                                    <input class="form-control" type="text" placeholder="Enter any notes regarding this item" />
-                                </div>
+                                    <div class="col-md-5">
+                                        <input  name="quote[item_group][<?php echo $group->getEntityId();?>][0][notes]" class="form-control js-cloneable" type="text" placeholder="Enter any notes regarding this item" />
+                                    </div>
 
-                                <div class="col-md-1">
-                                    <input class="form-control" type="text" placeholder="Price" />
-                                </div>
+                                    <div class="col-md-1">
+                                        <input  name="quote[item_group][<?php echo $group->getEntityId();?>][0][price]" class="form-control js-cloneable" type="text" placeholder="Price" />
+                                    </div>
 
-                                <div class="col-md-2">
-                                    btns
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-primary btn-xs js-add-row"><span class="glyphicon glyphicon-plus-sign"></span> Add</button>
+                                        <button type="button" class="btn btn-danger btn-xs js-del-row"><span class="glyphicon glyphicon-trash"></span> Remove</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -219,12 +222,5 @@ $excs = \Wedding\Source\ExclusiveUse::getOptions();
         <div class="row">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
-
-
-
-
-
     </form>
-
-
 </div>

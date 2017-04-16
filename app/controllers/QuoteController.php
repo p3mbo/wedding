@@ -17,10 +17,13 @@ class QuoteController extends CoreController
         $this->view->itemGroups = $itemGroups;
         $this->view->enquiry = $enquiry;
         $this->view->title('Add Quote');
+        $this->view->js('/js/quote.js');
     }
 
     public function editPostAction()
     {
+        $staffId = null;
+
         /** @var Request $request */
         $request = $this->getRequest();
 
@@ -68,16 +71,44 @@ class QuoteController extends CoreController
 
             $enquiry = $quote->getEnquiry();
 
+            if(!empty($quoteData['notes'])) {
+                $commentResult = \Wedding\EnquiryComment::add($enquiry, $quoteData['notes'], $staffId);
+            }
 
 
-            $staffId = null;
-            $result = \Wedding\EnquiryComment::add($enquiry, $quoteData['notes'], $staffId);
+
+            if(isset($quoteData['item_group'])) {
+                $itemGroups = $quoteData['item_group'];
+
+                print_r($itemGroups);
+                exit;
+
+                foreach($itemGroups as $itemGroupId => $itemGroupArr) {
+                    if($itemGroupArr['item'] != 0 && $itemGroupArr['item'] != 'Please select...') {
+                        $quoteItem = new \Wedding\QuoteItem();
+                        $quoteItem->setQuoteItemGroupItemId($itemGroupId);
+                        $quoteItem->setQty(isset($itemGroupArr['qty']) ? $itemGroupArr['qty'] : 1);
+                        $quoteItem->setNotes(isset($itemGroupArr['notes']) ? $itemGroupArr['notes'] : '');
+
+                        // @todo: Implement if
+                        // if we have permission to change the price
+                            $quoteItem->setPrice(isset($itemGroupArr['price']) ? $itemGroupArr['price'] : '');
+                        // end if
+                        $quoteItem->save();
+                    }
+                }
+            }
+
+
+
+
         } catch(Exception $e) {
             \Wedding\Messages::addError($e->getMessage());
             $this->redirectReferer();
         }
 
 
+        \Wedding\Messages::addSuccess('Quote generated');
         $url = \Wedding::getUrl('quote/add', ['enquiry_id' => $enquiry->getEntityId(), 'quote_id' => $quote->getEntityId()]);
         header('Location: '. $url);
         exit;
