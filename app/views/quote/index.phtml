@@ -32,42 +32,29 @@
                     </colgroup>
                     <thead>
                     <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Value</th>
                         <th>Names</th>
-                        <th>Address</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Mobile</th>
+                        <th>Contacts</th>
                         <th class="text-right">Actions</th>
                     </tr>
                     </thead>
                     <tbody class="list">
                     <?php
                     /** @var \Wedding\Quote $quote */
-                    foreach($collection as $quote) : /* ?>
-                        <tr class="<?php echo $enq->getStatusClass();?>" data-lead-id="<?php echo $enq->getEntityId();?>" data-created-at="<?php echo $enq->getCreatedAt()->format('d/m/Y H:i');?>" data-email="<?php echo $enq->getEmail();?>" data-couple="<?php echo $enq->getCouple();?>">
-                            <td class="srt-name name"><?php echo \Wedding::__($enq->getName());?><br /><?php echo  \Wedding::__($enq->getPartnerName());?></td>
-                            <td class="srt-addr addr"><?php echo \Wedding::__($enq->getAddress());?></td>
-                            <td class="srt-email email"><?php echo \Wedding::__($enq->getEmail());?></td>
-                            <td class="srt-name phone"><?php echo \Wedding::__($enq->getTelephone());?></td>
-                            <td class="srt-name mobile"><?php echo \Wedding::__($enq->getMobile());?></td>
+                    foreach($collection as $quote) : ?>
+                        <tr class="<?php //echo $quote->getStatusClass();?>">
+                            <td class="srt-num num"><?php echo \Wedding::__($quote->getEntityId());?></td>
+                            <td class="srt-date date"><?php echo \Wedding::__($quote->getCreatedAt()->format('d/m/Y'));?></td>
+                            <td class="srt-value value"><?php echo \Wedding::currency($quote->getValue());?></td>
+                            <td class="srt-name name"><?php echo \Wedding::__($quote->getEnquiry()->getCouple());?></td>
+                            <td class="contacts">tbc</td>
                             <td class="text-right">
-                                <a title="Edit Item" class="btn-sm btn-default js-entry-edit" href="<?php echo \Wedding::getUrl('lead/edit', ['id' => $enq->getEntityId()]);?>"><span class="glyphicon glyphicon-pencil"></span><span class="hidden">Edit</span></a>
-
-                                <a title="Mark as Contacted" class="btn-sm <?php echo $enq->getContactedAt() === null ? 'btn-danger' : 'btn-success'; ?> js-entry-edit" href="<?php echo \Wedding::getUrl('lead/contacted', ['id' => $enq->getEntityId()]);?>"><span class="glyphicon glyphicon-envelope"></span><span class="hidden">Mark as Contacted</span></a>
-
-                                <?php if(!is_null($enq->getLostAt())) : ?>
-                                    <a title="Mark as Lost" class="btn-sm btn-danger" href="<?php echo \Wedding::getUrl('lead/lose', ['id' => $enq->getEntityId()]);?>"><span class="hidden">Mark as </span>LOST</a>
-                                    <a title="Promote to Viewing" class="btn-sm btn-default" href="<?php echo \Wedding::getUrl('lead/reset', ['id' => $enq->getEntityId()]);?>">REACTIVATE</a>
-                                <?php elseif(!is_null($enq->getPromotedAt())) : ?>
-                                        <a title="Mark as Lost" class="btn-sm btn-default" href="<?php echo \Wedding::getUrl('lead/lose', ['id' => $enq->getEntityId()]);?>"><span class="hidden">Mark as </span>LOST</a>
-                                        <a title="Promote to Viewing" class="btn-sm btn-success" href="<?php echo \Wedding::getUrl('lead/promote', ['id' => $enq->getEntityId()]);?>">PROMOTED <span class="hidden">to viewing</span></a>
-                                <?php else: ?>
-                                    <a title="Mark as Lost" class="btn-sm btn-default" href="<?php echo \Wedding::getUrl('lead/lose', ['id' => $enq->getEntityId()]);?>"><span class="hidden">Mark as </span>LOST</a>
-                                    <a href="javascript:;" title="Promote to Viewing" class="js-viewing-modal-request btn-sm btn-default" data-href="<?php echo \Wedding::getUrl('lead/promote', ['id' => $enq->getEntityId()]);?>">PROMOTE <span class="hidden">to viewing</span></a>
-                                <?php endif; ?>
+                                <a title="Edit Item" class="btn-sm btn-default js-entry-edit" href="<?php echo \Wedding::getUrl('quote/edit', ['enquiry_id' => $quote->getEnquiryId(), 'quote_id' => $quote->getEntityId()]);?>"><span class="glyphicon glyphicon-pencil"></span><span class="hidden">Edit</span></a>
                             </td>
                         </tr>
-                    <?php */ endforeach;?>
+                    <?php endforeach;?>
                     </tbody>
                 </table>
             </div>

@@ -16,5 +16,9 @@ use Wedding\Base\Quote as BaseQuote;
  */
 class Quote extends BaseQuote
 {
-
+    public function getValue()
+    {
+        // @todo: implement
+        return '0';
+    }
 }

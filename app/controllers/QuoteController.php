@@ -20,6 +20,11 @@ class QuoteController extends CoreController
         $this->view->js('/js/quote.js');
     }
 
+    public function editAction()
+    {
+        
+    }
+
     public function editPostAction()
     {
         $staffId = null;
@@ -100,8 +105,11 @@ class QuoteController extends CoreController
                     }
                 }
             }
-            
+
             $quote->save();
+
+
+            die('boo');
 
 
         } catch(Exception $e) {
