@@ -1,10 +1,10 @@
-<?php
-/** @var \Wedding\Enquiry $enq */
-$enq = $this->enq;
-
-?>
 <div class="col-md-12 main">
-    <h1 class="page-header">Edit Lead</h1>
+    <h1 class="page-header">Edit Quote</h1>
+    <p>Note re-saving this quote will create a new quote.</p>
 
-    <?php echo $this->partial('lead/partial/form.phtml', ['enq' => $this->enq, 'itemGroups' => $this->itemGroups]); ?>
+    <?php echo $this->partial('quote/partial/form.phtml', [
+        'itemGroups' => $this->itemGroups,
+        'enquiry' => $this->enquiry,
+        'quote' => $this->quote
+    ]); ?>
 </div>

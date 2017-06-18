@@ -7,6 +7,14 @@ $days = \Wedding\Source\Day::getOptions();
 $months = \Wedding\Source\Month::getOptions();
 $excs = \Wedding\Source\ExclusiveUse::getOptions();
 
+
+$quoteData = [];
+if($this->new !== true) {
+    /** @var \Wedding\Quote $quote */
+    $quote = $this->quote;
+    $quoteData = $quote->toArray();
+}
+
 ?>
 <div class="col-md-12">
     <form method="post" action="<?php echo \Wedding::getUrl('quote/editPost');?>" class="form-horizontal">
@@ -75,7 +83,11 @@ $excs = \Wedding\Source\ExclusiveUse::getOptions();
                             <div class="col-sm-10">
                                 <?php foreach($days as $day) : ?>
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" value="1" name="quote[day][<?php echo $day;?>]"> <?php echo \Wedding::__($day); ?>
+                                        <input
+                                            <?php echo isset($quoteData['Day']) && in_array($day, explode(',', $quoteData['Day'])) ? 'checked="checked"' : '';?>
+                                            type="checkbox"
+                                            value="1"
+                                            name="quote[day][<?php echo $day;?>]"> <?php echo \Wedding::__($day); ?>
                                     </label>
                                 <?php endforeach;?>
                             </div>
@@ -87,7 +99,11 @@ $excs = \Wedding\Source\ExclusiveUse::getOptions();
                             <div class="col-sm-10">
                                 <?php foreach($months as $month) : ?>
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" value="1" name="quote[month][<?php echo $day;?>]"> <?php echo \Wedding::__($month); ?>
+                                        <input
+                                            <?php echo isset($quoteData['Month']) && in_array($month, explode(',', $quoteData['Month'])) ? 'checked="checked"' : '';?>
+                                            type="checkbox"
+                                            value="1"
+                                            name="quote[month][<?php echo $month;?>]"> <?php echo \Wedding::__($month); ?>
                                     </label>
 
                                     <?php if ($month == 'Jun') {
@@ -102,7 +118,7 @@ $excs = \Wedding\Source\ExclusiveUse::getOptions();
                             <label class="col-sm-2 control-label" for="year">Year</label>
                             <div class="col-sm-10">
                                 <select name="quote[year]" class="form-control">
-                                    <?php echo \Wedding\Source\Year::getOptionHtml();?>
+                                    <?php echo \Wedding\Source\Year::getOptionHtml(isset($quoteData['Year']) ? $quoteData['Year'] : '');?>
                                 </select>
                             </div>
                         </div>
@@ -115,7 +131,11 @@ $excs = \Wedding\Source\ExclusiveUse::getOptions();
                             <div class="col-sm-10">
                                 <?php foreach($excs as $exc) : ?>
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" value="1" name="quote[exc][<?php echo $exc;?>]"> <?php echo \Wedding::__($exc); ?>
+                                        <input
+                                                <?php echo isset($quoteData['Exclusive']) && in_array($exc, explode(',', $quoteData['Exclusive'])) ? 'checked="checked"' : '';?>
+                                                type="checkbox"
+                                                value="1"
+                                                name="quote[exc][<?php echo $exc;?>]"> <?php echo \Wedding::__($exc); ?>
                                     </label>
 
                                 <?php endforeach;?>
@@ -125,21 +145,21 @@ $excs = \Wedding\Source\ExclusiveUse::getOptions();
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="date">Specific Date</label>
                             <div class="col-sm-10">
-                                <input id="date" type="text" name="quote[date]" class="form-control" />
+                                <input id="date" type="text" name="quote[date]" class="form-control" value="<?php echo isset($quoteData['SpecificDate']) ? $quoteData['SpecificDate'] : '';?>"/>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="dayg">Day Guests</label>
                             <div class="col-sm-10">
-                                <input id="dayg" type="text" name="quote[dayg]" class="form-control" />
+                                <input id="dayg" type="text" name="quote[dayg]" class="form-control" value="<?php echo isset($quoteData['DayGuests']) ? $quoteData['DayGuests'] : '';?>"/>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="eveg">Eve Guests</label>
                             <div class="col-sm-10">
-                                <input id="eveg" type="text" name="quote[eveg]" class="form-control" />
+                                <input id="eveg" type="text" name="quote[eveg]" class="form-control" value="<?php echo isset($quoteData['EveGuests']) ? $quoteData['EveGuests'] : '';?>" />
                             </div>
                         </div>
 
@@ -161,7 +181,9 @@ $excs = \Wedding\Source\ExclusiveUse::getOptions();
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="notes">Notes</label>
                             <div class="col-sm-10">
-                                <textarea id="notes" type="text" name="quote[notes]" class="form-control"></textarea>
+                                <textarea id="notes" type="text" name="quote[notes]" class="form-control"><?php
+                                    echo isset($quoteData['Notes']) ? $quoteData['Notes'] : ''
+                                ?></textarea>
                             </div>
                         </div>
                     </div>
@@ -184,6 +206,33 @@ $excs = \Wedding\Source\ExclusiveUse::getOptions();
                             <h3><?php echo $group->getName();?></h3>
 
                             <div class="js-items-wrap">
+                                <?php $ptr = 0; ?>
+
+
+                                <?php foreach($quote->getQuoteItems() as $quoteItem) : ?>
+                                    <?php if($quoteItem->getQuoteItemGroupItemId() == $group->getEntityId()) : ?>
+                                        <?php echo $this->partial('quote/partial/item.phtml', [
+                                            'group' => $group,
+                                            'item' => $quoteItem,
+                                            'ptr' => $ptr
+                                        ]); ?>
+
+                                        <?php $ptr++; ?>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+
+
+                                <?php if($ptr == 0) : ?>
+                                    <?php echo $this->partial('quote/partial/item.phtml', [
+                                        'group' => $group,
+                                        'ptr' => $ptr,
+                                        'new' => true
+                                    ]); ?>
+                                <?php endif; ?>
+
+                                <?php
+                                /*
+                                ?>
                                 <div class="row js-item">
                                     <div class="col-md-3">
                                         <select name="quote[item_group][<?php echo $group->getEntityId();?>][0][item]" class="form-control js-cloneable">
@@ -211,6 +260,10 @@ $excs = \Wedding\Source\ExclusiveUse::getOptions();
                                         <button type="button" class="btn btn-danger btn-xs js-del-row"><span class="glyphicon glyphicon-trash"></span> Remove</button>
                                     </div>
                                 </div>
+                                */
+                                ?>
+
+
                             </div>
                         </div>
 

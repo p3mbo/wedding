@@ -22,7 +22,16 @@ class QuoteController extends CoreController
 
     public function editAction()
     {
-        
+        $itemGroups = \Wedding\QuoteItemGroupQuery::create()->find();
+
+        $enquiry = $this->_getEnquiry();
+        $quote = $this->_getQuote();
+
+        $this->view->itemGroups = $itemGroups;
+        $this->view->enquiry = $enquiry;
+        $this->view->quote = $quote;
+        $this->view->title('Edit Quote');
+        $this->view->js('/js/quote.js');
     }
 
     public function editPostAction()
@@ -50,11 +59,11 @@ class QuoteController extends CoreController
 
 
             if (isset($quoteData['day'])) {
-                $quote->setDay(implode(',', $quoteData['day']));
+                $quote->setDay(implode(',', array_keys($quoteData['day'])));
             }
 
             if (isset($quoteData['month'])) {
-                $quote->setMonth(implode(',', $quoteData['month']));
+                $quote->setMonth(implode(',', array_keys($quoteData['month'])));
             }
 
             if (isset($quoteData['year'])) {
@@ -62,7 +71,7 @@ class QuoteController extends CoreController
             }
 
             if (isset($quoteData['exc'])) {
-                $quote->setExclusive(implode(',', $quoteData['exc']));
+                $quote->setExclusive(implode(',', array_keys($quoteData['exc'])));
             }
 
             $quote->setCeremonyTypeId($quoteData['ceremony']);
@@ -108,12 +117,7 @@ class QuoteController extends CoreController
 
             $quote->save();
 
-
-            die('boo');
-
-
         } catch(Exception $e) {
-
             \Wedding\Messages::addError($e->getMessage());
             $this->redirectReferer();
         }
@@ -143,6 +147,26 @@ class QuoteController extends CoreController
         }
 
         return $enquiry;
+
+    }
+
+
+    private function _getQuote()
+    {
+        /** @var Request $request */
+        $request = $this->getRequest();
+
+        $params = $request->getGetParams();
+        if(!isset($params['quote_id'])) {
+            throw new Exception('Invalid Quote Id');
+        }
+
+        $quote = \Wedding\QuoteQuery::create()->findOneByEntityId($params['quote_id']);
+        if(!$quote) {
+            throw new Exception('Could not locate quote to edit.');
+        }
+
+        return $quote;
 
     }
 

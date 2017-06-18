@@ -38,16 +38,13 @@ $.extend(Quote.prototype, {
 
                     //console.log(matches);
                     return 'quote[item_group][' + p1 + '][' + (lastPos + 1) + '][' + p3 + ']';
-                })
+                });
+
+
+                this.value = '';
+                this.selectedIndex = 0;
             }).end().appendTo($wrapper);
-
-
-
-
-
-        //$item.clone().appendTo($wrapper);
-
-
+        
     },
     removeRowAction: function($el) {
         var self = this;

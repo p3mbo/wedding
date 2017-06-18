@@ -1,0 +1,63 @@
+<?php
+$group = $this->group;
+$ptr = $this->ptr;
+
+
+$quoteItemData = [];
+if($this->new !== true) {
+    /** @var \Wedding\QuoteItem $quoteItem */
+    $quoteItem = $this->item;
+    $quoteItemData = $quoteItem->toArray();
+}
+
+?>
+
+<div class="row js-item">
+    <div class="col-md-3">
+        <select name="quote[item_group][<?php echo $group->getEntityId();?>][<?php echo $ptr;?>][item]" class="form-control js-cloneable">
+            <option value="0">Please select...</option>
+            <?php foreach($group->getQuoteItemGroupItems() as $item) : ?>
+                <option
+                        data-price="<?php echo $item->getSuggestedPrice();?>"
+                        value="<?php echo $item->getEntityId();?>"
+                        <?php echo isset($quoteItemData['QuoteItemGroupItemId']) && $quoteItemData['QuoteItemGroupItemId'] == $item->getEntityId() ? 'selected="selected"' : '';?>
+                ><?php echo $item->getOptionString();?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+
+    <div class="col-md-1">
+        <input
+                name="quote[item_group][<?php echo $group->getEntityId();?>][<?php echo $ptr;?>][qty]"
+                class="form-control js-cloneable"
+                type="number"
+                placeholder="qty"
+                value="<?php echo isset($quoteItemData['Qty']) ? \Wedding::__($quoteItemData['Qty']) : '';?>"
+        />
+    </div>
+
+    <div class="col-md-5">
+        <input
+                name="quote[item_group][<?php echo $group->getEntityId();?>][<?php echo $ptr;?>][notes]"
+                class="form-control js-cloneable"
+                type="text"
+                placeholder="Enter any notes regarding this item"
+                value="<?php echo isset($quoteItemData['Notes']) ? \Wedding::__($quoteItemData['Notes']) : '';?>"
+        />
+    </div>
+
+    <div class="col-md-1">
+        <input
+                name="quote[item_group][<?php echo $group->getEntityId();?>][<?php echo $ptr;?>][price]"
+                class="form-control js-cloneable"
+                type="text" placeholder="Price"
+                value="<?php echo isset($quoteItemData['Price']) ? \Wedding::__($quoteItemData['Price']) : '';?>"
+        />
+    </div>
+
+    <div class="col-md-2">
+        <button type="button" class="btn btn-primary btn-xs js-add-row"><span class="glyphicon glyphicon-plus-sign"></span> Add</button>
+        <button type="button" class="btn btn-danger btn-xs js-del-row"><span class="glyphicon glyphicon-trash"></span> Remove</button>
+    </div>
+</div>
+
